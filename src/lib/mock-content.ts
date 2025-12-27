@@ -66,6 +66,34 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-financial-survival',
+    category: 'Survival/Financial',
+    title: 'NYSC Financial Survival Guide: Allowance, Budgets & Side Hustles',
+    summary: 'Strategic Financial Roadmap: Mastering the ₦77k allowance, PPA perks, SAED business development, and avoiding common scams.',
+    content: `Effective October 2024, the federal allowance (allowee) has been updated to ₦77,000. While a significant increase, the current economic climate requires disciplined management.
+I. THE ₦77,000 ALLOWANCE STRUCTURE
+1. PAYMENT CYCLE: The federal allowance usually arrives between the 25th and 30th of each month. Note that your first "double" payment (Camp + 1st Month) often faces processing delays.
+2. DEDUCTIONS: Aside from minor bank maintenance fees, no official deductions should be made from your federal allowance by any NYSC official.
+3. STATE ALLOWEE: Some states (e.g., Lagos, Anambra, Rivers) provide an additional stipend. Verify your registration status with the State Secretariat to ensure you are on the payroll.
+II. THE 50/30/20 BUDGETING MATRIX
+1. NEEDS (50% - ₦38,500): Prioritize food staples, essential transport to your PPA, and basic data/communication.
+2. SAVINGS & TRANSITION (30% - ₦23,100): Start building your 'Post-NYSC Buffer'. Saving ₦20k monthly results in ₦240k by the end of service—a critical safety net for job hunting.
+3. PERSONAL/CDS (20% - ₦15,400): Use this for personal hygiene, occasional social activities, and minor CDS project expenses.
+III. MAXIMIZING PPA PERKS
+1. ACCOMMODATION: If your PPA provides housing, you save approximately 35% of your total living costs. If not, legally request "Housing Allowance in Lieu."
+2. FEEDING/TRANSPORT: Many schools and government agencies provide lunch or staff bus access. Utilize these religiously to preserve your allowance.
+3. RETENTION PROSPECTS: View your PPA work as an investment. Corps members who show exceptional value are often retained with salaries far exceeding the allowance.
+IV. SAED & SIDE HUSTLES (MONETIZING DOWNTIME)
+1. SKILL ACQUISITION: Use your weekly CDS days and PPA afternoons to master high-income skills (Data Analysis, Graphic Design, Content Writing).
+2. LOCAL ARBITRAGE: Identify items cheaper in your state of deployment (e.g., Agricultural products in the North) and connect with buyers in urban centers.
+3. TUTORING: If posted to a school, private home lessons for students in your community can double your monthly income.
+V. EMERGENCY BUFFERS & SCAMS
+1. EMERGENCY FUND: Always keep at least ₦20,000 in a separate, high-interest savings app (like PiggyVest or Cowrywise) for medical or travel emergencies.
+2. PORTAL SCAMS: Never pay anyone to "fast-track" your allowance or change your PPA. All official financial updates happen through your dashboard.
+3. DEBT TRAPS: Avoid taking "quick loans" from apps that charge high interest. If your allowance is delayed, report to the LGI for official status rather than borrowing.`,
+    metadata: { stage: 'all', risk: 'medium', source: 'NYSC/SAED', featured: true }
+  },
+  {
     id: 'k-emergency',
     category: 'Advisory/Safety',
     title: 'NYSC Emergency Response Guide',
@@ -166,9 +194,9 @@ III. CDS & COMMUNITY IMPACT (Tips 51-65)
 64. Legacy Focus: Ask yourself: "Will this project still be useful in 5 years?"
 65. Teamwork: Support other corpers' projects; they will support yours.
 IV. FINANCIAL SURVIVAL (Tips 66-80)
-66. Payday Alert: The 'Allowee' usually arrives between the 25th and 30th of the month.
+66. Payday Alert: The 'Allowee' (₦77,000) usually arrives between the 25th and 30th of the month.
 67. The 50/30/20 Rule: 50% for needs, 30% for survival/wants, 20% for savings/investment.
-68. Emergency Fund: Set aside one month's allowance as an emergency backup.
+68. Emergency Fund: Set aside at least ₦20,000 as an emergency backup in a high-interest app.
 69. Avoid Debt: Never borrow money based on "expected" allowance; payments can be delayed.
 70. Bulk Buying: Buy non-perishable food (rice, beans, oil) in bulk at the start of the month.
 71. Transport Sharing: Join other corpers in 'charter' cars to save on travel costs.
@@ -370,39 +398,33 @@ Relocation is not guaranteed. Do not vacate your current PPA until you have the 
     title: 'Leveraging NYSC for Career Transition',
     summary: 'Strategic Roadmap: Mastering your transition from service to the labor market through skills, networking, and digital presence.',
     content: `National service is not just a mandatory gap year; it is a strategic launchpad. For those in their final months, the transition to the labor market requires intentional planning.
-
 I. SAED & SKILL MONETIZATION
-The Skills Acquisition and Entrepreneurship Development (SAED) program is more than camp lectures. Successful corps members use their PPA downtime to master technical or vocational skills. 
+The Skills Acquisition and Entrepreneurship Development (SAED) program is more than camp lectures. Successful corps members use their PPA downtime to master technical or vocational skills.
 1. CERTIFICATION: Ensure you collect your SAED certificates. They are recognized by the Bank of Industry (BOI) for start-up loans.
 2. PORTFOLIO BUILDING: If your PPA is in a school, bank, or firm, document your contributions. A "Recommendation Letter" from your employer is as valuable as the NYSC certificate.
-
 II. NETWORKING WITHIN THE PPA & COMMUNITY
 Your PPA is your first professional network.
 1. VISIBILITY: Ensure your supervisors know your long-term career goals. Many corps members are retained or referred to partner organizations based on their performance.
 2. THE NYSC NETWORK: Connect with other corps members in different PPAs. Today’s bunkmate could be tomorrow’s HR manager.
 3. LOCAL LEADERS: If you did a CDS project, the community leaders and sponsors you interacted with are valuable professional references.
-
 III. LEVERAGING THE DISCHARGE CERTIFICATE
 The NYSC Discharge Certificate is a legal prerequisite for employment in Nigeria for graduates.
 1. THE ANOMALY: Never lose your original certificate. NYSC does not reissue lost certificates; they only provide a "Letter of Confirmation."
 2. VERIFICATION: Employers can verify certificates on the portal. Ensure your name on the certificate matches your NIN and Degree exactly to avoid background check delays.
 3. THE 'EX-CORPER' EDGE: Many government and multinational roles prioritize candidates who have successfully completed the service year.
-
 IV. DIGITAL BRANDING (LINKEDIN OPTIMIZATION)
 Transition from "Corper" to "Professional" on social media.
 1. UPDATE PROFILE: Change your LinkedIn headline from "Serving Corps Member" to "Graduate [Your Major] | [Your Skillset]."
 2. CONTENT: Post about your CDS project or a challenge you solved at your PPA. Use keywords relevant to your industry.
 3. RECOMMENDATIONS: Ask your LGI or PPA supervisor to write a LinkedIn recommendation for you before you POP.
-
 V. POST-SERVICE FINANCIAL PLANNING
 The "Allowee" will stop. You need a buffer.
 1. SAVINGS: Save at least 20% of your final 3 months' allowance as a "Job Hunt Fund."
 2. HEALTH INSURANCE: Note that your NHIS coverage ends with your service. Research affordable private health insurance options immediately.
 3. TERMINAL CLEARANCE: Ensure your final clearance is flawless. Any delay in signing off will delay your final payment, which is crucial for your transition.
-
 VI. THE 90-DAY POST-POP WINDOW
-Statistics show that the first 90 days after POP are the most critical. 
-1. RESUME UPDATE: Include your NYSC experience as a "Professional Experience" entry, not just an "Extra-curricular" one. 
+Statistics show that the first 90 days after POP are the most critical.
+1. RESUME UPDATE: Include your NYSC experience as a "Professional Experience" entry, not just an "Extra-curricular" one.
 2. CAREER FAIR: Attend the post-service briefings organized by the state. Multinational recruiters often attend these exit ceremonies to scout for talent.`,
     metadata: { stage: 'pop', risk: 'low', source: 'NYSC Smart Companion', featured: true }
   },
@@ -460,7 +482,7 @@ II. ORIENTATION CAMP SURVIVAL
 III. PPA & ALLOWANCES
 21. What is a PPA? Place of Primary Assignment (where you work for 11 months).
 22. Can I reject my posting? No. Only the PPA can reject you.
-23. What is 'Allowee'? The monthly federal allowance (currently ₦33,000).
+23. What is 'Allowee'? The monthly federal allowance (currently ₦77,000).
 24. Does the state pay allowance? Some states pay an additional stipend.
 25. Can I travel without permission? No. You must obtain written permission from the State Coordinator.
 26. What is the 'Monthly Clearance'? A form signed by your PPA and LGI to prove you worked.

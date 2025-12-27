@@ -41,20 +41,27 @@ export function DashboardPage() {
   const priorityContent = useMemo(() => {
     if (!isInitialized || !isOnboarded) return null;
     const readArticlesSet = new Set(readArticles ?? []);
+    // 1. Critical Emergency Check
     if (!readArticlesSet.has('k-emergency')) {
       return { title: 'Emergency Response Guide', desc: 'Process Critical: Mandatory safety protocols for medical emergencies and security incidents.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=emergency' };
     }
+    // 2. Critical Disqualification Check
     if (!readArticlesSet.has('k-disqualification')) {
       return { title: 'Disqualification Protocol', desc: 'Critical Risk: Understand the grounds for service cancellation and legal implications.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=disqualification' };
     }
-    // Surface Career Leverage guide for those in POP stage
+    // 3. New Financial Intelligence (For PPA/CDS)
+    if ((stageId === 'ppa' || stageId === 'cds') && !readArticlesSet.has('k-financial-survival')) {
+      return { title: '₦77k Financial Survival Guide', desc: 'Strategy Active: Budgeting the new federal allowance, maximizing PPA perks, and SAED monetization.', risk: 'medium' as PriorityRisk, link: '/app/knowledge?search=financial' };
+    }
+    // 4. Career Leverage (For POP)
     if (stageId === 'pop' && !readArticlesSet.has('k-career-leverage')) {
       return { title: 'Career Transition Roadmap', desc: 'Strategy Active: Leverage your NYSC experience, certificates, and PPA network for the labor market.', risk: 'medium' as PriorityRisk, link: '/app/knowledge?search=career' };
     }
-    // Promoted survival tips for ALL stages once basic emergency guides are read
+    // 5. General Survival Tips
     if (!readArticlesSet.has('k-insider-tips')) {
       return { title: '100 Practical Survival Tips', desc: 'Expert Intelligence: Battle-tested tips for camp, finance, and PPA survival.', risk: 'medium' as PriorityRisk, link: '/app/knowledge?search=tips' };
     }
+    // 6. General FAQs
     if (!readArticlesSet.has('k-faqs')) {
       return { title: 'Verified NYSC FAQs', desc: 'Master the entire service cycle with answers to 50+ common official questions.', risk: 'low' as PriorityRisk, link: '/app/knowledge?search=faqs' };
     }

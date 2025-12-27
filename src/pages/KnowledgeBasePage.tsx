@@ -74,11 +74,11 @@ export function KnowledgeBasePage() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl" />
           <div className="relative z-10 max-w-2xl space-y-4">
             <h1 className="text-3xl md:text-4xl font-display font-bold">Verified Knowledge Base</h1>
-            <p className="text-nysc-green-100 font-medium">Browse through official rules, survival tips, and clearance procedures.</p>
+            <p className="text-nysc-green-100 font-medium">Browse through official rules, survival tips, and allowance management.</p>
             <div className="relative group">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 transition-colors group-focus-within:text-nysc-gold" />
               <Input
-                placeholder="Search FAQs, redeployment, sanctions, packing, POP, rules..."
+                placeholder="Search allowance, budgeting, redeployment, sanctions, packing, POP..."
                 className="pl-10 h-14 bg-white text-gray-900 border-none focus-visible:ring-2 focus-visible:ring-nysc-gold shadow-lg rounded-2xl"
                 value={search}
                 onChange={handleSearchChange}
