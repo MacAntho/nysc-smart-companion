@@ -13,10 +13,11 @@ import {
   DialogFooter,
   DialogTrigger
 } from '@/components/ui/dialog';
-import { Search, ExternalLink, Clock, CheckCircle, CircleCheck, Info, Sparkles } from 'lucide-react';
+import { Search, ExternalLink, Clock, CheckCircle, CircleCheck, Info, Sparkles, AlertTriangle } from 'lucide-react';
 import { KNOWLEDGE_ARTICLES } from '@/lib/mock-content';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { cn } from '@/lib/utils';
 export function KnowledgeBasePage() {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
@@ -70,13 +71,25 @@ export function KnowledgeBasePage() {
           {filtered.map(article => {
             const isRead = readArticles.includes(article.id);
             const isFeatured = article.metadata?.featured;
+            const isHighRisk = article.metadata?.risk === 'high';
             return (
-              <Card key={article.id} className={`hover:shadow-2xl transition-all duration-300 group border-gray-100 flex flex-col h-full relative rounded-3xl overflow-hidden ${isFeatured ? 'ring-2 ring-nysc-gold bg-amber-50/10' : 'bg-white'}`}>
+              <Card 
+                key={article.id} 
+                className={cn(
+                  "hover:shadow-2xl transition-all duration-300 group border-gray-100 flex flex-col h-full relative rounded-3xl overflow-hidden",
+                  isHighRisk ? "ring-2 ring-destructive bg-red-50/10" : isFeatured ? "ring-2 ring-nysc-gold bg-amber-50/10" : "bg-white"
+                )}
+              >
                 <CardHeader className="pb-2">
                   <div className="flex justify-between items-start">
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex flex-wrap gap-2 mb-1">
                       <div className="text-[10px] font-bold text-nysc-green-800 uppercase tracking-widest">{article.category}</div>
-                      {isFeatured && (
+                      {isHighRisk && (
+                        <Badge className="bg-destructive text-[8px] h-4 uppercase px-1.5 font-black flex items-center gap-1">
+                          <AlertTriangle className="w-2 h-2" /> Risk Alert
+                        </Badge>
+                      )}
+                      {isFeatured && !isHighRisk && (
                         <Badge className="bg-nysc-gold text-[8px] h-4 uppercase px-1.5 font-black animate-pulse flex items-center gap-1">
                           <Sparkles className="w-2 h-2" /> Featured Guide
                         </Badge>
@@ -84,7 +97,9 @@ export function KnowledgeBasePage() {
                     </div>
                     {isRead && <CircleCheck className="w-4 h-4 text-nysc-green-500" />}
                   </div>
-                  <CardTitle className="text-xl group-hover:text-nysc-green-800 transition-colors leading-tight font-display font-bold">{article.title}</CardTitle>
+                  <CardTitle className={cn("text-xl group-hover:text-nysc-green-800 transition-colors leading-tight font-display font-bold", isHighRisk && "text-destructive")}>
+                    {article.title}
+                  </CardTitle>
                   {article.metadata?.source && (
                     <p className="text-[9px] text-muted-foreground font-medium uppercase tracking-widest mt-1 opacity-70">
                       Source: {article.metadata.source} | 2025 Edition
@@ -102,17 +117,22 @@ export function KnowledgeBasePage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="h-10 text-nysc-green-800 hover:text-nysc-green-900 hover:bg-nysc-green-50 gap-2 font-bold rounded-xl"
+                          className={cn(
+                            "h-10 gap-2 font-bold rounded-xl transition-colors",
+                            isHighRisk ? "text-destructive hover:bg-red-50" : "text-nysc-green-800 hover:text-nysc-green-900 hover:bg-nysc-green-50"
+                          )}
                         >
                           Read Guide <ExternalLink className="w-3 h-3" />
                         </Button>
                       </DialogTrigger>
                       <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col p-0 border-none rounded-3xl overflow-hidden shadow-2xl">
-                        <DialogHeader className="p-8 pb-4 bg-gray-50 border-b">
-                          <div className="text-[10px] font-bold text-nysc-green-800 uppercase tracking-widest mb-1 flex items-center gap-2">
-                            {article.category} {article.metadata?.featured && <span className="text-nysc-gold">• Featured</span>}
+                        <DialogHeader className={cn("p-8 pb-4 border-b", isHighRisk ? "bg-red-50" : "bg-gray-50")}>
+                          <div className="text-[10px] font-bold text-nysc-green-800 uppercase tracking-widest mb-1 flex items-center gap-2 flex-wrap">
+                            {article.category} 
+                            {isHighRisk && <span className="text-destructive font-black">• HIGH PRIORITY</span>}
+                            {article.metadata?.featured && !isHighRisk && <span className="text-nysc-gold">• Featured</span>}
                           </div>
-                          <DialogTitle className="text-3xl font-display font-bold leading-tight">{article.title}</DialogTitle>
+                          <DialogTitle className={cn("text-3xl font-display font-bold leading-tight", isHighRisk && "text-destructive")}>{article.title}</DialogTitle>
                           <DialogDescription className="text-base text-muted-foreground font-medium mt-2">
                             {article.summary}
                           </DialogDescription>
@@ -131,7 +151,14 @@ export function KnowledgeBasePage() {
                           </div>
                           <Button
                             onClick={() => toggleReadArticle(article.id)}
-                            className={`h-12 px-6 rounded-xl font-bold transition-all active:scale-95 ${readArticles.includes(article.id) ? "bg-gray-100 text-gray-600 hover:bg-gray-200" : "bg-nysc-green-800 hover:bg-nysc-green-900 shadow-lg shadow-nysc-green-800/20"}`}
+                            className={cn(
+                              "h-12 px-6 rounded-xl font-bold transition-all active:scale-95",
+                              readArticles.includes(article.id) 
+                                ? "bg-gray-100 text-gray-600 hover:bg-gray-200" 
+                                : isHighRisk 
+                                  ? "bg-destructive hover:bg-red-700 shadow-lg shadow-destructive/20" 
+                                  : "bg-nysc-green-800 hover:bg-nysc-green-900 shadow-lg shadow-nysc-green-800/20"
+                            )}
                           >
                             {readArticles.includes(article.id) ? "Mark as Unread" : <><CheckCircle className="w-4 h-4 mr-2" /> Mark as Mastered</>}
                           </Button>

@@ -4,10 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, CheckCircle, ChevronRight, MapPin, BookOpen, LayoutList, Sparkles, Lock, ArrowRight } from 'lucide-react';
+import { Calendar, CheckCircle, ChevronRight, MapPin, BookOpen, LayoutList, Sparkles, Lock, ArrowRight, AlertTriangle, ShieldAlert } from 'lucide-react';
 import { JOURNEY_STAGES, DEADLINES, KNOWLEDGE_ARTICLES } from '@/lib/mock-content';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow, differenceInDays, parseISO } from 'date-fns';
+import { cn } from '@/lib/utils';
 export function DashboardPage() {
   const stageId = useAppStore(s => s.stage);
   const stateName = useAppStore(s => s.stateOfDeployment);
@@ -32,39 +33,55 @@ export function DashboardPage() {
       case 'prospective':
         return {
           title: 'Exemption & Exclusion Guide',
-          desc: 'Determine if you are eligible for national service or require an exemption certificate.'
+          desc: 'Determine if you are eligible for national service or require an exemption certificate.',
+          risk: 'low'
         };
       case 'mobilization':
         return {
           title: 'Official Registration Guide',
-          desc: 'Critical step-by-step instructions for your current registration stage.'
+          desc: 'Critical step-by-step instructions for your current registration stage.',
+          risk: 'medium'
         };
       case 'camp':
         return {
           title: 'Surviving the 21-Day Orientation Camp',
-          desc: 'The definitive survival toolkit: Accommodation, food, health, and security tips for your orientation period.'
+          desc: 'The definitive survival toolkit: Accommodation, food, health, and security tips for your orientation period.',
+          risk: 'medium'
         };
       case 'ppa':
         return {
-          title: 'PPA: Posting & Reporting Guide',
-          desc: 'Master the 48-hour reporting rule and first-day expectations at your new workplace.'
+          title: 'PPA Rejection & Reposting',
+          desc: 'HIGH ALERT: Learn the mandatory steps if your PPA rejects you to avoid service extension.',
+          risk: 'high'
         };
       case 'cds':
         return {
           title: 'CDS Project Lifecycle',
-          desc: 'Navigate the approval, implementation, and documentation of your legacy community project.'
+          desc: 'Navigate the approval, implementation, and documentation of your legacy community project.',
+          risk: 'low'
         };
       case 'pop':
         return {
           title: 'Final Winding-Up Guide',
-          desc: 'Crucial steps for your final PPA clearance and physical certificate collection.'
+          desc: 'Crucial steps for your final PPA clearance and physical certificate collection.',
+          risk: 'high'
         };
       default:
-        return { title: 'Essential Knowledge', desc: 'Browse the verified knowledge base for official rules.' };
+        return { title: 'Essential Knowledge', desc: 'Browse the verified knowledge base for official rules.', risk: 'low' };
     }
   };
-  const { title: priorityTitle, desc: priorityDesc } = getPriorityContent();
+  const { title: priorityTitle, desc: priorityDesc, risk } = getPriorityContent();
   const priorityLink = stageId === 'cds' ? '/app/cds' : '/app/knowledge';
+  const riskStyles = {
+    high: "border-destructive/40 bg-red-50/50 shadow-destructive/10",
+    medium: "border-nysc-gold border-2 bg-amber-50/50 shadow-nysc-gold/10",
+    low: "border-nysc-green-100 bg-nysc-green-50/20 shadow-nysc-green-100/10"
+  } as const;
+  const badgeStyles = {
+    high: "bg-destructive text-white animate-pulse",
+    medium: "bg-nysc-gold text-white",
+    low: "bg-nysc-green-800 text-white"
+  };
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-fade-in px-4">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -86,19 +103,26 @@ export function DashboardPage() {
         </div>
       </header>
       {priorityTitle && (
-        <Card className="border-nysc-gold border-2 bg-amber-50/50 shadow-lg shadow-nysc-gold/10 overflow-hidden relative group">
+        <Card className={cn("border-2 shadow-lg overflow-hidden relative group transition-all duration-300", riskStyles[(risk as keyof typeof riskStyles) ?? 'low'])}>
           <div className="absolute top-0 right-0 p-4">
-             <Sparkles className="w-12 h-12 text-nysc-gold opacity-20 group-hover:scale-125 transition-transform duration-500" />
+             {risk === 'high' ? (
+               <ShieldAlert className="w-12 h-12 text-destructive opacity-20 group-hover:scale-125 transition-transform duration-500" />
+             ) : (
+               <Sparkles className="w-12 h-12 text-nysc-gold opacity-20 group-hover:scale-125 transition-transform duration-500" />
+             )}
           </div>
           <CardHeader className="pb-2">
-            <Badge className="w-fit bg-nysc-gold mb-2 uppercase text-[9px] font-black tracking-widest">Priority Phase Resource</Badge>
-            <CardTitle className="text-xl font-display text-amber-900">{priorityTitle}</CardTitle>
-            <CardTitle className="text-amber-800 font-medium text-sm">{priorityDesc}</CardTitle>
+            <Badge className={cn("w-fit mb-2 uppercase text-[9px] font-black tracking-widest flex items-center gap-1", badgeStyles[(risk as keyof typeof badgeStyles) ?? 'low'])}>
+              {risk === 'high' && <AlertTriangle className="w-3 h-3" />}
+              {risk === 'high' ? 'High Risk Action Required' : 'Priority Phase Resource'}
+            </Badge>
+            <CardTitle className={cn("text-xl font-display", risk === 'high' ? "text-destructive" : "text-amber-900")}>{priorityTitle}</CardTitle>
+            <CardDescription className={cn("font-medium text-sm", risk === 'high' ? "text-red-800" : "text-amber-800")}>{priorityDesc}</CardDescription>
           </CardHeader>
           <CardContent className="pb-6">
             <Link to={priorityLink}>
-              <Button className="bg-nysc-gold hover:bg-amber-700 text-white font-bold h-12 rounded-xl group shadow-md">
-                Open Guide <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <Button className={cn("font-bold h-12 rounded-xl group shadow-md", risk === 'high' ? "bg-destructive hover:bg-red-700" : "bg-nysc-gold hover:bg-amber-700")}>
+                {risk === 'high' ? 'Handle Rejection Now' : 'Open Guide'} <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
           </CardContent>

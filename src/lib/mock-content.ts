@@ -77,6 +77,40 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-ppa-repost',
+    category: 'Official',
+    title: 'Handling PPA Rejection & Reposting Process',
+    summary: 'A critical survival guide for when your assigned PPA cannot accept you. Learn the official 24-hour reporting mandate and how to avoid the "Absconding" penalty.',
+    content: `Being rejected by a Primary Place of Assignment (PPA) is not a failure; it is a common administrative occurrence. However, how you handle it determines whether your service year remains smooth or results in a disciplinary extension.
+1. VALID REASONS FOR REJECTION
+An employer may reject your posting for specific official reasons:
+- Lack of Vacancy/Overstaffing: They already have the maximum number of corps members they can supervise.
+- Lack of Specialized Role: For example, an engineer posted to a school with no technical department.
+- Safety & Security: The organization cannot guarantee your safety in a specific volatile area.
+- Lack of Logistics: Inability to provide the mandatory accommodation or transport assistance.
+2. THE OFFICIAL REJECTION WORKFLOW
+If the employer cannot accept you, follow these steps immediately:
+- Get the Formal Letter: The organization MUST issue a "Letter of Rejection" on their official letterhead, signed and stamped.
+- DO NOT SELF-POST: Never go looking for another PPA on your own. This is a serious offense.
+- Report within 24 Hours: Take the rejection letter directly to your Local Government Inspector (LGI) or Zonal Inspector (ZI).
+- The Reposting Mandate: The NYSC office will review the rejection and issue you a new "Reposting Letter" to a different organization.
+3. THE 48-HOUR REPORTING RULE & ABSCONDING
+- You have 48 hours from the day you leave camp to report to your PPA.
+- If rejected, you have 24 hours to return to the NYSC office.
+- Failure to report back to the LGI after a rejection can lead to you being declared as "Absconding" (missing from service), which results in a minimum of 3 months extension of service without pay.
+4. CRITICAL TIPS & WARNINGS
+- Platoon Officer Communication: Inform your camp platoon officer or platoon leader about the rejection via phone as a backup record.
+- Avoid "Payment for Posting": It is illegal to pay any official for a "better" PPA. All reposting due to rejection is free of charge.
+- Maintain Professionalism: Even if rejected, remain polite. The rejection letter is a neutral document required for your files.`,
+    metadata: {
+      stage: 'ppa',
+      risk: 'high',
+      source: 'NYSC Official Policy',
+      last_updated: '2025',
+      featured: true
+    }
+  },
+  {
     id: 'k-ppa',
     category: 'Official',
     title: 'Primary Assignment (PPA): Posting, Reporting, Expectations',
