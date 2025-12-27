@@ -14,7 +14,7 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
     return ok(c, { sent: true, note: 'Frictionless testing enabled: Use any 6 digits' });
   });
   /**
-   * AUTH: SIMPLIFIED LOGIN (Bypasses state check, uses email heuristics)
+   * AUTH: SIMPLIFIED LOGIN
    */
   app.post('/api/auth/login', async (c) => {
     const body = await c.req.json<{ email?: string; otp?: string }>();
@@ -45,10 +45,9 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
       const userIndex = new Index(c.env, UserEntity.indexName);
       await userIndex.add(userId);
     } else {
-      // Hardened: Synchronize activity and Pro status on every login
       await profileEntity.mutate(curr => ({
         ...curr,
-        isPro: isPro || curr.isPro, // Preserve Pro status if already granted
+        isPro: isPro || curr.isPro,
         updatedAt: Date.now()
       }));
     }
@@ -68,12 +67,11 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
     const payload = await c.req.json<Partial<NYSCProfile>>();
     const entity = new UserEntity(c.env, id);
     if (!await entity.exists()) return notFound(c, 'Profile not found');
-    // Defensive: Ensure crucial system fields aren't corrupted
     const updated = await entity.mutate(curr => ({
       ...curr,
       ...payload,
-      id, // Force ID consistency
-      isPro: curr.isPro || payload.isPro || false, // Pro status stickiness
+      id,
+      isPro: curr.isPro || payload.isPro || false,
       updatedAt: Date.now()
     }));
     return ok(c, updated);
@@ -82,11 +80,12 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
    * ADMIN: ENDPOINTS
    */
   app.get('/api/admin/stats', async (c) => {
+    // Ensure seed data is present for demonstration purposes
+    await UserEntity.ensureSeed(c.env);
     const usersRes = await UserEntity.list(c.env);
     const users = usersRes.items || [];
     const now = Date.now();
     const oneDayMs = 24 * 60 * 60 * 1000;
-    // Defensive check: handle empty user lists
     const totalUsers = users.length;
     const activeToday = totalUsers === 0 ? 0 : users.filter(u => (now - (u.updatedAt || 0)) < oneDayMs).length;
     const proUsers = totalUsers === 0 ? 0 : users.filter(u => u.isPro).length;
@@ -98,8 +97,8 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
     });
   });
   app.get('/api/admin/users', async (c) => {
+    await UserEntity.ensureSeed(c.env);
     const users = await UserEntity.list(c.env);
-    // Hardened: Sort by latest activity to surface priority engagements
     const sorted = (users.items || []).sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
     return ok(c, sorted);
   });

@@ -2,7 +2,6 @@
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
 import { cn } from "@/lib/utils"
-// Format: { [key: string]: string }
 const THEME_COLORS = {
   primary: "var(--primary)",
   secondary: "var(--secondary)",
@@ -56,35 +55,27 @@ export function ChartContainer({
   )
 }
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
-  const colorConfig = Object.entries(config || {}).filter(
-    ([, itemConfig]) => itemConfig && (itemConfig.theme || itemConfig.color)
-  )
-  if (!colorConfig.length) {
-    return null
-  }
+  const css = React.useMemo(() => {
+    const colorConfig = Object.entries(config || {}).filter(
+      ([, itemConfig]) => itemConfig && (itemConfig.theme || itemConfig.color)
+    )
+    if (!colorConfig.length) return null
+    return Object.entries(THEME_COLORS)
+      .map(([theme, color]) => {
+        const rules = colorConfig
+          .map(([key, itemConfig]) => {
+            const themeColor = itemConfig.theme?.[theme as keyof typeof itemConfig.theme] || itemConfig.color
+            return themeColor ? `--color-${key}: ${themeColor};` : null
+          })
+          .filter(Boolean)
+          .join("\n")
+        return `[data-chart="${id}"] {\n${rules}\n}`
+      })
+      .join("\n")
+  }, [id, config])
+  if (!css) return null
   return (
-    <style
-      dangerouslySetInnerHTML={{
-        __html: Object.entries(THEME_COLORS)
-          .map(
-            ([theme, color]) => `
-[data-chart=${id}] {
-  ${colorConfig
-    .map(([key, itemConfig]) => {
-      const themeColor =
-        itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
-        itemConfig.color
-      return themeColor ? `--color-${key}: ${themeColor};` : null
-    })
-    .filter(Boolean)
-    .join("\n")}
-}
-`
-          )
-          .filter(style => style.trim().length > 0)
-          .join("\n"),
-      }}
-    />
+    <style dangerouslySetInnerHTML={{ __html: css }} />
   )
 }
 export const ChartTooltip = RechartsPrimitive.Tooltip

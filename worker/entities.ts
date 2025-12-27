@@ -1,5 +1,6 @@
 import { IndexedEntity, Entity, Index } from "./core-utils";
 import type { NYSCProfile } from "@shared/types";
+import { MOCK_USERS } from "@shared/mock-data";
 export { Index };
 export interface OtpState {
   otp: string;
@@ -8,6 +9,7 @@ export interface OtpState {
 export class UserEntity extends IndexedEntity<NYSCProfile> {
   static readonly entityName = "user-profile";
   static readonly indexName = "user-profiles";
+  static seedData = MOCK_USERS;
   static readonly initialState: NYSCProfile = {
     id: "",
     stage: "prospective",

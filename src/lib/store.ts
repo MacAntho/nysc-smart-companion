@@ -108,28 +108,28 @@ export const useAppStore = create<AppState>()(
       syncProfile: async () => {
         const state = get();
         const { userId, isAuthenticated, isSyncing, lastSyncedPayload } = state;
-        if (!userId || !isAuthenticated) return;
-        const currentPayload = {
-          stage: state.stage,
-          stateOfDeployment: state.stateOfDeployment,
-          completedTasks: state.completedTasks,
-          readArticles: state.readArticles,
-          activeProjectId: state.activeProjectId,
-          isOnboarded: state.isOnboarded
-        };
-        const payloadString = JSON.stringify(currentPayload);
-        if (payloadString === lastSyncedPayload || isSyncing) return;
+        if (!userId || !isAuthenticated || isSyncing) return;
+        const generatePayload = () => JSON.stringify({
+          stage: get().stage,
+          stateOfDeployment: get().stateOfDeployment,
+          completedTasks: get().completedTasks,
+          readArticles: get().readArticles,
+          activeProjectId: get().activeProjectId,
+          isOnboarded: get().isOnboarded
+        });
+        const currentPayload = generatePayload();
+        if (currentPayload === lastSyncedPayload) return;
         set({ isSyncing: true, lastSyncError: null });
         try {
           const response = await fetch(`/api/profile/${userId}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: payloadString,
+            body: currentPayload,
           });
           if (response.ok) {
             set({
               lastSynced: Date.now(),
-              lastSyncedPayload: payloadString
+              lastSyncedPayload: currentPayload
             });
           } else {
             set({ lastSyncError: 'Sync refused by server' });
@@ -139,6 +139,13 @@ export const useAppStore = create<AppState>()(
           set({ lastSyncError: 'Connection issue' });
         } finally {
           set({ isSyncing: false });
+          // Post-Sync Eventual Consistency Check:
+          // If state changed during the network request, trigger another sync
+          const latestPayload = generatePayload();
+          if (latestPayload !== currentPayload) {
+            // Use a slight delay to prevent stack overflow in error loops
+            setTimeout(() => get().syncProfile(), 100);
+          }
         }
       },
       loadProfile: async (force = false) => {
@@ -157,7 +164,6 @@ export const useAppStore = create<AppState>()(
             const result = await response.json();
             if (result.success && result.data) {
               const p = result.data as NYSCProfile;
-              // Merge logic: Server data overrides local for progress arrays
               set({
                 stage: p.stage || state.stage,
                 stateOfDeployment: p.stateOfDeployment || state.stateOfDeployment,
