@@ -111,6 +111,7 @@ export const useAppStore = create<AppState>()(
       syncProfile: async () => {
         const state = get();
         const { userId, isAuthenticated, isSyncing, lastSyncedPayload } = state;
+        // Defensive check: handle transient null userId or sync status
         if (!userId || !isAuthenticated || isSyncing) return;
         const payload = {
           stage: state.stage,
@@ -121,7 +122,7 @@ export const useAppStore = create<AppState>()(
           isOnboarded: state.isOnboarded
         };
         const payloadString = JSON.stringify(payload);
-        // Prevent redundant syncs
+        // Prevent redundant syncs if the payload hasn't changed since last successful sync
         if (payloadString === lastSyncedPayload) return;
         set({ isSyncing: true });
         try {
@@ -133,15 +134,7 @@ export const useAppStore = create<AppState>()(
           if (response.ok) {
             set({ lastSynced: Date.now(), lastSyncedPayload: payloadString });
           } else {
-            const errText = await response.text();
-            let errMsg = `[SYNC FAIL ${response.status}]`;
-            try {
-              const err = JSON.parse(errText);
-              errMsg += ` ${err.error || err.message || 'Unknown'}`;
-            } catch {
-              /* Ignore parsing errors for non-JSON failure responses */
-            }
-            console.warn(errMsg);
+            console.warn(`[SYNC FAIL ${response.status}]`);
           }
         } catch (error) {
           console.error('[SYNC FAILURE]', error);
@@ -150,7 +143,8 @@ export const useAppStore = create<AppState>()(
         }
       },
       loadProfile: async () => {
-        const { userId, isAuthenticated, isSyncing } = get();
+        const state = get();
+        const { userId, isAuthenticated, isSyncing, lastSyncedPayload } = state;
         if (!userId || !isAuthenticated || isSyncing) return;
         set({ isSyncing: true });
         try {
@@ -167,6 +161,11 @@ export const useAppStore = create<AppState>()(
                 activeProjectId: p.activeProjectId,
                 isOnboarded: p.isOnboarded
               });
+              // Optimization: Skip state updates if incoming cloud data is identical to local state
+              if (incomingPayloadString === lastSyncedPayload) {
+                set({ isInitialized: true, isSyncing: false });
+                return;
+              }
               set({
                 stage: p.stage || 'prospective',
                 stateOfDeployment: p.stateOfDeployment || '',
@@ -210,7 +209,10 @@ export const useAppStore = create<AppState>()(
     {
       name: 'nysc-companion-storage',
       onRehydrateStorage: () => (state) => {
-        if (state) state.isInitialized = true;
+        // Hardening: Ensure initialized state is captured immediately upon rehydration
+        if (state) {
+          state.isInitialized = true;
+        }
       },
       partialize: (state) => ({
         userId: state.userId,
@@ -225,6 +227,7 @@ export const useAppStore = create<AppState>()(
         activeProjectId: state.activeProjectId,
         isOnboarded: state.isOnboarded,
         lastSynced: state.lastSynced,
+        lastSyncedPayload: state.lastSyncedPayload,
       }),
     }
   )
