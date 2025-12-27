@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { toast } from 'sonner';
 import type { NYSCStage, NYSCProfile } from '@shared/types';
 interface AppState {
   userId: string | null;
@@ -44,23 +45,32 @@ export const useAppStore = create<AppState>()(
         get().syncProfile();
       },
       toggleTask: (taskId) => {
+        const isRemoving = get().completedTasks.includes(taskId);
         set((state) => ({
-          completedTasks: state.completedTasks.includes(taskId)
+          completedTasks: isRemoving
             ? state.completedTasks.filter((id) => id !== taskId)
             : [...state.completedTasks, taskId],
         }));
+        toast.success(isRemoving ? 'Task marked as incomplete' : 'Task completed!');
         get().syncProfile();
       },
       toggleReadArticle: (articleId) => {
+        const isRead = get().readArticles.includes(articleId);
         set((state) => ({
-          readArticles: state.readArticles.includes(articleId)
+          readArticles: isRead
             ? state.readArticles.filter((id) => id !== articleId)
             : [...state.readArticles, articleId],
         }));
+        toast.info(isRead ? 'Article marked as unread' : 'Knowledge shared! Article read.');
         get().syncProfile();
       },
       setActiveProject: (activeProjectId) => {
         set({ activeProjectId });
+        if (activeProjectId) {
+          toast.success('Project enrolled successfully');
+        } else {
+          toast.info('Project removed');
+        }
         get().syncProfile();
       },
       completeOnboarding: () => {
@@ -82,6 +92,7 @@ export const useAppStore = create<AppState>()(
           }
         } catch (error) {
           console.error('Failed to sync profile:', error);
+          toast.error('Cloud sync failed. Will retry later.');
         } finally {
           set({ isSyncing: false });
         }

@@ -5,8 +5,8 @@ export default {
   theme: {
   	extend: {
   		fontFamily: {
-  			sans: ['Inter', 'sans-serif'],
-			display: ['Inter', 'system-ui', 'sans-serif'],
+  			sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+			display: ['Poppins', 'Inter', 'system-ui', 'sans-serif'],
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -17,19 +17,19 @@ export default {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			primary: {
-  				DEFAULT: '#065F46', // Corps Green (Emerald-800)
+  				DEFAULT: '#00843D', // Official NYSC Green
   				foreground: '#FFFFFF'
   			},
         nysc: {
           green: {
-            50: '#ECFDF5',
-            100: '#D1FAE5',
-            500: '#10B981',
-            800: '#065F46',
+            50: '#F0FDF4',
+            100: '#DCFCE7',
+            500: '#22C55E',
+            800: '#00843D', // Official NYSC Green
             900: '#064E3B',
           },
           gold: {
-            DEFAULT: '#D97706', // Amber-600
+            DEFAULT: '#D97706',
             foreground: '#FFFFFF'
           }
         },
@@ -53,11 +53,16 @@ export default {
   			'slide-up': {
   				'0%': { transform: 'translateY(20px)', opacity: '0' },
   				'100%': { transform: 'translateY(0)', opacity: '1' }
-  			}
+  			},
+        'hover-glow': {
+          '0%, 100%': { boxShadow: '0 0 5px rgba(0, 132, 61, 0.2)' },
+          '50%': { boxShadow: '0 0 20px rgba(0, 132, 61, 0.4)' }
+        }
   		},
   		animation: {
   			'fade-in': 'fade-in 0.6s ease-out',
   			'slide-up': 'slide-up 0.4s ease-out',
+        'hover-glow': 'hover-glow 2s infinite'
   		}
   	}
   },
