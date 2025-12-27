@@ -55,11 +55,12 @@ export const useAppStore = create<AppState>()(
         isPro: data.isPro
       }),
       logout: () => {
-        // 1. Reset the runtime state
+        // 1. Reset the runtime state fully
         get().reset();
-        // 2. Clear persistent storage to prevent hydration of old state
+        // 2. Clear persistent storage to prevent hydration of stale/compromised state
         localStorage.removeItem('nysc-companion-storage');
-        // 3. Clear cookies or other tokens if applicable (not used in current simplified auth)
+        // 3. Force clean slate for any possible next session immediately
+        set({ lastSynced: null, userId: null, isAuthenticated: false });
         // 4. Final redirect to landing
         window.location.href = '/';
       },
@@ -108,35 +109,33 @@ export const useAppStore = create<AppState>()(
         if (get().isAuthenticated) get().syncProfile();
       },
       syncProfile: async () => {
-        const userId = get().userId;
-        const isAuthenticated = get().isAuthenticated;
-        const stage = get().stage;
-        const stateOfDeployment = get().stateOfDeployment;
-        const completedTasks = get().completedTasks;
-        const readArticles = get().readArticles;
-        const activeProjectId = get().activeProjectId;
-        const isOnboarded = get().isOnboarded;
-        const isSyncing = get().isSyncing;
-        if (!userId || !isAuthenticated || isSyncing) return;
+        const current = get();
+        const userId = current.userId;
+        const isAuthenticated = current.isAuthenticated;
+        // Defensive check: Do not sync if unauthenticated or missing identity
+        if (!userId || !isAuthenticated || current.isSyncing) return;
         set({ isSyncing: true });
         try {
           const response = await fetch(`/api/profile/${userId}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              stage,
-              stateOfDeployment,
-              completedTasks,
-              readArticles,
-              activeProjectId,
-              isOnboarded
+              stage: current.stage,
+              stateOfDeployment: current.stateOfDeployment,
+              completedTasks: current.completedTasks,
+              readArticles: current.readArticles,
+              activeProjectId: current.activeProjectId,
+              isOnboarded: current.isOnboarded
             }),
           });
           if (response.ok) {
             set({ lastSynced: Date.now() });
+          } else {
+            const errorData = await response.json().catch(() => ({}));
+            console.warn('[SYNC WARNING] Server rejected sync:', errorData.error);
           }
         } catch (error) {
-          console.error('Failed to sync profile:', error);
+          console.error('[SYNC FAILURE] Network/API error:', error);
         } finally {
           set({ isSyncing: false });
         }
@@ -154,17 +153,17 @@ export const useAppStore = create<AppState>()(
               set({
                 stage: p.stage || 'prospective',
                 stateOfDeployment: p.stateOfDeployment || '',
-                completedTasks: p.completedTasks || [],
-                readArticles: p.readArticles || [],
+                completedTasks: Array.isArray(p.completedTasks) ? p.completedTasks : [],
+                readArticles: Array.isArray(p.readArticles) ? p.readArticles : [],
                 activeProjectId: p.activeProjectId || null,
                 isOnboarded: p.isOnboarded ?? false,
-                lastSynced: p.updatedAt || null,
+                lastSynced: p.updatedAt || Date.now(),
                 isPro: p.isPro ?? false
               });
             }
           }
         } catch (error) {
-          console.error('Failed to load profile:', error);
+          console.error('[LOAD PROFILE FAILURE]', error);
         }
       },
       reset: () => {
