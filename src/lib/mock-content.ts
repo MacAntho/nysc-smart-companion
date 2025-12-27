@@ -66,6 +66,36 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-pop-certificate',
+    category: 'Official',
+    title: 'NYSC Certificate: Jobs, Recognition & Loss Procedure',
+    summary: 'The ultimate proof of service: Mandatory requirements for employment, educational transitions, and the official protocol for handling lost or damaged certificates.',
+    content: `The NYSC Discharge Certificate (or Certificate of National Service) is a high-security document and the only legal proof of your participation in the scheme. Under the NYSC Act, it carries significant legal weight.
+I. LEGAL MANDATE & JOB MARKET RECOGNITION
+1. MANDATORY PRESENTATION (Section 12): By law, every employer in Nigeria (Public or Private) is required to demand your NYSC Discharge Certificate or Exemption/Exclusion Certificate before offering permanent employment.
+2. PROFESSIONAL BODIES: Membership in many professional bodies (ICAN, COREN, NBA, etc.) and post-graduate university admissions in Nigeria require proof of national service.
+3. PUBLIC OFFICE: Eligibility for many elective or appointive public offices is contingent upon having served or being legally exempted.
+II. SAFEGUARDING YOUR CERTIFICATE
+1. SCANNED BACKUP: Immediately upon collection, create a high-resolution digital scan. Save it to a secure cloud vault (Google Drive, iCloud) and email a copy to yourself.
+2. LAMINATION: While common, some agencies advise against heavy lamination that might interfere with verifying security features (holograms/watermarks). Consider a high-quality protective sleeve instead.
+III. PROCEDURE FOR LOST OR DAMAGED CERTIFICATES
+NYSC Policy is strict: THE DISCHARGE CERTIFICATE IS NEVER RE-ISSUED IF LOST. However, the legal alternative is the "Confirmation of Service" letter.
+1. IMMEDIATE ACTION:
+   a. Police Report: File a report at the nearest station to the location of loss.
+   b. Sworn Affidavit: Obtain a court affidavit stating the circumstances of the loss and the certificate number (if known).
+2. FORMAL APPLICATION:
+   - Write a formal letter addressed to the Director-General of NYSC.
+   - Route the letter through your State Coordinator (the state where you served).
+   - Attach the Police Report and Sworn Affidavit.
+3. CONFIRMATION OF SERVICE:
+   - If approved, the Directorate Headquarters will issue a "Letter of Confirmation of Service." This letter is legally equivalent to the original certificate for all official purposes.
+IV. CORRECTION OF DATA ON CERTIFICATE
+If you notice an error in your name or date of birth on the day of collection:
+1. DO NOT ACCEPT: Point out the error to the distribution official immediately.
+2. CORRECTION WINDOW: Errors reported after the POP date are significantly harder to fix and often require a trip to the National Headquarters in Abuja with supporting documents (WAEC/Degree/Birth Certificate).`,
+    metadata: { stage: 'pop', risk: 'low', source: 'NYSC Act / Directorate Headquarters', featured: true, last_updated: '2024-12-01' }
+  },
+  {
     id: 'k-financial-survival',
     category: 'Survival/Financial',
     title: 'NYSC Financial Survival Guide: Allowance, Budgets & Side Hustles',
@@ -101,7 +131,7 @@ V. EMERGENCY BUFFERS & SCAMS
     content: `This guide outlines the mandatory steps to take during critical emergencies during your service year.
 I. MEDICAL EMERGENCIES
 1. ORIENTATION CAMP: Report immediately to the Camp Clinic. In severe cases, the NYSC medical team will coordinate a referral to a Military or Specialist hospital.
-2. POST-CAMP (PPA): Visit the nearest Government/General hospital. Inform your Local Government Inspector (LGI) and Zonal Inspector (ZI) within 24 hours. 
+2. POST-CAMP (PPA): Visit the nearest Government/General hospital. Inform your Local Government Inspector (LGI) and Zonal Inspector (ZI) within 24 hours.
 II. SECURITY & PERSONAL THREATS
 1. DISTRESS CALLS: Save the numbers of your LGI, ZI, and the State NYSC Security Officer.
 2. HARASSMENT: Reporting sexual or physical harassment at your PPA is mandatory. NYSC has a zero-tolerance policy.
@@ -128,7 +158,7 @@ IV. PPA & CDS CONFLICTS
     category: 'Career/POP',
     title: 'Leveraging NYSC for Career Transition',
     summary: 'Strategic Roadmap: Mastering your transition from service to the labor market through skills, networking, and digital presence.',
-    content: `National service is a strategic launchpad. 
+    content: `National service is a strategic launchpad.
 I. SKILL MONETIZATION: Collect your SAED certificates. They are recognized for start-up loans.
 II. NETWORKING: Your PPA is your first professional network. Get a "Recommendation Letter".
 III. DIGITAL BRANDING: Update LinkedIn profile. Change headline from "Serving Corps Member" to "Graduate [Your Major]".

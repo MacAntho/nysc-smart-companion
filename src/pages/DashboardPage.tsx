@@ -28,7 +28,7 @@ export function DashboardPage() {
     return (stageTasks || []).filter(t => tasksArr.includes(t.id)).length;
   }, [stageTasks, completedTasks]);
   const progressPercent = useMemo(() => {
-    if (!stageTasks || stageTasks.length === 0) return 100; // Phase completed by default if no tasks
+    if (!stageTasks || stageTasks.length === 0) return 100;
     return (completedCount / stageTasks.length) * 100;
   }, [stageTasks, completedCount]);
   const relevantDeadlines = useMemo(() => {
@@ -56,15 +56,19 @@ export function DashboardPage() {
     if (!readArticlesSet.has('k-disqualification')) {
       return { title: 'Disqualification Protocol', desc: 'Critical Risk: Understand the grounds for service cancellation and legal implications.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=disqualification' };
     }
-    // 3. New Financial Intelligence (For PPA/CDS)
+    // 3. Final Milestone: Certificate Intelligence (Priority for POP)
+    if (stageId === 'pop' && !readArticlesSet.has('k-pop-certificate')) {
+      return { title: 'Certificate: Jobs & Loss Protocol', desc: 'Operational Requirement: Mandatory guidelines for certificate recognition, job market usage, and official replacement procedure.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=certificate' };
+    }
+    // 4. Financial Intelligence (For PPA/CDS)
     if ((stageId === 'ppa' || stageId === 'cds') && !readArticlesSet.has('k-financial-survival')) {
       return { title: '₦77k Financial Survival Guide', desc: 'Strategy Active: Budgeting the new federal allowance, maximizing PPA perks, and SAED monetization.', risk: 'medium' as PriorityRisk, link: '/app/knowledge?search=financial' };
     }
-    // 4. Career Leverage (For POP)
+    // 5. Career Leverage (For POP)
     if (stageId === 'pop' && !readArticlesSet.has('k-career-leverage')) {
       return { title: 'Career Transition Roadmap', desc: 'Strategy Active: Leverage your NYSC experience, certificates, and PPA network for the labor market.', risk: 'medium' as PriorityRisk, link: '/app/knowledge?search=career' };
     }
-    // 5. General Survival Tips
+    // 6. General Survival Tips
     if (!readArticlesSet.has('k-insider-tips')) {
       return { title: '100 Practical Survival Tips', desc: 'Expert Intelligence: Battle-tested tips for camp, finance, and PPA survival.', risk: 'medium' as PriorityRisk, link: '/app/knowledge?search=tips' };
     }
