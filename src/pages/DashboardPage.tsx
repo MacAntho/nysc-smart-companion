@@ -40,6 +40,14 @@ export function DashboardPage() {
   const priorityContent = useMemo(() => {
     if (!isInitialized) return null;
     const readArticlesSet = new Set(readArticles);
+    if ((stageId === 'mobilization' || stageId === 'camp') && !readArticlesSet.has('k-redeployment')) {
+      return {
+        title: 'Redeployment & Relocation Guide',
+        desc: 'Relocation Intelligence: Understand valid grounds (Marital/Medical) and the mandatory digital application chain.',
+        risk: 'high' as PriorityRisk,
+        searchLink: '/app/knowledge?search=redeployment'
+      };
+    }
     if (!readArticlesSet.has('k-disqualification')) {
       return {
         title: 'Disqualification & Remobilization Protocol',

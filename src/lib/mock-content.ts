@@ -66,6 +66,40 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-redeployment',
+    category: 'Official/Advisory',
+    title: 'NYSC Redeployment & Relocation Guide',
+    summary: 'Comprehensive guide on valid relocation grounds (Marital, Medical, Security), the digital application process, and mandatory documentation.',
+    content: `Relocation (commonly known as Redeployment) is the official process of moving your service from one state to another. It is not a right, but a privilege granted based on verifiable and compassionate grounds.
+1. VALID REASONS FOR RELOCATION:
+The NYSC management recognizes three primary grounds for relocation:
+• MARITAL (For Married Women): This is the most common ground. Married female corps members can apply to be moved to the state where their husband resides. 
+• MEDICAL: Corps members with chronic or life-threatening conditions (e.g., Asthma, Sickle Cell, Heart Disease, Kidney issues) that require specialized care not available in the current state of deployment.
+• SECURITY: Relocation may be granted if the current state or specific local government is experiencing extreme instability or direct threats to life that the NYSC cannot mitigate.
+2. THE OFFICIAL PROCESS:
+Applications are strictly digital and follow this chain:
+• PORTAL LOGIN: Access your dashboard on the official NYSC portal (portal.nysc.org.ng).
+• RELOCATION LINK: Click on the "Relocation" or "Apply for Relocation" link.
+• DATA ENTRY: Fill in the required details and state the specific reason for the request.
+• DOCUMENT UPLOAD: Scan and upload all supporting documents as a single or multiple PDF files.
+• APPROVAL NOTIFICATION: If approved, you will be notified via SMS/Email. You must then print your "New Call-up Letter" and proceed to the new state for registration.
+3. MANDATORY DOCUMENTATION:
+Your application will be rejected without these specific documents:
+• FOR MARITAL CLAIMS:
+  - Marriage Certificate.
+  - Newspaper Change of Name (Original).
+  - Letter from Employer of Husband.
+  - Husband’s Identity Card.
+  - Utility bill as proof of Husband's residence.
+• FOR MEDICAL CLAIMS:
+  - A comprehensive Medical Report from a Federal or State Government Hospital.
+  - The report must be signed by the Chief Medical Director (CMD) or a designated consultant.
+  - Private hospital reports are NOT accepted without verification by a government hospital.
+4. IMPORTANT ADVISORY:
+Redeployment is usually processed during the 21-day Orientation Camp or immediately after camp. Requests made deep into the service year are significantly harder to secure. Beware of "Redeployment Agents" claiming they can influence the process for a fee; the system is monitored and automated to prevent fraud.`,
+    metadata: { stage: 'camp', risk: 'high', source: 'NYSC Bye-laws', featured: true }
+  },
+  {
     id: 'k-disqualification',
     category: 'Official/Advisory',
     title: 'NYSC Disqualification, Remobilization & Extensions',

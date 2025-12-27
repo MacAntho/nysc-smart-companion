@@ -33,7 +33,7 @@ export function KnowledgeBasePage() {
     if (!isTyping.current && queryParam !== search) {
       setSearch(queryParam);
     }
-  }, [queryParam]);
+  }, [queryParam, search]);
   // Debounced URL update
   useEffect(() => {
     const handler = setTimeout(() => {

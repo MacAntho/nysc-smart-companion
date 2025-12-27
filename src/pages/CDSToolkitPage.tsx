@@ -51,7 +51,7 @@ export function CDSToolkitPage() {
     } else if (!activeProjectId && tabValue === "diary") {
       setTabValue("ideas");
     }
-  }, [activeProjectId]);
+  }, [activeProjectId, tabValue]);
   const [search, setSearch] = useState('');
   const [activeFilter, setActiveFilter] = useState<'all' | 'low-budget' | 'short-term'>('all');
   const [dialogProject, setDialogProject] = useState<CDSProject | null>(null);
