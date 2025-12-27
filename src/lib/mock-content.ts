@@ -1,17 +1,17 @@
 import { KnowledgeArticle } from "@shared/types";
 export const NIGERIAN_STATES = [
-  'Lagos', 
-  'Abuja', 
-  'Oyo', 
-  'Rivers', 
-  'Kano', 
-  'Kaduna', 
-  'Enugu', 
-  'Edo', 
-  'Cross River', 
-  'Delta', 
-  'Anambra', 
-  'Plateau', 
+  'Lagos',
+  'Abuja',
+  'Oyo',
+  'Rivers',
+  'Kano',
+  'Kaduna',
+  'Enugu',
+  'Edo',
+  'Cross River',
+  'Delta',
+  'Anambra',
+  'Plateau',
   'Kwara'
 ];
 export const JOURNEY_STAGES = [
@@ -76,6 +76,42 @@ export const JOURNEY_STAGES = [
   }
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
+  {
+    id: 'k-ppa',
+    category: 'Official',
+    title: 'Primary Assignment (PPA): Posting, Reporting, Expectations',
+    summary: 'The complete roadmap for your first days at your workplace: Posting letters, reporting protocols, employer acceptance, and professional expectations.',
+    content: `Your Primary Place of Assignment (PPA) is where you will spend the majority of your service year. Navigating the transition from the regimented camp life to a professional environment is critical for a successful year.
+1. RECEIVING THE POSTING LETTER
+On the final day of the orientation camp, every corps member receives a posting letter. This document is official and contains the name and address of the organization where you have been deployed.
+- Check the Address: Immediately verify the location. If the address is vague, consult with your Platoon Officer or the camp's posting desk before leaving the gate.
+- Photocopy: Make at least 3 photocopies of this letter immediately. You will need them for your employer and the Local Government Inspector (LGI).
+2. THE 48-HOUR REPORTING RULE
+You are required by NYSC regulations to report to your PPA within 48 hours of leaving the orientation camp.
+- Documentation of Arrival: When you arrive, present your original posting letter to the head of the organization or the Human Resources manager.
+- Professionalism: Arrive in your full 6/6 uniform or official white-on-white. First impressions matter.
+- Why Promptness Matters: Delays in reporting can be interpreted as "absconding," which is a serious disciplinary offense that can lead to an extension of service.
+3. ACCEPTANCE VS. REJECTION
+Your employer has the right to either accept or reject your posting based on their current needs and capacity.
+- Acceptance: If accepted, the employer will sign and stamp your posting letter. You must then take this signed letter to the Local Government Secretariat to "dock" your file with the LGI.
+- Rejection: If the organization cannot accommodate you, they must issue a formal "Letter of Rejection" stating the reason. You must take this rejection letter back to the NYSC Zonal or Local Office. The NYSC will then issue a "Relocation/Reposting" letter to a new organization. Never look for a PPA yourself without official NYSC approval.
+4. FIRST DAY PROTOCOLS & EXPECTATIONS
+- Dress Code: Unless specified otherwise (e.g., if you are a medical doctor or in a specialized field), you are expected to be in your NYSC uniform on Mondays and as directed by the organization on other days.
+- Introductions: Familiarize yourself with the hierarchy. Know your supervisor and the head of the establishment.
+- Office Hours: Adhere strictly to the organization's working hours. If the office opens at 8:00 AM, ensure you are present by 7:50 AM.
+5. BALANCING WORK AND CDS
+Your primary duty is to your PPA, but you have a mandatory weekly Community Development Service (CDS) meeting.
+- Communication: Inform your employer of your specific CDS day (usually one day between Tuesday and Thursday).
+- Reliability: Ensure that your absence for CDS does not negatively impact your professional responsibilities. Plan your workload ahead of your CDS day.
+- Leave of Absence: Any travel or extended absence from your PPA must be approved in writing by both your Employer and the NYSC State Coordinator through your LGI.`,
+    metadata: {
+      stage: 'ppa',
+      risk: 'medium',
+      source: 'NYSC Official',
+      last_updated: '2025',
+      featured: true
+    }
+  },
   {
     id: 'k-camp-survival',
     category: 'Survival',

@@ -46,8 +46,8 @@ export function DashboardPage() {
         };
       case 'ppa':
         return {
-          title: 'Monthly Clearance Protocol',
-          desc: 'Master the steps for your monthly attendance and allowance verification to avoid extensions.'
+          title: 'PPA: Posting & Reporting Guide',
+          desc: 'Master the 48-hour reporting rule and first-day expectations at your new workplace.'
         };
       case 'cds':
         return {
@@ -93,7 +93,7 @@ export function DashboardPage() {
           <CardHeader className="pb-2">
             <Badge className="w-fit bg-nysc-gold mb-2 uppercase text-[9px] font-black tracking-widest">Priority Phase Resource</Badge>
             <CardTitle className="text-xl font-display text-amber-900">{priorityTitle}</CardTitle>
-            <CardDescription className="text-amber-800 font-medium">{priorityDesc}</CardDescription>
+            <CardTitle className="text-amber-800 font-medium text-sm">{priorityDesc}</CardTitle>
           </CardHeader>
           <CardContent className="pb-6">
             <Link to={priorityLink}>
