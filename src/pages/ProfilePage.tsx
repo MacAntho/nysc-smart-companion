@@ -26,6 +26,7 @@ const STAGES: { value: NYSCStage; label: string }[] = [
   { value: 'mobilization', label: 'Mobilization' },
   { value: 'camp', label: 'Orientation Camp' },
   { value: 'ppa', label: 'Primary Assignment' },
+  { value: 'cds', label: 'CDS Phase' },
   { value: 'pop', label: 'Winding Up / POP' },
 ];
 const NIGERIAN_STATES = ['Lagos', 'Abuja', 'Oyo', 'Rivers', 'Kano', 'Kaduna', 'Enugu', 'Edo', 'Cross River', 'Delta', 'Anambra', 'Plateau', 'Kwara'];
@@ -110,7 +111,7 @@ export function ProfilePage() {
                 <span>Journey Tasks</span>
                 <span>{completedTasks.length} Done</span>
               </div>
-              <Progress value={Math.min(100, (completedTasks.length / 15) * 100)} className="h-2 bg-gray-100" />
+              <Progress value={Math.min(100, (completedTasks.length / 18) * 100)} className="h-2 bg-gray-100" />
             </div>
             <div className="p-4 border border-nysc-green-100 bg-nysc-green-50/50 rounded-2xl">
               <p className="text-[10px] font-black uppercase tracking-widest text-nysc-green-800 mb-1">Current Milestone</p>

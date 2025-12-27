@@ -40,6 +40,16 @@ export const JOURNEY_STAGES = [
     ]
   },
   {
+    id: 'cds',
+    title: 'CDS Project Lifecycle',
+    description: 'Impacting your host community through sustainable projects and weekly meetings.',
+    tasks: [
+      { id: 'cd1', title: 'Identify Community Need', description: 'Perform a needs assessment in your PPA locality.' },
+      { id: 'cd2', title: 'Submit Project Proposal', description: 'Get approval from the LGI for your personal or group project.' },
+      { id: 'cd3', title: 'Weekly Meeting Attendance', description: 'Consistent presence at CDS group meetings.' },
+    ]
+  },
+  {
     id: 'pop',
     title: 'Passing Out Parade (POP)',
     description: 'The final stretch. Winding up and receiving your certificate.',

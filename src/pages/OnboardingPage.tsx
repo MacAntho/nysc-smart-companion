@@ -12,6 +12,7 @@ const STAGES: { value: NYSCStage; label: string }[] = [
   { value: 'mobilization', label: 'Mobilization & Online Registration' },
   { value: 'camp', label: 'Orientation Camp (The 21 Days)' },
   { value: 'ppa', label: 'Primary Assignment (At PPA)' },
+  { value: 'cds', label: 'CDS Phase (Community Projects)' },
   { value: 'pop', label: 'Winding Up / POP Phase' },
 ];
 const NIGERIAN_STATES = ['Lagos', 'Abuja', 'Oyo', 'Rivers', 'Kano', 'Kaduna', 'Enugu', 'Edo', 'Cross River', 'Delta', 'Anambra', 'Plateau', 'Kwara'];
@@ -25,8 +26,6 @@ export function OnboardingPage() {
   const completeOnboarding = useAppStore(s => s.completeOnboarding);
   const isSyncing = useAppStore(s => s.isSyncing);
   const handleFinish = async () => {
-    // We do NOT generate a new ID here. 
-    // We rely on the userId set during the login phase to maintain profile consistency.
     completeOnboarding();
     navigate('/app');
   };
