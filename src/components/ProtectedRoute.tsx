@@ -1,5 +1,5 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useAppStore } from '@/lib/store';
 interface GuardProps {
   children: React.ReactNode;
@@ -10,8 +10,16 @@ interface GuardProps {
  */
 export function AuthGuard({ children }: GuardProps) {
   const isAuthenticated = useAppStore((s) => s.isAuthenticated);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
+
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return null;
   }
   return <>{children}</>;
 }
@@ -21,8 +29,16 @@ export function AuthGuard({ children }: GuardProps) {
  */
 export function OnboardingGuard({ children }: GuardProps) {
   const isOnboarded = useAppStore((s) => s.isOnboarded);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isOnboarded) {
+      navigate('/onboarding', { replace: true });
+    }
+  }, [isOnboarded, navigate]);
+
   if (!isOnboarded) {
-    return <Navigate to="/onboarding" replace />;
+    return null;
   }
   return <>{children}</>;
 }
@@ -41,11 +57,18 @@ export function ProtectedRoute({ children }: GuardProps) {
 export function AdminRoute({ children }: { children: React.ReactNode }) {
   const userRole = useAppStore((s) => s.userRole);
   const isAuthenticated = useAppStore((s) => s.isAuthenticated);
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-  if (userRole !== 'admin') {
-    return <Navigate to="/app" replace />;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login', { replace: true });
+    } else if (userRole !== 'admin') {
+      navigate('/app', { replace: true });
+    }
+  }, [isAuthenticated, userRole, navigate]);
+
+  if (!isAuthenticated || userRole !== 'admin') {
+    return null;
   }
   return <>{children}</>;
 }
