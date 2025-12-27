@@ -31,10 +31,20 @@ export function DashboardPage() {
   const priorityContent = useMemo(() => {
     if (!isInitialized) return null;
     const readArticlesSet = new Set(readArticles);
+    // Phase 21: Sanctions Intelligence Override
+    // Prioritize the Violations Guide if not yet mastered, as it is critical across all stages
+    if (!readArticlesSet.has('k-sanctions')) {
+      return {
+        title: 'NYSC Violations & Penalties Guide',
+        desc: 'Critical Advisory: Learn how to avoid Service Extensions and disciplinary sanctions.',
+        risk: 'high' as PriorityRisk,
+        searchLink: '/app/knowledge?search=sanctions'
+      };
+    }
     let content: { title: string; desc: string; risk: PriorityRisk; searchLink: string } | null = null;
     switch (stageId) {
       case 'prospective':
-        content = !readArticlesSet.has('k-registration') 
+        content = !readArticlesSet.has('k-registration')
           ? { title: 'Official Registration Roadmap', desc: 'Mandatory: Ensure your senate list details are verified.', risk: 'high', searchLink: '/app/knowledge?search=registration' }
           : { title: 'Clearance Preparation', desc: 'Learn about the final clearance process.', risk: 'low', searchLink: '/app/knowledge' };
         break;

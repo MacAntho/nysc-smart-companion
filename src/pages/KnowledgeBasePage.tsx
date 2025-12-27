@@ -14,7 +14,7 @@ import {
   DialogFooter,
   DialogTrigger
 } from '@/components/ui/dialog';
-import { Search, ExternalLink, Clock, CheckCircle, CircleCheck, Info, Sparkles, AlertTriangle, XCircle, Loader2 } from 'lucide-react';
+import { Search, ExternalLink, Clock, CheckCircle, CircleCheck, Info, Sparkles, AlertTriangle, XCircle, ShieldAlert } from 'lucide-react';
 import { KNOWLEDGE_ARTICLES } from '@/lib/mock-content';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -27,15 +27,12 @@ export function KnowledgeBasePage() {
   const [category, setCategory] = useState('All');
   const readArticles = useAppStore(s => s.readArticles);
   const toggleReadArticle = useAppStore(s => s.toggleReadArticle);
-  // Ref to track if we're currently typing to prevent URL sync fighting with input
   const isTyping = useRef(false);
-  // Sync state from URL only on initial load or external change (back button)
   useEffect(() => {
     if (!isTyping.current && queryParam !== search) {
       setSearch(queryParam);
     }
   }, [queryParam, search]);
-  // Debounce search update to URL
   useEffect(() => {
     const handler = setTimeout(() => {
       if (search) {
@@ -59,7 +56,7 @@ export function KnowledgeBasePage() {
       a.summary.toLowerCase().includes(searchLower) ||
       (a.metadata?.source?.toLowerCase() || '').includes(searchLower) ||
       (a.metadata?.stage?.toLowerCase() || '').includes(searchLower);
-    const matchesCategory = category === 'All' || a.category === category;
+    const matchesCategory = category === 'All' || a.category.includes(category);
     return matchesSearch && matchesCategory;
   });
   const clearFilters = () => {
@@ -79,7 +76,7 @@ export function KnowledgeBasePage() {
             <div className="relative group">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 transition-colors group-focus-within:text-nysc-gold" />
               <Input
-                placeholder="Search redeployment, routine, packing, documents, POP, rules..."
+                placeholder="Search redeployment, sanctions, routine, packing, POP, rules..."
                 className="pl-10 h-14 bg-white text-gray-900 border-none focus-visible:ring-2 focus-visible:ring-nysc-gold shadow-lg rounded-2xl"
                 value={search}
                 onChange={handleSearchChange}
@@ -97,14 +94,15 @@ export function KnowledgeBasePage() {
         </div>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <Tabs value={category} onValueChange={setCategory} className="w-full md:w-auto">
-            <TabsList className="bg-white border rounded-xl p-1 shadow-sm h-auto flex gap-2">
-              <TabsTrigger value="All" className="px-4 py-2 font-bold text-xs uppercase tracking-widest rounded-lg">All Topics</TabsTrigger>
-              <TabsTrigger value="Official" className="px-4 py-2 font-bold text-xs uppercase tracking-widest rounded-lg">Official</TabsTrigger>
-              <TabsTrigger value="Survival" className="px-4 py-2 font-bold text-xs uppercase tracking-widest rounded-lg">Survival</TabsTrigger>
-              <TabsTrigger value="CDS" className="px-4 py-2 font-bold text-xs uppercase tracking-widest rounded-lg">CDS</TabsTrigger>
+            <TabsList className="bg-white border rounded-xl p-1 shadow-sm h-auto flex flex-wrap gap-1">
+              {['All', 'Official', 'Survival', 'CDS', 'Advisory'].map((cat) => (
+                <TabsTrigger key={cat} value={cat} className="px-4 py-2 font-bold text-[10px] uppercase tracking-widest rounded-lg">
+                  {cat === 'All' ? 'All Topics' : cat}
+                </TabsTrigger>
+              ))}
             </TabsList>
           </Tabs>
-          <div className="flex items-center gap-3 text-xs text-muted-foreground font-black uppercase tracking-widest px-4 py-2 bg-gray-50 rounded-full border">
+          <div className="flex items-center gap-3 text-xs text-muted-foreground font-black uppercase tracking-widest px-4 py-2 bg-gray-50 rounded-full border shadow-inner">
             <Badge variant="secondary" className="bg-nysc-green-50 text-nysc-green-800 border-nysc-green-100">{readArticles.length} Read</Badge>
             <span>•</span>
             <span>{KNOWLEDGE_ARTICLES.length} Available</span>
@@ -123,7 +121,11 @@ export function KnowledgeBasePage() {
                     key={article.id}
                     className={cn(
                       "hover:shadow-2xl transition-all duration-300 group border-gray-100 flex flex-col h-full relative rounded-3xl overflow-hidden min-h-[220px]",
-                      isHighRisk ? "ring-2 ring-destructive bg-red-50/10 shadow-destructive/5" : isFeatured ? "ring-2 ring-nysc-gold bg-amber-50/10 shadow-nysc-gold/5" : "bg-white"
+                      isHighRisk 
+                        ? "ring-2 ring-destructive bg-red-50/10 shadow-lg shadow-red-100/50" 
+                        : isFeatured 
+                          ? "ring-2 ring-nysc-gold bg-amber-50/10 shadow-nysc-gold/5" 
+                          : "bg-white"
                     )}
                   >
                     <CardHeader className="pb-2">
@@ -133,20 +135,15 @@ export function KnowledgeBasePage() {
                           {isHighRisk && (
                             <Tooltip>
                               <TooltipTrigger asChild>
-                                <Badge className="bg-destructive text-[8px] h-4 uppercase px-1.5 font-black flex items-center gap-1 cursor-help">
-                                  <AlertTriangle className="w-2 h-2" /> Risk Alert
+                                <Badge className="bg-destructive text-[8px] h-4 uppercase px-1.5 font-black flex items-center gap-1 cursor-help animate-pulse">
+                                  <ShieldAlert className="w-2.5 h-2.5" /> Risk Alert
                                 </Badge>
                               </TooltipTrigger>
-                              <TooltipContent>Strict penalties for policy violations</TooltipContent>
+                              <TooltipContent className="bg-destructive text-white border-none font-bold">Strict penalties for policy violations</TooltipContent>
                             </Tooltip>
                           )}
-                          {isMediumRisk && !isFeatured && (
-                            <Badge variant="outline" className="text-[8px] h-4 uppercase px-1.5 font-black border-nysc-gold text-nysc-gold">
-                              Process Critical
-                            </Badge>
-                          )}
-                          {isFeatured && (
-                            <Badge className="bg-nysc-gold text-white text-[8px] h-4 uppercase px-1.5 font-black animate-pulse flex items-center gap-1">
+                          {isFeatured && !isHighRisk && (
+                            <Badge className="bg-nysc-gold text-white text-[8px] h-4 uppercase px-1.5 font-black flex items-center gap-1">
                               <Sparkles className="w-2 h-2" /> Featured
                             </Badge>
                           )}
@@ -182,11 +179,11 @@ export function KnowledgeBasePage() {
                             </Button>
                           </DialogTrigger>
                           <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col p-0 border-none rounded-3xl overflow-hidden shadow-2xl">
-                            <DialogHeader className={cn("p-8 pb-4 border-b", isHighRisk ? "bg-red-50" : "bg-gray-50")}>
+                            <DialogHeader className={cn("p-8 pb-4 border-b", isHighRisk ? "bg-red-50/50" : "bg-gray-50")}>
                               <div className="text-[10px] font-bold text-nysc-green-800 uppercase tracking-widest mb-1 flex items-center gap-2 flex-wrap">
                                 {article.category}
-                                {isHighRisk && <span className="text-destructive font-black">🚩 HIGH PRIORITY</span>}
-                                {article.metadata?.featured && <span className="text-nysc-gold font-black">• Featured</span>}
+                                {isHighRisk && <span className="text-destructive font-black flex items-center gap-1"><ShieldAlert className="w-3 h-3" /> HIGH PRIORITY ADVISORY</span>}
+                                {isFeatured && <span className="text-nysc-gold font-black">• Featured</span>}
                               </div>
                               <DialogTitle className={cn("text-3xl font-display font-bold leading-tight", isHighRisk && "text-destructive")}>{article.title}</DialogTitle>
                               <DialogDescription className="text-base text-muted-foreground font-medium mt-2">

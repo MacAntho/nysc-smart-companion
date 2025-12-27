@@ -66,6 +66,30 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-sanctions',
+    category: 'Official/Advisory',
+    title: 'NYSC Violations & Penalties Guide',
+    summary: 'Absence, AWOL, uniform, forgery sanctions. Know the official disciplinary protocols.',
+    content: `Think of your NYSC service year as a National Professional Contract. You have signed an agreement with the Nigerian state to serve for 365 days. In this context, "Extensions" (extra days or months of service) are essentially penalties for "Breach of Contract." 
+Compliance is not just about rules; it is about protecting your time and securing your future discharge certificate.
+1. AWOL & ABSENCE FROM DUTY:
+Absence from your Place of Primary Assignment (PPA) for up to 7 consecutive days without permission is classified as AWOL (Absent Without Leave).
+PROTOCOL: If you are absent for 1 to 7 days, you face a 1-month service extension. If you are absent for more than 7 days, your allowance will be suspended and you may be mandated to repeat the entire service year (Remobilization).
+2. UNIFORM & DECORUM VIOLATIONS:
+The NYSC uniform is a legal kit. Wearing it improperly (e.g., wearing the Khaki with non-white sneakers, or "slimming" the kit excessively) is a policy violation.
+PROTOCOL: Corpers caught improperly dressed can be sent out of official gatherings, face disciplinary reports from the ZI/LGI, or in extreme cases (during camp), face expulsion from the orientation program.
+3. FORGERY & DOCUMENT FALSIFICATION:
+Presenting fake medical reports for redeployment or falsifying PPA clearance signatures is a high-risk criminal offense.
+PROTOCOL: NYSC operates a zero-tolerance policy for forgery. Discovery leads to immediate cancellation of the service year, withholding of the Discharge Certificate, and potential criminal prosecution under the NYSC Act.
+4. CONDUCT AT PPA:
+Serious misconduct at your PPA (theft, insubordination, or gross negligence) can lead to a formal "Letter of Committal" to the state secretariat.
+PROTOCOL: If found guilty, the State Disciplinary Committee may recommend a service extension of 2 weeks to 4 months depending on the severity of the act.
+5. TRAVEL PERMISSION:
+Leaving your state of service without a written "Travel Permit" signed by the State Coordinator is a violation.
+PROTOCOL: If involved in an accident or emergency while outside your state without a permit, you forfeit all official insurance and support, and will face a service extension for being "Outside Station" without authority.`,
+    metadata: { stage: 'all', risk: 'high', source: 'NYSC Act/Bye-laws', featured: true }
+  },
+  {
     id: 'k-clearance-issues',
     category: 'Official/Troubleshooting',
     title: 'Common NYSC Clearance Issues and Solutions',
@@ -79,9 +103,9 @@ The NYSC Bye-laws mandate a minimum of 75% attendance at weekly CDS meetings.
 PROTOCOL: If you miss a meeting due to illness, you must present a medical report from a government hospital to the LGI within 48 hours of the meeting. Retrospective excuses are generally not accepted.
 3. LOST ID CARD PROTOCOL:
 Your NYSC ID card is a legal document. Losing it is a serious policy violation that can lead to service extension.
-PROTOCOL: 
-a) Obtain a Police Report immediately. 
-b) Get a Sworn Affidavit of Loss from a High Court. 
+PROTOCOL:
+a) Obtain a Police Report immediately.
+b) Get a Sworn Affidavit of Loss from a High Court.
 c) Present these to the State Secretariat to apply for a replacement. Do not attempt to use a "photocopy" for biometric clearance.
 4. BIOMETRIC CAPTURE FAILURES:
 In cases where the portal fails to recognize your thumbprints during monthly clearance.
