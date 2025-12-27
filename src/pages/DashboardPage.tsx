@@ -33,6 +33,19 @@ export function DashboardPage() {
     if (!isInitialized) return null;
     const readArticlesSet = new Set(readArticles);
     switch (stageId) {
+      case 'prospective':
+        if (!readArticlesSet.has('k-registration')) return {
+          title: 'Official Registration Roadmap',
+          desc: 'Mandatory: Ensure your senate list details are verified before portal registration starts.',
+          risk: 'high' as PriorityRisk,
+          searchLink: '/app/knowledge?search=registration'
+        };
+        return {
+          title: 'Clearance Preparation',
+          desc: 'Learn about the final clearance process before you transition to mobilization.',
+          risk: 'low' as PriorityRisk,
+          searchLink: '/app/knowledge'
+        };
       case 'mobilization':
         if (!readArticlesSet.has('k-registration')) return {
           title: 'Portal Registration Critical Step',
@@ -119,11 +132,11 @@ export function DashboardPage() {
         };
     }
   }, [stageId, readArticles, isInitialized]);
-  if (!isInitialized && !isSyncing) {
+  if (!isInitialized) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
         <Loader2 className="w-10 h-10 text-nysc-green-800 animate-spin" />
-        <p className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground animate-pulse">Hydrating Command Center...</p>
+        <p className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground animate-pulse">Initializing Command Center...</p>
       </div>
     );
   }

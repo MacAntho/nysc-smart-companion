@@ -192,6 +192,27 @@ export const STATE_DATA: Record<string, any> = {
     ppa: 'Oil & Gas support firms, Marine logistics, and Education sectors.',
     pro_tip: 'Always carry your NYSC ID card; security checkpoints are common in the delta region.'
   },
+  'Enugu': {
+    camp: 'Awgu Orientation Camp. Located in a hilly region. Expect chilly mornings and rigorous drills.',
+    cost: 'Moderate. Food is relatively cheap due to local agriculture.',
+    metrics: { rent: 120000, food: 22000, transport: 12000 },
+    ppa: 'Strong opportunities in Education, Healthcare, and Civil Service. Coal City Tech Hub is emerging.',
+    pro_tip: 'Rent in Independence Layout or New Haven if you want a city vibe; otherwise, stay close to Awgu to save.'
+  },
+  'Edo': {
+    camp: 'Okada Orientation Camp. Spacious grounds. Security is high.',
+    cost: 'Moderate. Benin City is a major hub with varied living costs.',
+    metrics: { rent: 140000, food: 28000, transport: 18000 },
+    ppa: 'History, Arts, and Civil Service. Growing opportunities in agriculture and retail.',
+    pro_tip: 'Explore the Ring Road axis for major PPA clusters, but watch out for peak hour traffic.'
+  },
+  'Kaduna': {
+    camp: 'Black Gold Orientation Camp. Well-structured and historic.',
+    cost: 'Moderate-Low. One of the more affordable northern hubs.',
+    metrics: { rent: 90000, food: 20000, transport: 10000 },
+    ppa: 'Civil Service, Defense, and Education. Many federal institutions are headquartered here.',
+    pro_tip: 'The Barnawa axis is very friendly for corpers looking for balanced accommodation.'
+  },
   'DEFAULT': {
     camp: 'Standard NYSC Orientation facilities. Registration usually starts at 4:00 AM.',
     cost: 'Moderate. Aligns with national averages.',

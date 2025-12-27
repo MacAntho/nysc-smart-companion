@@ -169,6 +169,7 @@ export const useAppStore = create<AppState>()(
         } catch (error) {
           console.error('[LOAD PROFILE FAILURE]', error);
         } finally {
+          // Always mark as initialized to allow UI transition even on 404/failure
           set({ isSyncing: false, isInitialized: true });
         }
       },

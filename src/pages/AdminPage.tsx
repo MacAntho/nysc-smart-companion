@@ -7,11 +7,11 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { ShieldAlert, Users, BookOpen, Trash2, Edit3, Search, RefreshCw, ArrowLeft, Eye, Copy, Check, GraduationCap, Trophy, LayoutGrid } from 'lucide-react';
+import { ShieldAlert, Users, BookOpen, Trash2, Edit3, Search, RefreshCw, ArrowLeft, Eye, Copy, Check, GraduationCap, Trophy, LayoutGrid, Clock } from 'lucide-react';
 import { KNOWLEDGE_ARTICLES } from '@/lib/mock-content';
 import type { NYSCProfile } from '@shared/types';
 import { toast } from 'sonner';
-import { format } from 'date-fns';
+import { format, isValid } from 'date-fns';
 export function AdminPage() {
   const [activeTab, setActiveTab] = useState('users');
   const [users, setUsers] = useState<NYSCProfile[]>([]);
@@ -35,7 +35,7 @@ export function AdminPage() {
           readArticles: Array.isArray(u.readArticles) ? u.readArticles : [],
           stateOfDeployment: u.stateOfDeployment || 'Not Set',
           updatedAt: u.updatedAt || 0
-        })).sort((a: NYSCProfile, b: NYSCProfile) => b.updatedAt - a.updatedAt);
+        })).sort((a: NYSCProfile, b: NYSCProfile) => (b.updatedAt || 0) - (a.updatedAt || 0));
         setUsers(sanitizedUsers);
       }
       if (!silent) toast.success('Admin Dashboard Synced');
@@ -140,57 +140,61 @@ export function AdminPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-50">
-                    {filteredUsers.length > 0 ? filteredUsers.map((u) => (
-                      <tr key={u.id} className="hover:bg-gray-50/50 transition-colors group">
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-nysc-green-50 flex items-center justify-center text-nysc-green-800 text-[10px] font-bold border border-nysc-green-100">
-                               {u.id.slice(0, 2).toUpperCase()}
+                    {filteredUsers.length > 0 ? filteredUsers.map((u) => {
+                      const dateObj = new Date(u.updatedAt);
+                      const isDateValid = isValid(dateObj) && u.updatedAt > 0;
+                      return (
+                        <tr key={u.id} className="hover:bg-gray-50/50 transition-colors group">
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-full bg-nysc-green-50 flex items-center justify-center text-nysc-green-800 text-[10px] font-bold border border-nysc-green-100">
+                                 {u.id.slice(0, 2).toUpperCase()}
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-bold text-gray-900 font-mono text-xs">{u.id}</span>
+                                <button
+                                  onClick={() => copyToClipboard(u.id)}
+                                  className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-nysc-green-800 transition-all"
+                                >
+                                  {copiedId === u.id ? <Check className="w-3 h-3 text-nysc-green-500" /> : <Copy className="w-3 h-3" />}
+                                </button>
+                              </div>
+                              {u.isPro && <Badge className="bg-nysc-gold text-[8px] h-4 font-black">PRO</Badge>}
                             </div>
-                            <div className="flex items-center gap-2">
-                              <span className="font-bold text-gray-900 font-mono text-xs">{u.id}</span>
-                              <button
-                                onClick={() => copyToClipboard(u.id)}
-                                className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-nysc-green-800 transition-all"
-                              >
-                                {copiedId === u.id ? <Check className="w-3 h-3 text-nysc-green-500" /> : <Copy className="w-3 h-3" />}
-                              </button>
-                            </div>
-                            {u.isPro && <Badge className="bg-nysc-gold text-[8px] h-4 font-black">PRO</Badge>}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <Badge variant="outline" className="capitalize text-[10px] font-bold border-gray-200 bg-white">
-                            {u.stage}
-                          </Badge>
-                        </td>
-                        <td className="px-6 py-4 text-xs font-bold text-gray-600">{u.stateOfDeployment}</td>
-                        <td className="px-6 py-4">
-                           <div className="flex items-center gap-2">
-                             <span className="text-xs font-black text-nysc-green-800">{u.readArticles.length}</span>
-                             <div className="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                                <div 
-                                  className="h-full bg-nysc-green-800" 
-                                  style={{ width: `${Math.min(100, (u.readArticles.length / KNOWLEDGE_ARTICLES.length) * 100)}%` }} 
-                                />
+                          </td>
+                          <td className="px-6 py-4">
+                            <Badge variant="outline" className="capitalize text-[10px] font-bold border-gray-200 bg-white">
+                              {u.stage}
+                            </Badge>
+                          </td>
+                          <td className="px-6 py-4 text-xs font-bold text-gray-600">{u.stateOfDeployment}</td>
+                          <td className="px-6 py-4">
+                             <div className="flex items-center gap-2">
+                               <span className="text-xs font-black text-nysc-green-800">{u.readArticles.length}</span>
+                               <div className="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                  <div
+                                    className="h-full bg-nysc-green-800"
+                                    style={{ width: `${Math.min(100, (u.readArticles.length / KNOWLEDGE_ARTICLES.length) * 100)}%` }}
+                                  />
+                               </div>
                              </div>
-                           </div>
-                        </td>
-                        <td className="px-6 py-4 text-[11px] font-semibold text-muted-foreground">
-                          {u.updatedAt ? format(u.updatedAt, 'MMM d, HH:mm') : 'Never'}
-                        </td>
-                        <td className="px-6 py-4 text-right">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-nysc-green-800 font-bold h-9 px-4 rounded-xl hover:bg-nysc-green-50 transition-colors"
-                            onClick={() => setSelectedUser(u)}
-                          >
-                            <Eye className="w-4 h-4 mr-2" /> Inspect
-                          </Button>
-                        </td>
-                      </tr>
-                    )) : (
+                          </td>
+                          <td className="px-6 py-4 text-[11px] font-semibold text-muted-foreground">
+                            {isDateValid ? format(dateObj, 'MMM d, HH:mm') : 'No History'}
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="text-nysc-green-800 font-bold h-9 px-4 rounded-xl hover:bg-nysc-green-50 transition-colors"
+                              onClick={() => setSelectedUser(u)}
+                            >
+                              <Eye className="w-4 h-4 mr-2" /> Inspect
+                            </Button>
+                          </td>
+                        </tr>
+                      );
+                    }) : (
                       <tr>
                         <td colSpan={6} className="px-6 py-24 text-center">
                           <div className="flex flex-col items-center gap-4 opacity-40">
@@ -228,7 +232,7 @@ export function AdminPage() {
                       <div>
                         <p className="text-sm font-bold text-gray-900">{a.title}</p>
                         <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-black flex items-center gap-2">
-                           {a.category} 
+                           {a.category}
                            {a.metadata?.risk === 'high' && <span className="text-destructive">• High Risk</span>}
                         </p>
                       </div>
@@ -268,13 +272,13 @@ export function AdminPage() {
             <div className="grid grid-cols-2 gap-4">
               <AuditStat label="Service Phase" value={selectedUser?.stage} icon={<Trophy className="w-3.5 h-3.5" />} />
               <AuditStat label="Deployment" value={selectedUser?.stateOfDeployment} icon={<GraduationCap className="w-3.5 h-3.5" />} />
-              <AuditStat label="Tasks Completed" value={selectedUser?.completedTasks.length.toString()} icon={<Check className="w-3.5 h-3.5" />} />
-              <AuditStat label="Articles Read" value={selectedUser?.readArticles.length.toString()} icon={<BookOpen className="w-3.5 h-3.5" />} />
+              <AuditStat label="Tasks Completed" value={selectedUser?.completedTasks?.length.toString()} icon={<Check className="w-3.5 h-3.5" />} />
+              <AuditStat label="Articles Read" value={selectedUser?.readArticles?.length.toString()} icon={<BookOpen className="w-3.5 h-3.5" />} />
             </div>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Progression Integrity</p>
-                <span className="text-[10px] font-bold text-nysc-green-800">Verified Stage</span>
+                <span className="text-[10px] font-bold text-nysc-green-800 flex items-center gap-1"><Clock className="w-3 h-3" /> System Verified</span>
               </div>
               <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 font-mono text-[10px] overflow-auto max-h-48 whitespace-pre text-gray-700 leading-relaxed">
                 {JSON.stringify(selectedUser, null, 2)}
