@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, CheckCircle, ChevronRight, MapPin, BookOpen, LayoutList, Sparkles, Lock, ArrowRight, AlertTriangle, ShieldAlert, Fingerprint } from 'lucide-react';
+import { Calendar, CheckCircle, ChevronRight, MapPin, BookOpen, LayoutList, Sparkles, Lock, ArrowRight, AlertTriangle, ShieldAlert, Fingerprint, Briefcase } from 'lucide-react';
 import { JOURNEY_STAGES, DEADLINES, KNOWLEDGE_ARTICLES } from '@/lib/mock-content';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow, differenceInDays, parseISO } from 'date-fns';
@@ -31,63 +31,19 @@ export function DashboardPage() {
   const relevantDeadlines = DEADLINES.filter(d => d.stage === stageId);
   const getPriorityContent = (): { title: string; desc: string; risk: PriorityRisk; searchLink: string } => {
     const readArticlesSet = new Set(readArticles);
-    const hasReadRedeployment = readArticlesSet.has('k-redeployment');
-    const hasReadMedicalRedeploy = readArticlesSet.has('k-medical-redeploy');
-    const hasReadMaritalRedeploy = readArticlesSet.has('k-marital-redeploy');
-    const hasReadSecurityRedeploy = readArticlesSet.has('k-security-redeploy');
     const hasReadCDSGuide = readArticlesSet.has('k-cds');
     const hasReadPOPGuide = readArticlesSet.has('k-pop-guide');
     switch(stageId) {
-      case 'prospective':
-        return {
-          title: 'Exemption & Exclusion Guide',
-          desc: 'Determine if you are eligible for national service or require an exemption certificate.',
-          risk: 'low',
-          searchLink: '/app/knowledge?q=exemption'
-        };
-      case 'mobilization':
-      case 'camp':
-      case 'ppa':
-        if (!hasReadSecurityRedeploy) return {
-          title: 'Security & Relocation Protocol',
-          desc: 'Critical: Official NYSC guide for relocation in areas facing insurgency or banditry. Protect your life.',
-          risk: 'high',
-          searchLink: '/app/knowledge?q=security'
-        };
-        if (!hasReadMedicalRedeploy) return {
-          title: 'Medical Redeployment Guide',
-          desc: 'Essential for corps members with chronic health conditions. Learn the official board review process.',
-          risk: 'medium',
-          searchLink: '/app/knowledge?q=medical'
-        };
-        if (stageId === 'ppa' && !hasReadMaritalRedeploy) return {
-          title: 'Marital Relocation Protocol',
-          desc: 'Married women relocation window is open. Verify your marriage certificate and employer letters for relocation.',
-          risk: 'medium',
-          searchLink: '/app/knowledge?q=marital'
-        };
-        if (!hasReadRedeployment) return {
-          title: 'Redeployment & Relocation Protocol',
-          desc: 'Crucial: Learn the health, marital, and security grounds for relocating to a different state.',
-          risk: 'medium',
-          searchLink: '/app/knowledge?q=redeployment'
-        };
-        return {
-          title: 'Official Operational Guide',
-          desc: 'Browse verified knowledge base for official rules and survival tips.',
-          risk: 'low',
-          searchLink: '/app/knowledge'
-        };
       case 'cds':
         if (!hasReadCDSGuide) return {
           title: 'CDS Group & Lifecycle Policy',
-          desc: 'Mandatory: Review official protocols for weekly meetings, dues, and project approval to avoid extension.',
+          desc: 'Mandatory: Review official protocols for weekly meetings, dues, and project approval to avoid service extension.',
           risk: 'high',
           searchLink: '/app/knowledge?q=cds'
         };
         return {
-          title: 'CDS Project Lifecycle',
-          desc: 'Navigate the approval, implementation, and documentation of your legacy community project.',
+          title: 'Expanded Legacy Project Toolkit',
+          desc: 'Explore 30+ verified project blueprints with operational budget benchmarks and impact metrics.',
           risk: 'low',
           searchLink: '/app/cds'
         };
@@ -104,10 +60,17 @@ export function DashboardPage() {
           risk: 'low',
           searchLink: '/app/knowledge?q=career'
         };
+      case 'ppa':
+        return {
+          title: 'PPA Survival & CDS Initiation',
+          desc: 'Your PPA phase has started. It is time to begin brainstorming your community legacy project.',
+          risk: 'medium',
+          searchLink: '/app/cds'
+        };
       default:
         return {
-          title: 'Essential Knowledge',
-          desc: 'Browse the verified knowledge base for official rules.',
+          title: 'Official Operational Guide',
+          desc: 'Browse verified knowledge base for official rules and survival tips.',
           risk: 'low',
           searchLink: '/app/knowledge'
         };
@@ -125,7 +88,7 @@ export function DashboardPage() {
     low: "bg-nysc-green-800 text-white"
   };
   return (
-    <div className="max-w-7xl mx-auto space-y-8 animate-fade-in px-4">
+    <div className="max-w-7xl mx-auto px-4 space-y-8 animate-fade-in py-8 md:py-10">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
@@ -144,9 +107,6 @@ export function DashboardPage() {
               <><div className="h-2 w-2 rounded-full bg-nysc-green-800" /><span className="text-muted-foreground uppercase tracking-wider">Cloud Synced {lastSynced ? formatDistanceToNow(lastSynced, { addSuffix: true }) : 'now'}</span></>
             )}
           </div>
-          <span className="text-[9px] font-black text-nysc-green-800 uppercase tracking-widest opacity-40 px-2 flex items-center gap-1">
-            <Fingerprint className="w-3 h-3" /> System Integrity Verified
-          </span>
         </div>
       </header>
       {priorityTitle && (
@@ -184,7 +144,7 @@ export function DashboardPage() {
             </div>
             <CheckCircle className="text-nysc-green-800 w-8 h-8" />
           </CardHeader>
-          <CardContent className="pt-6 space-y-8">
+          <CardContent className="pt-6 space-y-6">
             <div className="space-y-3">
               <div className="flex justify-between text-sm font-bold text-nysc-green-900 uppercase tracking-widest">
                 <span>Phase Readiness</span>
@@ -192,7 +152,7 @@ export function DashboardPage() {
               </div>
               <Progress value={progressPercent} className="h-2.5 bg-gray-100" />
             </div>
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 gap-3">
               {stageTasks.map(task => (
                 <div key={task.id} className="group flex items-center gap-4 p-4 border rounded-xl bg-white hover:border-nysc-green-500 hover:bg-nysc-green-50/20 transition-all">
                   <div className={`w-3 h-3 rounded-full shrink-0 ${completedTasks.includes(task.id) ? 'bg-nysc-green-800' : 'bg-gray-200 group-hover:bg-nysc-green-200'}`} />
@@ -215,95 +175,44 @@ export function DashboardPage() {
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 group-hover:scale-110 transition-transform" />
             <CardHeader className="relative z-10">
               <CardTitle className="flex items-center gap-2 text-white font-display">
-                <MapPin className="w-5 h-5 text-nysc-gold" /> {stateName || 'Deployment'} Hub
+                <Briefcase className="w-5 h-5 text-nysc-gold" /> Legacy Project Hub
               </CardTitle>
-              <CardDescription className="text-nysc-green-100 font-medium">Local intelligence for your area.</CardDescription>
+              <CardDescription className="text-nysc-green-100 font-medium">Build your legacy in {stateName || 'your community'}.</CardDescription>
             </CardHeader>
             <CardContent className="relative z-10 space-y-4">
               <div className="p-3 bg-white/10 rounded-xl border border-white/10">
-                <p className="text-[10px] uppercase tracking-widest text-nysc-green-200 font-bold mb-1">PPA Database</p>
-                {isPro ? (
-                  <p className="text-xs font-bold text-white flex items-center gap-2"><Sparkles className="w-3 h-3 text-nysc-gold" /> 42 Openings Found</p>
-                ) : (
-                  <p className="text-xs font-bold text-nysc-green-200 flex items-center gap-2 opacity-60"><Lock className="w-3 h-3" /> Locked for Pro Tier</p>
-                )}
+                <p className="text-[10px] uppercase tracking-widest text-nysc-green-200 font-bold mb-1">New Update</p>
+                <p className="text-xs font-bold text-white flex items-center gap-2"><Sparkles className="w-3 h-3 text-nysc-gold" /> 30+ Verified Blueprints</p>
               </div>
-              <Link to="/app/state-guide">
+              <Link to="/app/cds">
                 <Button className="w-full bg-white text-nysc-green-800 hover:bg-gray-100 border-none font-bold">
-                  State Intelligence <ChevronRight className="ml-1 w-4 h-4" />
+                  Explore Toolkit <ChevronRight className="ml-1 w-4 h-4" />
                 </Button>
               </Link>
             </CardContent>
           </Card>
-          <Card className="shadow-sm">
+          <Card className="shadow-sm border-gray-100">
             <CardHeader className="pb-2">
               <CardTitle className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-muted-foreground">
-                <LayoutList className="w-4 h-4 text-nysc-green-800" /> Mastery Level
+                <Calendar className="w-4 h-4 text-nysc-green-800" /> Deadline Radar
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
-               <div className="flex justify-between items-end">
-                  <span className="text-xl font-black text-nysc-green-800">{readArticles.length}</span>
-                  <span className="text-[10px] font-bold text-gray-300 uppercase">Guides Mastered</span>
-               </div>
-               <Progress value={readPercent} className="h-1.5 bg-gray-50" />
+            <CardContent className="space-y-4">
+              {relevantDeadlines.length > 0 ? (
+                relevantDeadlines.map(d => (
+                  <div key={d.id} className="flex items-center justify-between p-3 border rounded-xl hover:bg-gray-50/50 transition-colors">
+                    <p className="text-xs font-bold text-gray-900">{d.title}</p>
+                    <p className="text-[10px] text-nysc-gold font-black uppercase">{differenceInDays(parseISO(d.date), new Date())}d Left</p>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-6 bg-gray-50/50 rounded-xl border-2 border-dashed">
+                  <p className="text-[10px] text-muted-foreground font-black uppercase">No phase deadlines</p>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="shadow-sm border-gray-100">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 font-display text-lg">
-              <Calendar className="w-5 h-5 text-nysc-green-800" /> Deadline Radar
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {relevantDeadlines.length > 0 ? (
-              relevantDeadlines.map(d => {
-                const daysLeft = differenceInDays(parseISO(d.date), new Date());
-                return (
-                  <div key={d.id} className="flex items-center justify-between p-4 border rounded-xl hover:bg-gray-50/50 transition-colors">
-                    <div className="space-y-0.5">
-                      <p className="text-sm font-bold text-gray-900">{d.title}</p>
-                      <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{d.stage}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className={`text-sm font-black ${daysLeft < 3 ? 'text-destructive' : 'text-nysc-gold'}`}>
-                        {daysLeft < 0 ? 'PAST DUE' : `${daysLeft}d left`}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <div className="text-center py-12 flex flex-col items-center gap-2 bg-gray-50/50 rounded-2xl border-2 border-dashed">
-                <Sparkles className="w-8 h-8 text-nysc-gold animate-pulse" />
-                <div className="space-y-1">
-                  <p className="text-xs font-bold text-gray-900">All Clear for {stageId}!</p>
-                  <p className="text-[10px] text-muted-foreground font-medium">No urgent deadlines detected for your current phase.</p>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-        <Card className="shadow-sm border-gray-100">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 font-display text-lg">
-              <BookOpen className="w-5 h-5 text-nysc-green-800" /> Essential Knowledge
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="grid grid-cols-1 gap-3">
-             <Link to="/app/journey" className="flex items-center justify-between p-4 border rounded-xl hover:bg-nysc-green-50/20 group">
-               <span className="text-sm font-bold">Interactive Timeline</span>
-               <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-nysc-green-800" />
-             </Link>
-             <Link to="/app/knowledge" className="flex items-center justify-between p-4 border rounded-xl hover:bg-nysc-green-50/20 group">
-               <span className="text-sm font-bold">Registration & Rules</span>
-               <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-nysc-green-800" />
-             </Link>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );

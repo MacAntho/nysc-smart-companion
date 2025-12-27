@@ -15,6 +15,17 @@ export interface NYSCProfile {
   isPro: boolean;
   updatedAt: number;
 }
+export interface CDSProject {
+  id: string;
+  category: string;
+  title: string;
+  description: string;
+  requirements: string[];
+  budget?: string;
+  duration?: string;
+  challenges?: string[];
+  metrics?: string[];
+}
 export interface KnowledgeArticle {
   id: string;
   category: string;

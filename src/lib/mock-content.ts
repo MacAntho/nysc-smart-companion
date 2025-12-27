@@ -1,4 +1,4 @@
-import { KnowledgeArticle } from "@shared/types";
+import { KnowledgeArticle, CDSProject } from "@shared/types";
 export const NIGERIAN_STATES = [
   'Lagos', 'Abuja', 'Oyo', 'Rivers', 'Kano', 'Kaduna', 'Enugu', 'Edo',
   'Cross River', 'Delta', 'Anambra', 'Plateau', 'Kwara', 'Imo', 'Akwa Ibom'
@@ -72,320 +72,21 @@ export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
     summary: 'Comprehensive guide on group types, weekly attendance, project timelines, and clearance protocols.',
     content: `Community Development Service (CDS) is a mandatory component of the NYSC scheme designed to impact host communities through sustainable projects.
 1. CDS GROUP TYPES
-Upon leaving camp, you will be assigned to a specific CDS group based on your discipline or interest:
-- Editorial: Managing state newsletters and public relations.
-- ICT/Digital Literacy: Teaching tech skills in schools and communities.
-- Medical & Health: Rural health sensitization and clinic support.
-- Road Safety (FRSC): Assisting in traffic control and safety education.
-- Anti-Corruption (EFCC/ICPC): Promoting integrity and transparency.
-- Environment & Sanitation: Monthly environmental sanitation and waste management.
-- Charity/SDGs: Poverty alleviation and sustainable development projects.
+- Editorial, ICT, Medical, Road Safety, Anti-Corruption, Environment, Charity/SDGs.
 2. WEEKLY MEETING MANDATE
-- Frequency: Meetings are held once every week (usually Thursdays) at the Local Government Secretariat.
-- Attendance Rule: You must maintain at least 75% attendance in your CDS group.
-- The "No Attendance, No Allowance" Policy: Your Local Government Inspector (LGI) verifies your attendance before signing your monthly clearance. Missing meetings without valid permission leads to the forfeiture of your monthly allowance.
+- Meetings are held weekly (usually Thursdays). 75% attendance is required for clearance.
 3. THE PROJECT LIFECYCLE
-If you choose to carry out a Personal/Individual project:
-- Identification: Perform a needs assessment in your community.
-- Proposal: Write a detailed project proposal following the NYSC template.
-- Approval: Submit the proposal to the LGI. If the budget is significant, it moves to the Zonal Inspector (ZI) for final approval.
-- Implementation: Execute the project only AFTER receiving the official Letter of Approval.
-- Report: Submit a final Project Completion Report with "Before" and "After" photographs.
-4. FEES & CONTRIBUTIONS
-- Legal Dues: Small monthly contributions for group logistics (e.g., N500 - N1000) are officially recognized but must be receipted.
-- Illegal Charges: Any demand for large sums of money for "posting" or "clearance" is illegal and should be reported to the State Coordinator.
-5. THE CLEARANCE PROTOCOL
-- Monthly Clearance: Every month, the LGI must sign your clearance form. This confirms you attended all CDS meetings and performed your duties at your PPA.
-- Exit Clearance: At the end of the service year, you must be cleared by your CDS President and LGI to be eligible for your Discharge Certificate.`,
+- Identify, Propose, Approve, Implement, Report.`,
     metadata: {
       stage: 'cds',
       risk: 'low',
       source: 'NYSC Official',
-      last_updated: '2025',
-      featured: true
-    }
-  },
-  {
-    id: 'k-pop-guide',
-    category: 'Official',
-    title: 'Passing Out Parade (POP) & Certification Guide',
-    summary: 'Final clearance, certificate collection, and winding-up protocols for a successful service exit.',
-    content: `The Passing Out Parade (POP) marks the official end of your service year. It is a strictly regulated process that requires meticulous documentation.
-1. FINAL CLEARANCE PROTOCOL
-Before you can receive your certificate, you must be cleared by two primary entities:
-- Employer Clearance: A final "Letter of Recommendation/Clearance" from your PPA, stating you have completed your duties and are not owing any organization property.
-- LGI Clearance: Your Local Government Inspector must sign your final clearance form, verifying your monthly attendance and CDS participation throughout the year.
-2. THE WINDING-UP EXERCISE
-In the weeks leading to POP:
-- Zonal Briefing: Attend the mandatory briefing by the Zonal or State Coordinator.
-- ID Card Return: You must surrender your NYSC ID card before or during the certificate collection.
-- Final CDS Report: Ensure your project completion report is submitted and approved.
-3. COLLECTION OF DISCHARGE CERTIFICATE
-- Physical Presence: Certificates are NEVER issued by proxy. You must be physically present.
-- Fingerprint Verification: Many states now use biometric verification at the point of collection.
-- Signature: You will sign the official Certificate Register.
-4. CERTIFICATE SAFETY & POLICY
-- No Replacement Policy: NYSC does NOT replace lost or damaged Discharge Certificates. They can only issue a "Letter of Confirmation." Treat this document with the highest security.
-- Verification: Most employers will verify the certificate's authenticity with the NYSC National Directorate Headquarters.
-5. POST-SERVICE ADVISORY
-- SAED Continuation: Utilize the skills gained in SAED for post-service employment or entrepreneurship.
-- Alumni Network: Join the NYSC Alumni association to stay connected with your peers.`,
-    metadata: {
-      stage: 'pop',
-      risk: 'high',
-      source: 'NYSC Official',
-      last_updated: '2025',
-      featured: true
-    }
-  },
-  {
-    id: 'k-security-redeploy',
-    category: 'Official',
-    title: 'Security-Based Redeployment Guide',
-    summary: 'Official relocation protocol for corps members in areas facing insurgency, banditry, or personal safety threats.',
-    content: `Security Redeployment is a critical provision to ensure the safety of corps members deployed to volatile regions.
-1. RECOGNIZED SECURITY GROUNDS
-Relocation may be granted under the following conditions:
-- Active Insurgency: Official declaration of conflict in the local government or zone.
-- Civil Unrest: Sustained communal clashes or banditry affecting the PPA location.
-- Personal Threat: Verified evidence of specific threats against the life of a corps member.
-- Religious/Ethnic Hostility: Clear evidence of targeted hostility in the host community.
-2. IMMEDIATE SAFETY PROTOCOL
-If you feel your life is in immediate danger:
-- Evacuate: Move immediately to the nearest military barracks, police station, or NYSC State Secretariat.
-- Report: Contact your Local Government Inspector (LGI) and State Coordinator via the emergency lines on your dashboard.
-- Documentation: Do not wait for formal letters if there is an active kinetic threat; secure your life first.
-3. MANDATORY DOCUMENTATION
-To formalize the relocation after securing safety, you will need:
-- Police/DSS Report: An official report confirming the security incident or personal threat.
-- LGI Identification: A formal letter from the NYSC field officer verifying the situation in the community.
-- Incident Brief: A signed personal account of the safety breach or threat.
-4. RELOCATION OUTCOMES
-- Intra-State Reposting: Moving you to a safer local government within the same state (e.g., the state capital).
-- Inter-State Redeployment: Complete move to a different state if the entire host state is deemed unsafe for service.
-5. WARNING
-- "Self-Relocation" without reporting to the NYSC office within 48 hours of moving for safety is treated as absconding. Always ensure the State Secretariat is informed of your temporary safety location.`,
-    metadata: {
-      stage: 'ppa/camp',
-      risk: 'high',
-      source: 'NYSC Policy',
-      last_updated: '2025',
-      featured: true
-    }
-  },
-  {
-    id: 'k-marital-redeploy',
-    category: 'Official',
-    title: 'Marital Redeployment Guide',
-    summary: 'Official relocation protocol for married female corps members wishing to serve in their husband’s state of residence.',
-    content: `Marital Redeployment is a specific provision granted to married female corps members to ensure family stability during the service year.
-1. ELIGIBILITY
-- This provision applies exclusively to married female corps members.
-- The request must be to move to the state where the husband officially resides and works.
-2. MANDATORY DOCUMENTATION
-To apply, you must upload or present the following legal documents:
-- Marriage Certificate: A valid certificate from a recognized Marriage Registry (Court Marriage).
-- Newspaper Change of Name: A publication in a national daily newspaper announcing your change of surname.
-- Sworn Affidavit: An affidavit from a High Court confirming the marriage and change of name.
-- Husband’s Employer Letter: A formal letter from the husband's workplace confirming his employment status and residential address in the target state.
-- Husband’s Identity: A copy of the husband's valid ID (Work ID, Driver’s License, or International Passport).
-3. APPLICATION WINDOWS
-- During Registration: You can indicate your marital status and upload documents during the online mobilization phase.
-- In-Camp: If your status changed after registration, you can apply during the first week of orientation camp using the relocation forms provided.
-- Post-Camp (In-Service): You can apply via your dashboard 3 months after camp exit if you recently got married.
-4. IMPORTANT NOTES
-- Verification: NYSC officials strictly verify all submitted documents. Forgery leads to disciplinary action.
-- Timing: Relocation is not instantaneous; you must remain at your current station until the official Relocation Letter is issued.`,
-    metadata: {
-      stage: 'mobilization/ppa',
-      risk: 'low',
-      source: 'NYSC',
-      last_updated: '2025',
-      featured: true
-    }
-  },
-  {
-    id: 'k-medical-redeploy',
-    category: 'Official',
-    title: 'Medical Redeployment (Health Relocation) Guide',
-    summary: 'Qualifying conditions, documentation requirements from government hospitals, and the official board review process for health-based relocations.',
-    content: `Medical Redeployment is an official provision for corps members with chronic or life-threatening health conditions that require specialized monitoring or treatment available only in specific geographical locations.
-1. QUALIFYING CHRONIC CONDITIONS
-NYSC typically considers applications for conditions such as:
-- Sickle Cell Anemia (HB SS/SC)
-- Chronic Kidney Disease (CKD)
-- Severe Cardiovascular/Heart Diseases
-- HIV/AIDS (Requiring specific antiretroviral therapy)
-- Epilepsy/Severe Neurological Disorders
-- Post-Major Surgical Recovery (within 6 months)
-2. MANDATORY DOCUMENTATION
-Documentation is the most scrutinized part of the process. Reports must be:
-- From a Government, Military, or University Teaching Hospital.
-- Signed by a Consultant in the relevant field.
-- Stamped by the Hospital Medical Director or CMD.
-- IMPORTANT: Reports from private clinics, diagnostic centers, or pharmacies are STRICTLY PROHIBITED and will result in immediate rejection.
-3. THE MEDICAL BOARD REVIEW
-Applications are not automatically granted.
-- Verification: The NYSC Medical Board will verify the authenticity of the hospital report.
-- Interview: You may be summoned for a physical interview or assessment by the camp medical team or state secretariat health officers.
-- Decision: Relocation is granted based on the availability of the required medical facilities in the destination state.
-4. APPLICATION WINDOWS
-- Camp Window: Apply within the first 10 days of the orientation camp.
-- In-Service Window: Apply through your dashboard or State Secretariat after the 3rd month of service if the condition develops or worsens during PPA.
-5. WARNINGS
-- Forgery: Presenting a forged medical report is a criminal offense under the NYSC Act and leads to immediate decamping and prosecution.
-- Self-Relocation: Never leave your post without the official Relocation Letter, even if you have submitted a medical report.`,
-    metadata: {
-      stage: 'mobilization/camp',
-      risk: 'medium',
-      source: 'NYSC',
-      last_updated: '2025',
-      featured: true
-    }
-  },
-  {
-    id: 'k-cds-approval',
-    category: 'CDS',
-    title: 'The CDS Project Approval Lifecycle',
-    summary: 'Step-by-step instructions on identifying community needs, writing proposals, and getting official LGI clearance.',
-    content: `The Community Development Service (CDS) project is the primary way a corps member leaves a lasting legacy.
-1. NEEDS ASSESSMENT
-- Visit your host community (schools, markets, clinics).
-- Interview locals to find a 'felt need' (e.g., lack of clean water, school desks, or health awareness).
-2. WRITING THE PROPOSAL
-- Title: Clear and descriptive.
-- Objectives: What will this solve?
-- Budget: Itemized and realistic.
-- Implementation Plan: How long will it take?
-3. THE APPROVAL CHAIN
-- Step 1: Submit to your Local Government Inspector (LGI).
-- Step 2: LGI reviews and forwards to the Zonal Inspector (ZI) if the budget exceeds certain limits.
-- Step 3: Receive 'Letter of Approval' BEFORE spending any money or starting work.
-4. FUNDING RULES
-- Personal funds are allowed but restricted.
-- Public solicitation (donations) must be approved in writing.
-- 'Payment for Posting' or using project funds for personal gain is a disciplinary offense.`,
-    metadata: {
-      stage: 'cds',
-      risk: 'low',
-      source: 'NYSC CDS Handbook',
-      last_updated: '2025',
-      featured: true
-    }
-  },
-  {
-    id: 'k-redeployment',
-    category: 'Official',
-    title: 'Guide to NYSC Redeployment (Relocation)',
-    summary: 'A definitive manual on relocation grounds (Health, Marital, Security), the official application process, and mandatory documentation.',
-    content: `Redeployment (officially called Relocation) is the administrative process of moving a corps member from one state to another. It is not a right, but a privilege granted based on strict humanitarian and security grounds.
-1. VALID GROUNDS FOR REDEPLOYMENT
-NYSC recognizes three primary reasons for relocation:
-- Marital Grounds (Women Only): Married female corps members who wish to serve in the state where their husband resides.
-- Health/Medical Grounds: For those with chronic or life-threatening conditions requiring specialized care available only in a specific location.
-- Security Grounds: In cases of extreme instability or personal threat in the assigned state.
-2. THE APPLICATION PROCESS
-There are two main windows for application:
-- During Orientation Camp: Relocation forms are usually distributed within the first 10 days of camp. Applications are processed before camp ends.
-- Post-Camp (In-Service): After reporting to your PPA, you can apply via your dashboard (online) or through the State Secretariat. This usually opens 3 months after the orientation camp.
-3. MANDATORY DOCUMENTATION
-Documentation must be authentic. Forgery leads to immediate disciplinary action.
-- Marital: Marriage Certificate, Change of Name (published in a national daily), Letter of Identification from husband's employer, and Husband's utility bill/ID.
-- Medical: A comprehensive Medical Report from a Government/Military Hospital. Reports from private clinics are strictly prohibited and will be rejected.
-- Security: Official police report or intelligence brief (if personal threat).
-4. OFFICIAL TIMELINES
-- Camp Applications: Processed within the 21-day period. Results are typically announced 2-3 days before the end of camp.
-- Post-Camp Applications: Can take 4-8 weeks to process. You must remain at your current PPA until your relocation is approved and you receive your "Relocation Letter."
-5. WARNINGS & POLICIES
-- No "Payment for Posting": Any official or civilian asking for money to "facilitate" relocation is committing a crime.
-- Self-Relocation Offense: Moving to another state without an approved relocation letter is treated as "Absconding" and leads to an extension of service.
-- Reposting: Once relocated to a new state, you must report to the new State Secretariat within 48 hours.`,
-    metadata: {
-      stage: 'mobilization/camp',
-      risk: 'medium',
-      source: 'NYSC Official',
-      last_updated: '2025',
-      featured: true
-    }
-  },
-  {
-    id: 'k-ppa-repost',
-    category: 'Official',
-    title: 'Handling PPA Rejection & Reposting Process',
-    summary: 'A critical survival guide for when your assigned PPA cannot accept you. Learn the official 24-hour reporting mandate and how to avoid the "Absconding" penalty.',
-    content: `Being rejected by a Primary Place of Assignment (PPA) is not a failure; it is a common administrative occurrence. However, how you handle it determines whether your service year remains smooth or results in a disciplinary extension.
-1. VALID REASONS FOR REJECTION
-An employer may reject your posting for specific official reasons:
-- Lack of Vacancy/Overstaffing: They already have the maximum number of corps members they can supervise.
-- Lack of Specialized Role: For example, an engineer posted to a school with no technical department.
-- Safety & Security: The organization cannot guarantee your safety in a specific volatile area.
-- Lack of Logistics: Inability to provide the mandatory accommodation or transport assistance.
-2. THE OFFICIAL REJECTION WORKFLOW
-If the employer cannot accept you, follow these steps immediately:
-- Get the Formal Letter: The organization MUST issue a "Letter of Rejection" on their official letterhead, signed and stamped.
-- DO NOT SELF-POST: Never go looking for another PPA on your own. This is a serious offense.
-- Report within 24 Hours: Take the rejection letter directly to your Local Government Inspector (LGI) or Zonal Inspector (ZI).
-- The Reposting Mandate: The NYSC office will review the rejection and issue you a new "Reposting Letter" to a different organization.
-3. THE 48-HOUR REPORTING RULE & ABSCONDING
-- You have 48 hours from the day you leave camp to report to your PPA.
-- If rejected, you have 24 hours to return to the NYSC office.
-- Failure to report back to the LGI after a rejection can lead to you being declared as "Absconding" (missing from service), which results in a minimum of 3 months extension of service without pay.
-4. CRITICAL TIPS & WARNINGS
-- Platoon Officer Communication: Inform your camp platoon officer or platoon leader about the rejection via phone as a backup record.
-- Avoid "Payment for Posting": It is illegal to pay any official for a "better" PPA. All reposting due to rejection is free of charge.
-- Maintain Professionalism: Even if rejected, remain polite. The rejection letter is a neutral document required for your files.`,
-    metadata: {
-      stage: 'ppa',
-      risk: 'high',
-      source: 'NYSC Official Policy',
       last_updated: '2025',
       featured: true
     }
   }
 ];
 export const STATE_DATA: Record<string, any> = {
-  'Lagos': {
-    camp: 'Iyana Ipaja Orientation Camp. Very crowded, strict discipline. Mami market is expensive.',
-    cost: 'Extremely high. Transport is a major budget item.',
-    metrics: { rent: 280000, food: 55000, transport: 35000 },
-    ppa: 'Corporate firms, tech hubs, private schools.',
-    pro_tip: 'Learn the bus routes early to avoid excessive Uber spending.'
-  },
-  'Abuja': {
-    camp: 'Kubwa Orientation Camp. Relatively modern facilities. Cold at night during harmattan.',
-    cost: 'High but manageable with sharing. Good infrastructure.',
-    metrics: { rent: 350000, food: 45000, transport: 20000 },
-    ppa: 'MDAs, NGOs, International agencies.',
-    pro_tip: 'Networking in the city is key; dress corporate even for casual meetups.'
-  },
-  'Rivers': {
-    camp: 'Nonwa Gbam Tai Orientation Camp. Spacious with decent water supply. Military presence is high.',
-    cost: 'Moderate to High. Security consciousness is required.',
-    metrics: { rent: 180000, food: 40000, transport: 25000 },
-    ppa: 'Oil & Gas logistics firms, schools, Port Authority.',
-    pro_tip: 'Always carry your NYSC ID; it helps with movement through checkpoints.'
-  },
-  'Kano': {
-    camp: 'Karaye Orientation Camp. Large and dry. Culture is very conservative.',
-    cost: 'Low cost of living. Food is very cheap.',
-    metrics: { rent: 90000, food: 20000, transport: 12000 },
-    ppa: 'Public schools, industrial firms in Bompai, health centers.',
-    pro_tip: 'Respect local traditions and dress modestly to build community trust.'
-  },
-  'Enugu': {
-    camp: 'Awgu Orientation Camp. Located in a hilly region. Very beautiful but requires hiking.',
-    cost: 'Moderate. Peaceful environment.',
-    metrics: { rent: 140000, food: 30000, transport: 15000 },
-    ppa: 'State ministries, Coal City startups, schools.',
-    pro_tip: 'The hilly terrain makes the camp cold; bring a thick blanket.'
-  },
-  'Delta': {
-    camp: 'Isele-Uku Orientation Camp. Generally friendly and social. Mami market is lively.',
-    cost: 'Moderate. High energy sector influence.',
-    metrics: { rent: 160000, food: 35000, transport: 18000 },
-    ppa: 'Agribusiness, Oil support services, educational institutions.',
-    pro_tip: 'The cost of living in Asaba is higher than in the outskirts; plan accordingly.'
-  },
   'DEFAULT': {
     camp: 'Standard NYSC Orientation facilities. Registration usually starts at 4:00 AM.',
     cost: 'Moderate. Aligns with national averages.',
@@ -401,25 +102,347 @@ export const DEADLINES = [
 ];
 export const CDS_RESOURCES = {
   categories: [
-    { id: 'edu', name: 'Education', icon: 'Book' },
-    { id: 'health', name: 'Health', icon: 'HeartPulse' },
-    { id: 'environ', name: 'Environment', icon: 'Leaf' },
-    { id: 'ict', name: 'ICT/Literacy', icon: 'Cpu' },
+    { id: 'Education', name: 'Education', icon: 'Book' },
+    { id: 'Health', name: 'Health', icon: 'HeartPulse' },
+    { id: 'Environment', name: 'Environment', icon: 'Leaf' },
+    { id: 'Infrastructure', name: 'Infrastructure', icon: 'Construction' },
+    { id: 'Social', name: 'Social Welfare', icon: 'Users' },
   ],
   projects: [
+    // --- EDUCATION (6) ---
     {
-      id: 'cp1',
+      id: 'edu-1',
       category: 'Education',
-      title: 'Free Vacation Lessons',
-      description: 'Organize free tutoring for students during their break period.',
-      requirements: ['Permission from School Principal', 'Curriculum Guide']
+      title: 'Rural Library Initiative',
+      description: 'Establishing a community library with donated books to improve literacy.',
+      budget: '₦80,000 - ₦200,000',
+      duration: '4 Months',
+      requirements: ['Community Space', 'Book Donations', 'LGI Approval'],
+      challenges: ['Theft/Security', 'Maintenance', 'Space Allocation'],
+      metrics: ['1,000+ Books Collected', '200 Weekly Users']
     },
     {
-      id: 'cp2',
+      id: 'edu-2',
+      category: 'Education',
+      title: 'Digital Literacy for Teachers',
+      description: 'Training rural school teachers on basic computer operations and digital teaching tools.',
+      budget: '₦40,000 - ₦100,000',
+      duration: '2 Months',
+      requirements: ['Laptops', 'Training Manual', 'Venue'],
+      challenges: ['Power Supply', 'Varying Tech Backgrounds'],
+      metrics: ['50 Teachers Certified', '10 Schools Impacted']
+    },
+    {
+      id: 'edu-3',
+      category: 'Education',
+      title: 'Inter-School Debate Trophy',
+      description: 'Organizing a LGA-wide debate competition to foster intellectual growth.',
+      budget: '₦30,000 - ₦70,000',
+      duration: '6 Weeks',
+      requirements: ['Judges', 'Medals/Trophies', 'Participating Schools'],
+      challenges: ['Transport for Students', 'Judging Fairness'],
+      metrics: ['12 Schools Participating', '500+ Audience']
+    },
+    {
+      id: 'edu-4',
+      category: 'Education',
+      title: 'School Desk Refurbishment',
+      description: 'Repairing broken desks in dilapidated community schools.',
+      budget: '₦60,000 - ₦150,000',
+      duration: '3 Months',
+      requirements: ['Carpenter', 'Materials', 'School Permission'],
+      challenges: ['Lumber Costs', 'Logistics of Moving Desks'],
+      metrics: ['200 Desks Repaired', '400 Students Seated']
+    },
+    {
+      id: 'edu-5',
+      category: 'Education',
+      title: 'Career Guidance Seminar',
+      description: 'Providing professional counseling to SS3 students for university selection.',
+      budget: '₦20,000 - ₦40,000',
+      duration: '1 Month',
+      requirements: ['Resource Persons', 'Handouts'],
+      challenges: ['Student Attendance', 'Venue Size'],
+      metrics: ['300 Students Reached', '10 Career Paths Explained']
+    },
+    {
+      id: 'edu-6',
+      category: 'Education',
+      title: 'Adult Literacy Classes',
+      description: 'Evening classes for local artisans and market women to learn basic reading.',
+      budget: '₦15,000 - ₦50,000',
+      duration: '6 Months',
+      requirements: ['Venue', 'Teaching Aids'],
+      challenges: ['Market Timings', 'Cultural Barriers'],
+      metrics: ['40 Adults Literate', 'Weekly Sessions']
+    },
+    // --- HEALTH (6) ---
+    {
+      id: 'health-1',
       category: 'Health',
-      title: 'Deworming Exercise',
-      description: 'Partner with local clinics to provide deworming medication for school children.',
-      requirements: ['Medical Supervisor', 'LGI Approval']
+      title: 'Community De-worming Campaign',
+      description: 'Providing de-worming medications to children in primary schools.',
+      budget: '₦50,000 - ₦120,000',
+      duration: '2 Months',
+      requirements: ['Medical Personnel', 'Drugs', 'Ministry Approval'],
+      challenges: ['Parental Consent', 'Drug Storage'],
+      metrics: ['1,000 Children Treated']
+    },
+    {
+      id: 'health-2',
+      category: 'Health',
+      title: 'Rural Health Sensitization',
+      description: 'Door-to-door awareness on hygiene, Lassa fever, and Malaria prevention.',
+      budget: '₦10,000 - ₦30,000',
+      duration: '3 Months',
+      requirements: ['Fliers', 'Megaphone'],
+      challenges: ['Language Barrier', 'Terrain'],
+      metrics: ['500 Households Reached']
+    },
+    {
+      id: 'health-3',
+      category: 'Health',
+      title: 'Blood Donation Drive',
+      description: 'Partnering with the National Blood Service to organize a donation clinic.',
+      budget: '₦25,000 - ₦60,000',
+      duration: '1 Month',
+      requirements: ['Hospital Partnership', 'Post-donation snacks'],
+      challenges: ['Myths about Blood Donation', 'Eligibility'],
+      metrics: ['100 Pints of Blood Collected']
+    },
+    {
+      id: 'health-4',
+      category: 'Health',
+      title: 'First Aid Kit Distribution',
+      description: 'Donating equipped first aid boxes to remote schools and police posts.',
+      budget: '₦40,000 - ₦90,000',
+      duration: '2 Months',
+      requirements: ['Kits', 'Basic Training Manuals'],
+      challenges: ['Refill Sustainability'],
+      metrics: ['20 Centers Equipped']
+    },
+    {
+      id: 'health-5',
+      category: 'Health',
+      title: 'Maternal Nutrition Workshop',
+      description: 'Teaching pregnant women about affordable local nutrition.',
+      budget: '₦30,000 - ₦70,000',
+      duration: '3 Months',
+      requirements: ['Nutritionist', 'Samples'],
+      challenges: ['Cultural Taboos', 'Affordability'],
+      metrics: ['150 Women Trained']
+    },
+    {
+      id: 'health-6',
+      category: 'Health',
+      title: 'Free Eye Screening',
+      description: 'Partnering with optometrists for free community vision tests.',
+      budget: '₦50,000 - ₦150,000',
+      duration: '2 Months',
+      requirements: ['Optometrist', 'Basic Equipment'],
+      challenges: ['Crowd Management', 'Referral Costs'],
+      metrics: ['200 Patients Screened']
+    },
+    // --- ENVIRONMENT (6) ---
+    {
+      id: 'env-1',
+      category: 'Environment',
+      title: 'The Green School Project',
+      description: 'Planting economic trees in schools to combat erosion and provide shade.',
+      budget: '₦40,000 - ₦80,000',
+      duration: '5 Months',
+      requirements: ['Seedlings', 'Water Source'],
+      challenges: ['Stray Animals', 'Water Scarcity'],
+      metrics: ['100 Trees Planted', 'Survival Rate Tracking']
+    },
+    {
+      id: 'env-2',
+      category: 'Environment',
+      title: 'Waste Bin Distribution',
+      description: 'Placing color-coded waste bins in public markets.',
+      budget: '₦70,000 - ₦150,000',
+      duration: '3 Months',
+      requirements: ['Bins', 'Waste Agency Partnership'],
+      challenges: ['Vandalism', 'Regular Evacuation'],
+      metrics: ['50 Bins Deployed']
+    },
+    {
+      id: 'env-3',
+      category: 'Environment',
+      title: 'Drainage Clearing Drive',
+      description: 'Leading community youth to clear blocked gutters before rainy season.',
+      budget: '₦10,000 - ₦25,000',
+      duration: '2 Months',
+      requirements: ['Tools', 'Local Youth Mobilization'],
+      challenges: ['Solid Waste Volume', 'Odor/Health Risks'],
+      metrics: ['2km Drainage Cleared']
+    },
+    {
+      id: 'env-4',
+      category: 'Environment',
+      title: 'Climate Change Awareness',
+      description: 'Workshops for local farmers on sustainable agricultural practices.',
+      budget: '₦20,000 - ₦50,000',
+      duration: '3 Months',
+      requirements: ['Expert Speakers', 'Demonstration Plot'],
+      challenges: ['Traditional Mindsets'],
+      metrics: ['100 Farmers Reached']
+    },
+    {
+      id: 'env-5',
+      category: 'Environment',
+      title: 'Anti-Erosion Barriers',
+      description: 'Building sandbag or tire barriers in erosion-prone hilly areas.',
+      budget: '₦30,000 - ₦90,000',
+      duration: '4 Months',
+      requirements: ['Tires/Sandbags', 'Labor'],
+      challenges: ['Physical Exhaustion', 'Material Supply'],
+      metrics: ['5 Critical Spots Secured']
+    },
+    {
+      id: 'env-6',
+      category: 'Environment',
+      title: 'Community Orchard',
+      description: 'Converting a wasteland into a fruit orchard for community use.',
+      budget: '₦60,000 - ₦120,000',
+      duration: '6 Months',
+      requirements: ['Fenced Land', 'Seedlings'],
+      challenges: ['Land Ownership Disputes'],
+      metrics: ['1 Acre Restored']
+    },
+    // --- INFRASTRUCTURE (6) ---
+    {
+      id: 'inf-1',
+      category: 'Infrastructure',
+      title: 'Community Well Restoration',
+      description: 'Repairing and cleaning abandoned community wells.',
+      budget: '₦50,000 - ₦130,000',
+      duration: '3 Months',
+      requirements: ['Expert Well Cleaner', 'Cement/Lids'],
+      challenges: ['Depth Risks', 'Water Purity'],
+      metrics: ['3 Wells Functional']
+    },
+    {
+      id: 'inf-2',
+      category: 'Infrastructure',
+      title: 'Solar Street Lights',
+      description: 'Installing solar-powered lamps at dark community junctions.',
+      budget: '₦150,000 - ₦400,000',
+      duration: '4 Months',
+      requirements: ['Solar Kits', 'Technician', 'Approval'],
+      challenges: ['High Capital', 'Battery Theft'],
+      metrics: ['5 Critical Junctions Lit']
+    },
+    {
+      id: 'inf-3',
+      category: 'Infrastructure',
+      title: 'Market Shed Construction',
+      description: 'Building simple wooden/iron sheds for rural market women.',
+      budget: '₦100,000 - ₦300,000',
+      duration: '5 Months',
+      requirements: ['Land Space', 'Construction Materials'],
+      challenges: ['High Material Cost'],
+      metrics: ['10 Sheds Built']
+    },
+    {
+      id: 'inf-4',
+      category: 'Infrastructure',
+      title: 'Culvert Repair',
+      description: 'Fixing minor road culverts to prevent seasonal cut-offs.',
+      budget: '₦80,000 - ₦250,000',
+      duration: '4 Months',
+      requirements: ['Engineer', 'Cement/Stone'],
+      challenges: ['Heavy Traffic', 'Material Transport'],
+      metrics: ['2 Key Access Roads Saved']
+    },
+    {
+      id: 'inf-5',
+      category: 'Infrastructure',
+      title: 'Signage & Directions',
+      description: 'Erecting permanent direction signs for hospitals and government offices.',
+      budget: '₦30,000 - ₦70,000',
+      duration: '2 Months',
+      requirements: ['Metal Sheets', 'Paint', 'Welder'],
+      challenges: ['Durability/Rust'],
+      metrics: ['15 Signs Installed']
+    },
+    {
+      id: 'inf-6',
+      category: 'Infrastructure',
+      title: 'Public Toilet Renovation',
+      description: 'Repairing doors and plumbing of public/school latrines.',
+      budget: '₦60,000 - ₦180,000',
+      duration: '3 Months',
+      requirements: ['Plumber', 'Tiles/Doors'],
+      challenges: ['Hygiene Standards', 'Water Connection'],
+      metrics: ['4 Toilets Restored']
+    },
+    // --- SOCIAL (6) ---
+    {
+      id: 'soc-1',
+      category: 'Social',
+      title: 'Artisan Skills Hub',
+      description: 'Setting up a weekend training center for vocational skills.',
+      budget: '₦50,000 - ₦150,000',
+      duration: '6 Months',
+      requirements: ['Skill Tutors', 'Basic Tools'],
+      challenges: ['Equipment Costs'],
+      metrics: ['30 Youths Trained']
+    },
+    {
+      id: 'soc-2',
+      category: 'Social',
+      title: 'Orphanage Visitation Program',
+      description: 'Coordinated monthly visits with food and educational supplies.',
+      budget: '₦20,000 - ₦60,000',
+      duration: 'Continuous',
+      requirements: ['Sponsorship', 'Transport'],
+      challenges: ['Donation Consistency'],
+      metrics: ['50 Children Supported']
+    },
+    {
+      id: 'soc-3',
+      category: 'Social',
+      title: 'Drug Abuse Sensitization',
+      description: 'Rallies and seminars in secondary schools on the dangers of drug abuse.',
+      budget: '₦15,000 - ₦40,000',
+      duration: '2 Months',
+      requirements: ['Police/NDLEA Speakers'],
+      challenges: ['Sensitive Audience'],
+      metrics: ['10 Schools Covered']
+    },
+    {
+      id: 'soc-4',
+      category: 'Social',
+      title: 'Women Empowerment (Tailoring)',
+      description: 'Donating sewing machines to top-performing women in vocational training.',
+      budget: '₦100,000 - ₦250,000',
+      duration: '4 Months',
+      requirements: ['Machines', 'Selection Criteria'],
+      challenges: ['Selection Fairness'],
+      metrics: ['5 Women Empowered']
+    },
+    {
+      id: 'soc-5',
+      category: 'Social',
+      title: 'Community Sports Tournament',
+      description: 'Organizing a "Peace Cup" to unite conflicting local youth groups.',
+      budget: '₦40,000 - ₦100,000',
+      duration: '2 Months',
+      requirements: ['Jerseys', 'Pitch', 'Community Leaders'],
+      challenges: ['Security during Finals'],
+      metrics: ['8 Teams Participated']
+    },
+    {
+      id: 'soc-6',
+      category: 'Social',
+      title: 'Prisoners Welfare Drive',
+      description: 'Donating toiletries and basic reading materials to local correctional centers.',
+      budget: '₦30,000 - ₦80,000',
+      duration: '3 Months',
+      requirements: ['Correctional Clearance', 'Items'],
+      challenges: ['Access Restrictions'],
+      metrics: ['200 Inmates Reached']
     }
   ],
   templates: [
