@@ -37,19 +37,23 @@ export function CDSToolkitPage() {
   const activeProjectId = useAppStore(s => s.activeProjectId);
   const setActiveProject = useAppStore(s => s.setActiveProject);
   const completedTasksRaw = useAppStore(s => s.completedTasks);
-  const completedTasks = Array.isArray(completedTasksRaw) ? completedTasksRaw : [];
+  // Memoize completedTasks to satisfy lint rules and ensure stable references
+  const completedTasks = useMemo(() => 
+    Array.isArray(completedTasksRaw) ? completedTasksRaw : [], 
+    [completedTasksRaw]
+  );
   const [tabValue, setTabValue] = useState<string>(activeProjectId ? "diary" : "ideas");
   const [search, setSearch] = useState('');
   const [dialogProject, setDialogProject] = useState<CDSProject | null>(null);
   const filteredProjects = useMemo(() => {
+    const s = search.toLowerCase();
     return (CDS_RESOURCES.projects || []).filter(p => {
-      const matchesSearch = p.title.toLowerCase().includes(search.toLowerCase()) ||
-                            p.category.toLowerCase().includes(search.toLowerCase());
-      return matchesSearch;
+      return p.title.toLowerCase().includes(s) ||
+             p.category.toLowerCase().includes(s);
     });
   }, [search]);
-  const activeProject = useMemo(() => 
-    (CDS_RESOURCES.projects || []).find(p => p.id === activeProjectId), 
+  const activeProject = useMemo(() =>
+    (CDS_RESOURCES.projects || []).find(p => p.id === activeProjectId),
     [activeProjectId]
   );
   const milestones = useMemo(() => {
@@ -100,7 +104,7 @@ export function CDSToolkitPage() {
           </p>
         </header>
         <Tabs value={tabValue} onValueChange={setTabValue} className="space-y-6">
-          <TabsList className="bg-white border w-full sm:w-fit justify-start h-auto p-1.5 gap-2 shadow-sm rounded-xl">
+          <TabsList className="bg-white border w-full sm:w-fit justify-start h-auto p-1.5 gap-2 shadow-sm rounded-xl overflow-x-auto">
             <TabsTrigger value="ideas" className="gap-2 px-6 py-2.5 font-bold uppercase tracking-widest text-[10px] rounded-lg data-[state=active]:bg-nysc-green-800 data-[state=active]:text-white">
               <Lightbulb className="w-4 h-4" /> Discover Ideas
             </TabsTrigger>
@@ -112,6 +116,18 @@ export function CDSToolkitPage() {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="ideas" className="space-y-8">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <input 
+                  type="text" 
+                  placeholder="Search project category or title..." 
+                  className="w-full h-11 pl-10 pr-4 rounded-xl border border-gray-100 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-nysc-green-800 shadow-sm"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+            </div>
             <Card className="border-nysc-green-100 bg-nysc-green-50/20 overflow-hidden shadow-sm">
               <div className="p-6 md:p-8 space-y-8">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -140,32 +156,39 @@ export function CDSToolkitPage() {
                 </div>
               </div>
             </Card>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProjects.map((project) => (
-                <Card key={project.id} className={cn(
-                  "hover:shadow-xl transition-all duration-300 border-gray-100 flex flex-col h-full",
-                  activeProjectId === project.id ? 'border-nysc-green-800 shadow-md ring-4 ring-nysc-green-50' : ''
-                )}>
-                  <CardHeader className="pb-3">
-                    <Badge variant="outline" className="w-fit px-3 py-1 text-[10px] font-black uppercase tracking-widest border-nysc-green-100 text-nysc-green-800">{project.category}</Badge>
-                    <CardTitle className="text-xl mt-2">{project.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6 flex-1 flex flex-col justify-between">
-                    <p className="text-sm text-muted-foreground font-medium leading-relaxed">{project.description}</p>
-                    <div className="grid grid-cols-2 gap-2">
-                        <Button variant="outline" className="font-bold border-gray-200" onClick={() => setDialogProject(project)}>Details</Button>
-                        <Button
-                          onClick={() => handleEnroll(project.id)}
-                          className={cn("font-bold", activeProjectId === project.id ? 'bg-gray-100' : 'bg-nysc-green-800 hover:bg-nysc-green-900')}
-                          disabled={activeProjectId === project.id}
-                        >
-                          {activeProjectId === project.id ? "Active" : "Adopt"}
-                        </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            {filteredProjects.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredProjects.map((project) => (
+                  <Card key={project.id} className={cn(
+                    "hover:shadow-xl transition-all duration-300 border-gray-100 flex flex-col h-full",
+                    activeProjectId === project.id ? 'border-nysc-green-800 shadow-md ring-4 ring-nysc-green-50' : ''
+                  )}>
+                    <CardHeader className="pb-3">
+                      <Badge variant="outline" className="w-fit px-3 py-1 text-[10px] font-black uppercase tracking-widest border-nysc-green-100 text-nysc-green-800">{project.category}</Badge>
+                      <CardTitle className="text-xl mt-2">{project.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-6 flex-1 flex flex-col justify-between">
+                      <p className="text-sm text-muted-foreground font-medium leading-relaxed line-clamp-2">{project.description}</p>
+                      <div className="grid grid-cols-2 gap-2">
+                          <Button variant="outline" className="font-bold border-gray-200" onClick={() => setDialogProject(project)}>Details</Button>
+                          <Button
+                            onClick={() => handleEnroll(project.id)}
+                            className={cn("font-bold", activeProjectId === project.id ? 'bg-gray-100 text-gray-400' : 'bg-nysc-green-800 hover:bg-nysc-green-900')}
+                            disabled={activeProjectId === project.id}
+                          >
+                            {activeProjectId === project.id ? "Active" : "Adopt"}
+                          </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="py-20 text-center border-2 border-dashed rounded-3xl opacity-40">
+                <Search className="w-10 h-10 mx-auto mb-4" />
+                <p className="font-bold text-sm">No matching blueprints found</p>
+              </div>
+            )}
           </TabsContent>
           <TabsContent value="diary">
             {activeProject ? (
