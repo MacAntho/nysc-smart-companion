@@ -9,8 +9,8 @@ import { MapPin, Tent, CreditCard, Bus, Info, ShieldAlert, TrendingUp, Sparkles,
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Link } from 'react-router-dom';
 export function StateGuidePage() {
-  const stateName = useAppStore(s => s.stateOfDeployment);
-  if (!stateName) {
+  const stateOfDeployment = useAppStore(s => s.stateOfDeployment);
+  if (!stateOfDeployment) {
     return (
       <div className="max-w-4xl mx-auto py-20 px-4 text-center space-y-6">
         <div className="w-20 h-20 bg-nysc-green-50 rounded-full flex items-center justify-center mx-auto border border-nysc-green-100">
@@ -30,16 +30,19 @@ export function StateGuidePage() {
       </div>
     );
   }
-  const data = STATE_DATA[stateName] || {
+  const data = STATE_DATA[stateOfDeployment] || {
     camp: 'Information pending for this state.',
     cost: 'Moderate',
     metrics: { rent: 0, food: 0, transport: 0 },
     ppa: 'Standard PPA opportunities.'
   };
+  const rentMetric = data.metrics?.rent ?? 0;
+  const foodMetric = data.metrics?.food ?? 0;
+  const transportMetric = data.metrics?.transport ?? 0;
   const chartData = [
-    { name: 'Rent', amount: data.metrics.rent || 0, avg: 180000 },
-    { name: 'Food', amount: data.metrics.food || 0, avg: 35000 },
-    { name: 'Transport', amount: data.metrics.transport || 0, avg: 20000 },
+    { name: 'Rent', amount: rentMetric, avg: 180000 },
+    { name: 'Food', amount: foodMetric, avg: 35000 },
+    { name: 'Transport', amount: transportMetric, avg: 20000 },
   ];
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-fade-in px-4">
@@ -48,7 +51,7 @@ export function StateGuidePage() {
           <MapPin className="w-8 h-8" />
         </div>
         <div className="space-y-1">
-          <h1 className="text-3xl font-display font-bold text-nysc-green-800 tracking-tight">{stateName} State Intelligence</h1>
+          <h1 className="text-3xl font-display font-bold text-nysc-green-800 tracking-tight">{stateOfDeployment} State Intelligence</h1>
           <p className="text-muted-foreground font-medium flex items-center gap-1.5">
             <Sparkles className="w-4 h-4 text-nysc-gold" /> Official field data for posted corps members.
           </p>
@@ -141,7 +144,7 @@ export function StateGuidePage() {
                   <p>Reliability of transport depends on proximity to major city centers. Budget carefully for high-traffic days.</p>
                   <div className="mt-6 p-4 border rounded-xl bg-gray-50 flex justify-between items-center">
                     <span className="font-bold text-muted-foreground uppercase tracking-widest text-[10px]">Avg Monthly Cost</span>
-                    <span className="font-black text-nysc-green-800 text-lg">₦{(data.metrics.transport || 0).toLocaleString()}</span>
+                    <span className="font-black text-nysc-green-800 text-lg">₦{(transportMetric).toLocaleString()}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -171,9 +174,9 @@ export function StateGuidePage() {
             <CardContent className="space-y-5">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-muted-foreground">Est. Base Expenses</span>
-                <span className="font-black text-nysc-green-800">₦{(Math.round((data.metrics.rent || 0)/12 + (data.metrics.food || 0) + (data.metrics.transport || 0))).toLocaleString()}</span>
+                <span className="font-black text-nysc-green-800">₦{(Math.round(rentMetric/12 + foodMetric + transportMetric)).toLocaleString()}</span>
               </div>
-              <Progress value={Math.min(100, ((data.metrics.food || 0) / 50000) * 100)} className="h-2 bg-gray-50" />
+              <Progress value={Math.min(100, (foodMetric / 50000) * 100)} className="h-2 bg-gray-50" />
               <p className="text-[10px] text-muted-foreground font-medium italic leading-tight">
                 Benchmark based on single-occupancy housing and local transport rates.
               </p>

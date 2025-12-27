@@ -207,7 +207,10 @@ export function DashboardPage() {
             ) : (
               <div className="text-center py-12 flex flex-col items-center gap-2 bg-gray-50/50 rounded-2xl border-2 border-dashed">
                 <Sparkles className="w-8 h-8 text-nysc-gold animate-pulse" />
-                <p className="text-xs font-bold text-gray-900">All Clear!</p>
+                <div className="space-y-1">
+                  <p className="text-xs font-bold text-gray-900">All Clear for {stageId}!</p>
+                  <p className="text-[10px] text-muted-foreground font-medium">No urgent deadlines detected for your current phase.</p>
+                </div>
               </div>
             )}
           </CardContent>

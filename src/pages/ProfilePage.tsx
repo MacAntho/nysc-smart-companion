@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import type { NYSCStage } from '@shared/types';
 import { formatDistanceToNow } from 'date-fns';
+import { JOURNEY_STAGES } from '@/lib/mock-content';
 const STAGES: { value: NYSCStage; label: string }[] = [
   { value: 'prospective', label: 'Prospective Corper' },
   { value: 'mobilization', label: 'Mobilization' },
@@ -42,6 +43,9 @@ export function ProfilePage() {
   const setStage = useAppStore(s => s.setStage);
   const setStateOfDeployment = useAppStore(s => s.setStateOfDeployment);
   const logout = useAppStore(s => s.logout);
+  // Calculate total tasks dynamically from all stages
+  const totalTasks = JOURNEY_STAGES.reduce((acc, s) => acc + s.tasks.length, 0);
+  const masteryProgress = totalTasks > 0 ? (completedTasks.length / totalTasks) * 100 : 0;
   return (
     <div className="max-w-4xl mx-auto space-y-8 animate-fade-in px-4">
       <header className="flex flex-col items-center text-center space-y-4">
@@ -109,9 +113,9 @@ export function ProfilePage() {
             <div className="space-y-2">
               <div className="flex justify-between text-xs font-bold uppercase tracking-widest">
                 <span>Journey Tasks</span>
-                <span>{completedTasks.length} Done</span>
+                <span>{completedTasks.length} / {totalTasks} Done</span>
               </div>
-              <Progress value={Math.min(100, (completedTasks.length / 18) * 100)} className="h-2 bg-gray-100" />
+              <Progress value={masteryProgress} className="h-2 bg-gray-100" />
             </div>
             <div className="p-4 border border-nysc-green-100 bg-nysc-green-50/50 rounded-2xl">
               <p className="text-[10px] font-black uppercase tracking-widest text-nysc-green-800 mb-1">Current Milestone</p>

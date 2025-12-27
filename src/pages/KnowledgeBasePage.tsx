@@ -23,11 +23,12 @@ export function KnowledgeBasePage() {
   const readArticles = useAppStore(s => s.readArticles);
   const toggleReadArticle = useAppStore(s => s.toggleReadArticle);
   const filtered = KNOWLEDGE_ARTICLES.filter(a => {
+    const searchLower = search.toLowerCase();
     const matchesSearch =
-      a.title.toLowerCase().includes(search.toLowerCase()) ||
-      a.content.toLowerCase().includes(search.toLowerCase()) ||
-      a.summary.toLowerCase().includes(search.toLowerCase()) ||
-      a.metadata?.source?.toLowerCase().includes(search.toLowerCase());
+      a.title.toLowerCase().includes(searchLower) ||
+      a.content.toLowerCase().includes(searchLower) ||
+      a.summary.toLowerCase().includes(searchLower) ||
+      (a.metadata?.source?.toLowerCase() || '').includes(searchLower);
     const matchesCategory = category === 'All' || a.category === category;
     return matchesSearch && matchesCategory;
   });
@@ -86,7 +87,7 @@ export function KnowledgeBasePage() {
                   <CardTitle className="text-xl group-hover:text-nysc-green-800 transition-colors leading-tight font-display font-bold">{article.title}</CardTitle>
                   {article.metadata?.source && (
                     <p className="text-[9px] text-muted-foreground font-medium uppercase tracking-widest mt-1 opacity-70">
-                      Source: {article.metadata.source} {article.metadata.last_updated && `| 2025 Edition`}
+                      Source: {article.metadata.source} | 2025 Edition
                     </p>
                   )}
                 </CardHeader>
