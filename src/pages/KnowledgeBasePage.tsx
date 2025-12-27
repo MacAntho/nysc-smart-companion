@@ -64,7 +64,7 @@ export function KnowledgeBasePage() {
       a.summary.toLowerCase().includes(searchLower) ||
       (a.metadata?.source?.toLowerCase() || '').includes(searchLower) ||
       (a.metadata?.stage?.toLowerCase() || '').includes(searchLower);
-    const matchesCategory = category === 'All' || a.category === category || a.category.includes(category);
+    const matchesCategory = category === 'All' || a.category.toLowerCase().includes(category.toLowerCase());
     return matchesSearch && matchesCategory;
   });
   return (
@@ -78,7 +78,7 @@ export function KnowledgeBasePage() {
             <div className="relative group">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 transition-colors group-focus-within:text-nysc-gold" />
               <Input
-                placeholder="Search redeployment, sanctions, packing, POP, rules..."
+                placeholder="Search FAQs, redeployment, sanctions, packing, POP, rules..."
                 className="pl-10 h-14 bg-white text-gray-900 border-none focus-visible:ring-2 focus-visible:ring-nysc-gold shadow-lg rounded-2xl"
                 value={search}
                 onChange={handleSearchChange}

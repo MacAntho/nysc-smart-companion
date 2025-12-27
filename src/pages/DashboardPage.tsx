@@ -45,6 +45,16 @@ export function DashboardPage() {
       };
     }
     const readArticlesSet = new Set(readArticles ?? []);
+    // 0. NYSC Master FAQ (Promote to early stages after foundational reading)
+    if ((stageId === 'prospective' || stageId === 'mobilization') && 
+        readArticlesSet.has('k-eligibility') && readArticlesSet.has('k-batches') && !readArticlesSet.has('k-faqs')) {
+      return {
+        title: 'NYSC FAQs: 50+ Verified Answers',
+        desc: 'Operational Intelligence: Master the entire service cycle with answers to 50+ common questions on camp, PPA, and relocation protocols.',
+        risk: 'low' as PriorityRisk,
+        searchLink: '/app/knowledge?search=faqs'
+      };
+    }
     // 0. Essential Foundational Knowledge (Eligibility)
     if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-eligibility')) {
       return {

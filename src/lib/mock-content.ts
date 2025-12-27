@@ -246,6 +246,75 @@ Relocation is not guaranteed. Do not vacate your current PPA until you have the 
 2. THE CLOCK: You have 48 hours to report this rejection to your LGI.
 3. REPOSTING: The LGI will issue you a new posting letter. Do not wander about or go home.`,
     metadata: { stage: 'ppa', risk: 'medium', source: 'NYSC Admin', featured: true }
+  },
+  {
+    id: 'k-faqs',
+    category: 'Official',
+    title: 'NYSC FAQs: 50+ Answered Questions',
+    summary: 'Comprehensive Q&A roadmap covering eligibility, camp survival, PPA protocols, CDS projects, and clearance procedures across all stages.',
+    content: `This master guide provides verified answers to the most common questions across the NYSC service year.
+
+I. ELIGIBILITY & REGISTRATION
+1. Can I serve if I am over 30? No. If you graduated at 30+, you receive an Exemption Certificate.
+2. Can I use a statement of result? Yes, for registration, but you must present the original degree at camp.
+3. How do I correct my name? Apply for a name correction on your dashboard using the 'Apply for Correction' link.
+4. What is the Senate List? The list of eligible graduates uploaded by your institution to the NYSC database.
+5. Can I register with a thumbprint error? No. You must visit an accredited center with a working scanner.
+6. Is the medical certificate mandatory? Yes. It must be from a Government/Military hospital.
+7. Can I choose my state of deployment? No, except for married women or those with serious medical conditions.
+8. What is Revalidation? Registering again because you failed to report to a previous batch.
+9. Can I change my date of birth after registration? No, NYSC uses the WAEC/JAMB database for date of birth verification.
+10. What if my school name is missing? Contact your Student Affairs Officer immediately.
+
+II. ORIENTATION CAMP SURVIVAL
+11. What happens if I arrive camp late? You may be turned back if registration has closed (usually after Day 2).
+12. Are laptops allowed in camp? Generally discouraged for security reasons.
+13. Can I leave camp before 21 days? Only on official permission for health or marital emergencies.
+14. What is 'Double bunking'? The standard sleeping arrangement in NYSC hostels.
+15. Is food provided in camp? Yes, three meals daily at the kitchen (Mami market is an alternative).
+16. Do I get paid in camp? Yes, your first month's allowance and transport allowance (bicycle allowance) are paid in camp.
+17. What is the 'White' uniform? White shorts, white T-shirts, and white canvas. The official daily wear.
+18. Can I wear mufti? Only during specific social events or on Sunday mornings for religious services.
+19. What if I lose my ID card in camp? Report to the camp commandant/secretariat immediately.
+20. Are phones allowed during drills? No. Phones are for use during break times and in hostels.
+
+III. PPA & ALLOWANCES
+21. What is a PPA? Place of Primary Assignment (where you work for 11 months).
+22. Can I reject my posting? No. Only the PPA can reject you.
+23. What is 'Allowee'? The monthly federal allowance (currently ₦33,000).
+24. Does the state pay allowance? Some states pay an additional monthly stipend; others do not.
+25. Can I travel without permission? No. You must obtain written permission from the State Coordinator.
+26. What is the 'Monthly Clearance'? A form signed by your PPA and LGI to prove you worked that month.
+27. What if my PPA refuses to pay me? Report to your Local Government Inspector (LGI).
+28. Can I change my PPA? Only on grounds of security, health, or extreme lack of vacancy/accommodation.
+29. What is an 'Abscondment'? Missing service for more than 3 months without leave.
+30. Can I work two jobs? No. National service is a full-time commitment.
+
+IV. CDS & PROJECTS
+31. What is CDS? Community Development Service.
+32. Is weekly CDS attendance mandatory? Yes. 10% absence can lead to service extension.
+33. Can I start a project without approval? No. You must receive an official approval letter first.
+34. How do I fund my CDS project? Through community donations and corporate sponsorship. Out-of-pocket funding is discouraged.
+35. What is a 'Personal CDS'? A project initiated and executed by an individual corps member.
+36. Can groups do CDS? Yes. These are called 'Group CDS' projects (e.g., HIV/AIDS, SDGs).
+37. What is a completion report? The final document submitted to the LGI after a project is finished.
+38. Do I get an award for CDS? Exceptional projects are nominated for State and Presidential honors.
+39. Can I do CDS in my home state? Only if you are legally deployed there.
+40. What is a 'Milestone'? A specific phase of project completion verified by the LGI.
+
+V. RELOCATION, POP & CERTIFICATION
+41. When can I apply for relocation? During camp (on the portal) or 3 months post-camp.
+42. What are the grounds for relocation? Marital, Health, or Security.
+43. How long does relocation take? Results are usually out within 2-4 weeks of application.
+44. What is 'Winding Up'? The final week of activities before the Passing Out Parade.
+45. When do I get my Discharge Certificate? On the day of the Passing Out Parade (POP).
+46. What if I lose my Discharge Certificate? It is never replaced. NYSC only issues a 'Letter of Confirmation'.
+47. Can I collect my certificate by proxy? No. You must be physically present and cleared.
+48. What is an 'Extension'? A penalty where you serve extra months for misconduct.
+49. Is the certificate required for jobs? Yes, it is a legal requirement for employment in Nigeria for graduates.
+50. What if I am pregnant? Pregnant and nursing mothers get concessionary postings and maternity leave.
+51. Can I serve twice? No. It is illegal to enroll for NYSC more than once.`,
+    metadata: { stage: 'all', risk: 'low', source: 'NYSC Portal / Official Policy Handbook', featured: true }
   }
 ];
 export const STATE_DATA: Record<string, any> = {
