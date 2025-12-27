@@ -41,7 +41,7 @@ export function KnowledgeBasePage() {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
               <Input
-                placeholder="Search exemptions, registration, rules..."
+                placeholder="Search packing, documents, exemptions, rules..."
                 className="pl-10 h-12 bg-white text-gray-900 border-none focus-visible:ring-nysc-gold"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}

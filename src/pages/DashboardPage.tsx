@@ -27,13 +27,30 @@ export function DashboardPage() {
   const progressPercent = stageTasks.length > 0 ? (completedCount / stageTasks.length) * 100 : 0;
   const readPercent = (readArticles.length / KNOWLEDGE_ARTICLES.length) * 100;
   const relevantDeadlines = DEADLINES.filter(d => d.stage === stageId);
-  const showPriorityAction = stageId === 'prospective' || stageId === 'mobilization';
-  const priorityTitle = stageId === 'prospective' 
-    ? 'Exemption & Exclusion Guide' 
-    : 'Official Registration Guide';
-  const priorityDesc = stageId === 'prospective'
-    ? 'Determine if you are eligible for national service or require an exemption certificate.'
-    : 'Critical step-by-step instructions for your current registration stage.';
+  // Surfacing logic for priority resources based on stage
+  const showPriorityAction = ['prospective', 'mobilization', 'camp'].includes(stageId);
+  const getPriorityContent = () => {
+    switch(stageId) {
+      case 'prospective':
+        return {
+          title: 'Exemption & Exclusion Guide',
+          desc: 'Determine if you are eligible for national service or require an exemption certificate.'
+        };
+      case 'mobilization':
+        return {
+          title: 'Official Registration Guide',
+          desc: 'Critical step-by-step instructions for your current registration stage.'
+        };
+      case 'camp':
+        return {
+          title: 'Camp Packing & Doc Checklist',
+          desc: 'Ensure you have all mandatory documents and gear before reporting to your orientation camp.'
+        };
+      default:
+        return { title: '', desc: '' };
+    }
+  };
+  const { title: priorityTitle, desc: priorityDesc } = getPriorityContent();
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-fade-in px-4">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -54,7 +71,7 @@ export function DashboardPage() {
           )}
         </div>
       </header>
-      {showPriorityAction && (
+      {showPriorityAction && priorityTitle && (
         <Card className="border-nysc-gold border-2 bg-amber-50/50 shadow-lg shadow-nysc-gold/10 overflow-hidden relative group">
           <div className="absolute top-0 right-0 p-4">
              <Sparkles className="w-12 h-12 text-nysc-gold opacity-20 group-hover:scale-125 transition-transform duration-500" />

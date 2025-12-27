@@ -52,6 +52,47 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-camp-packing',
+    category: 'Survival',
+    title: 'NYSC Orientation Camp: Official Documents & Packing List',
+    summary: 'The ultimate checklist of required documents, white-kit items, and prohibited materials for the 21-day orientation period.',
+    content: `Survival at the NYSC Orientation Camp begins with proper preparation. Below is the verified checklist for every prospective corps member.
+1. MANDATORY OFFICIAL DOCUMENTS (The "File Documents"):
+- Original Statement of Result/Degree (+ 4 photocopies).
+- Call-up Letter (Color + 4 photocopies). DO NOT LAMINATE.
+- Green Card (Color + 4 photocopies). This is printed from your portal after registration.
+- Medical Fitness Certificate from a Government/General Hospital (+ 4 photocopies).
+- Institutional ID Card.
+- Passport Photographs: At least 24 copies with a white background.
+2. CAMP KIT (The '7-in-7' Clothing):
+- White Round-neck T-shirts (6-12 copies): You will live in these.
+- White Shorts (6-12 copies): Essential for drills and morning exercises.
+- White Socks (6-12 pairs): Ensure they are plain white.
+- White Sneakers (1-2 pairs): Quality matters for 21 days of marching.
+- Rubber Tennis Shoes (1 pair): Extremely useful for rain or muddy conditions.
+- Sturdy Waist Bag: To keep your phone, cash, and documents safe at all times.
+3. PERSONAL ESSENTIALS:
+- Bedding: At least 2 bedsheets and a pillowcase.
+- Mosquito Net: Malaria is a real risk; bring a net and ropes to tie it.
+- Toiletries: Bucket, bailer, soap, sponge, toothpaste, and sufficient tissue.
+- Laundry Gear: Detergent and a small pack of clothes pegs.
+- Padlocks: At least 2 small ones to secure your box and locker.
+4. PROHIBITED ITEMS (Do NOT bring these):
+- Sharp Objects: Knives, forks, or metal cutlery (use plastic instead).
+- Electrical Appliances: Irons, boiling rings, and extension boxes are strictly banned.
+- Vehicles: Corps members are not allowed to bring cars or bikes to camp.
+- Laptops: Generally discouraged unless you are posted to the ICT or Press sub-unit.
+- Weapons of any kind.
+Pro-Tip: Arrive at camp early (Day 1) to get the best bunk positions and avoid long registration queues.`,
+    metadata: {
+      stage: 'camp',
+      risk: 'low',
+      source: 'NYSC Official',
+      last_updated: '2025',
+      featured: true
+    }
+  },
+  {
     id: 'k-exemptions',
     category: 'Official',
     title: 'Guide to NYSC Exemptions and Exclusions',
