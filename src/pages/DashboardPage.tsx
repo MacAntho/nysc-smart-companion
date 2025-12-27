@@ -29,7 +29,8 @@ export function DashboardPage() {
   const progressPercent = stageTasks.length > 0 ? (completedCount / stageTasks.length) * 100 : 0;
   const readPercent = (readArticles.length / KNOWLEDGE_ARTICLES.length) * 100;
   const relevantDeadlines = DEADLINES.filter(d => d.stage === stageId);
-  const getPriorityContent = (): { title: string; desc: string; risk: PriorityRisk } => {
+  const getPriorityContent = (): { title: string; desc: string; risk: PriorityRisk; articleId?: string } => {
+    const hasReadRedeployment = readArticles.includes('k-redeployment');
     switch(stageId) {
       case 'prospective':
         return {
@@ -38,7 +39,12 @@ export function DashboardPage() {
           risk: 'low'
         };
       case 'mobilization':
-        return {
+        return !hasReadRedeployment ? {
+          title: 'Redeployment & Relocation Protocol',
+          desc: 'Crucial: Learn the health, marital, and security grounds for relocating to a different state.',
+          risk: 'medium',
+          articleId: 'k-redeployment'
+        } : {
           title: 'Official Registration Guide',
           desc: 'Critical step-by-step instructions for your current registration stage.',
           risk: 'medium'
@@ -46,11 +52,16 @@ export function DashboardPage() {
       case 'camp':
         return {
           title: 'Surviving the 21-Day Orientation Camp',
-          desc: 'The definitive survival toolkit: Accommodation, food, health, and security tips for your orientation period.',
+          desc: 'The definitive survival toolkit: Accommodation, food, health, and security tips.',
           risk: 'medium'
         };
       case 'ppa':
-        return {
+        return !hasReadRedeployment ? {
+          title: 'Post-Camp Relocation Window',
+          desc: 'The 3-month relocation portal opens soon. Verify your documentation for marital or health grounds.',
+          risk: 'medium',
+          articleId: 'k-redeployment'
+        } : {
           title: 'Monthly Clearance & PPA Protocol',
           desc: 'Essential: Your guide to monthly signatures, registers, and handling PPA rejection.',
           risk: 'high'
