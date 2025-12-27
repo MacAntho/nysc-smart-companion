@@ -14,7 +14,7 @@ import {
   DialogFooter,
   DialogTrigger
 } from '@/components/ui/dialog';
-import { Search, ExternalLink, Clock, CheckCircle, CircleCheck, Info, Sparkles, AlertTriangle, XCircle, ShieldAlert } from 'lucide-react';
+import { Search, ExternalLink, Clock, CheckCircle, CircleCheck, Info, Sparkles, XCircle, ShieldAlert } from 'lucide-react';
 import { KNOWLEDGE_ARTICLES } from '@/lib/mock-content';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -28,13 +28,13 @@ export function KnowledgeBasePage() {
   const readArticles = useAppStore(s => s.readArticles);
   const toggleReadArticle = useAppStore(s => s.toggleReadArticle);
   const isTyping = useRef(false);
-  // Synchronize local search state with URL parameters
+  // Synchronize local search state with URL parameters (direct navigation or back/forward)
   useEffect(() => {
     if (!isTyping.current && queryParam !== search) {
       setSearch(queryParam);
     }
   }, [queryParam, search]);
-  // Debounced URL update
+  // Debounced URL update for clean address bar
   useEffect(() => {
     const handler = setTimeout(() => {
       if (search && search !== queryParam) {
@@ -50,6 +50,12 @@ export function KnowledgeBasePage() {
     isTyping.current = true;
     setSearch(e.target.value);
   };
+  const clearFilters = () => {
+    isTyping.current = false;
+    setSearch('');
+    setCategory('All');
+    setSearchParams({}, { replace: true });
+  };
   const filtered = KNOWLEDGE_ARTICLES.filter(a => {
     const searchLower = search.toLowerCase();
     const matchesSearch =
@@ -61,12 +67,6 @@ export function KnowledgeBasePage() {
     const matchesCategory = category === 'All' || a.category === category || a.category.includes(category);
     return matchesSearch && matchesCategory;
   });
-  const clearFilters = () => {
-    isTyping.current = false;
-    setSearch('');
-    setCategory('All');
-    setSearchParams({});
-  };
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="py-8 md:py-10 lg:py-12 space-y-8">
@@ -78,14 +78,14 @@ export function KnowledgeBasePage() {
             <div className="relative group">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 transition-colors group-focus-within:text-nysc-gold" />
               <Input
-                placeholder="Search redeployment, sanctions, routine, packing, POP, rules..."
+                placeholder="Search redeployment, sanctions, packing, POP, rules..."
                 className="pl-10 h-14 bg-white text-gray-900 border-none focus-visible:ring-2 focus-visible:ring-nysc-gold shadow-lg rounded-2xl"
                 value={search}
                 onChange={handleSearchChange}
               />
               {search && (
                 <button
-                  onClick={() => { setSearch(''); setSearchParams({}); }}
+                  onClick={clearFilters}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                 >
                   <XCircle className="w-5 h-5" />
@@ -123,7 +123,7 @@ export function KnowledgeBasePage() {
                     className={cn(
                       "hover:shadow-2xl transition-all duration-300 group border-gray-100 flex flex-col h-full relative rounded-3xl overflow-hidden min-h-[220px]",
                       isHighRisk
-                        ? "ring-2 ring-destructive bg-red-50/30 shadow-lg shadow-red-100/50 animate-pulse-subtle"
+                        ? "ring-2 ring-destructive bg-red-50/30 shadow-lg shadow-red-100/50"
                         : isFeatured
                           ? "ring-2 ring-nysc-gold bg-amber-50/10 shadow-nysc-gold/5"
                           : "bg-white"
@@ -154,11 +154,6 @@ export function KnowledgeBasePage() {
                       <CardTitle className={cn("text-xl group-hover:text-nysc-green-800 transition-colors leading-tight font-display font-bold", isHighRisk && "text-destructive")}>
                         {article.title}
                       </CardTitle>
-                      {article.metadata?.source && (
-                        <p className="text-[9px] text-muted-foreground font-medium uppercase tracking-widest mt-1 opacity-70">
-                          Source: {article.metadata.source} | 2025 Edition
-                        </p>
-                      )}
                     </CardHeader>
                     <CardContent className="space-y-4 flex-1 flex flex-col justify-between pt-2">
                       <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed font-medium">{article.summary}</p>
@@ -184,7 +179,6 @@ export function KnowledgeBasePage() {
                               <div className="text-[10px] font-bold text-nysc-green-800 uppercase tracking-widest mb-1 flex items-center gap-2 flex-wrap">
                                 {article.category}
                                 {isHighRisk && <span className="text-destructive font-black flex items-center gap-1"><ShieldAlert className="w-3 h-3" /> HIGH PRIORITY ADVISORY</span>}
-                                {isFeatured && <span className="text-nysc-gold font-black">• Featured</span>}
                               </div>
                               <DialogTitle className={cn("text-3xl font-display font-bold leading-tight", isHighRisk && "text-destructive")}>{article.title}</DialogTitle>
                               <DialogDescription className="text-base text-muted-foreground font-medium mt-2">
@@ -245,7 +239,7 @@ export function KnowledgeBasePage() {
           <div className="space-y-2 text-center md:text-left">
             <h4 className="font-display font-bold text-lg text-gray-900">Official Operational Disclaimer</h4>
             <p className="text-xs text-muted-foreground max-w-4xl font-medium leading-relaxed">
-              NYSC Smart Companion provides independent operational support and educational resources. This platform is NOT an official NYSC portal and is not affiliated with the National Youth Service Corps directorate. Always verify critical dates, official payments, and policy changes directly via official government communications on the <a href="https://portal.nysc.org.ng" className="text-nysc-green-800 underline font-black" target="_blank" rel="noreferrer">Official NYSC Portal</a>. Your use of this tool indicates acknowledgment of this advisory.
+              NYSC Smart Companion provides independent operational support. This platform is NOT an official NYSC portal. Always verify critical dates directly via the <a href="https://portal.nysc.org.ng" className="text-nysc-green-800 underline font-black" target="_blank" rel="noreferrer">Official NYSC Portal</a>.
             </p>
           </div>
         </footer>

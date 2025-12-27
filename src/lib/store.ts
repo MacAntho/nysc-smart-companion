@@ -59,7 +59,9 @@ export const useAppStore = create<AppState>()(
         userRole: data.role,
         isAuthenticated: true,
         isPro: data.isPro,
-        isInitialized: false
+        isSyncing: false,
+        lastSyncError: null,
+        isInitialized: false // Re-initialize for new user session
       }),
       logout: () => {
         localStorage.removeItem('nysc-companion-storage');
@@ -139,18 +141,17 @@ export const useAppStore = create<AppState>()(
           set({ lastSyncError: 'Connection issue' });
         } finally {
           set({ isSyncing: false });
-          // Post-Sync Eventual Consistency Check:
-          // If state changed during the network request, trigger another sync
+          // Eventual consistency check
           const latestPayload = generatePayload();
           if (latestPayload !== currentPayload) {
-            // Use a slight delay to prevent stack overflow in error loops
-            setTimeout(() => get().syncProfile(), 100);
+            setTimeout(() => get().syncProfile(), 150);
           }
         }
       },
       loadProfile: async (force = false) => {
         const state = get();
         const { userId, isAuthenticated, isSyncing, isInitialized } = state;
+        // Skip if already working or initialized (unless forced)
         if (!userId || !isAuthenticated || (isSyncing && !force) || (isInitialized && !force)) {
           if (!isInitialized && userId && isAuthenticated) {
              set({ isInitialized: true });
@@ -187,6 +188,7 @@ export const useAppStore = create<AppState>()(
         } catch (error) {
           set({ lastSyncError: 'Failed to fetch cloud profile' });
         } finally {
+          // Robust initialized transition: always true to avoid render loops on fallback
           set({ isSyncing: false, isInitialized: true });
         }
       },

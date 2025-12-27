@@ -5,7 +5,7 @@ import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, CheckCircle, ChevronRight, Sparkles, ArrowRight, ShieldAlert, Briefcase, Info, Loader2, Search, HelpCircle } from 'lucide-react';
-import { JOURNEY_STAGES, DEADLINES, STATE_DATA } from '@/lib/mock-content';
+import { JOURNEY_STAGES, DEADLINES } from '@/lib/mock-content';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow, differenceInDays, parseISO, isPast } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -39,7 +39,8 @@ export function DashboardPage() {
   }, [stageId]);
   const priorityContent = useMemo(() => {
     if (!isInitialized) return null;
-    const readArticlesSet = new Set(readArticles);
+    const readArticlesSet = new Set(readArticles ?? []);
+    // Logic for camp stage relocation visibility
     if ((stageId === 'mobilization' || stageId === 'camp') && !readArticlesSet.has('k-redeployment')) {
       return {
         title: 'Redeployment & Relocation Guide',
@@ -48,6 +49,7 @@ export function DashboardPage() {
         searchLink: '/app/knowledge?search=redeployment'
       };
     }
+    // Critical disciplinary guides
     if (!readArticlesSet.has('k-disqualification')) {
       return {
         title: 'Disqualification & Remobilization Protocol',
@@ -64,33 +66,40 @@ export function DashboardPage() {
         searchLink: '/app/knowledge?search=sanctions'
       };
     }
-    if (!readArticlesSet.has('k-extension')) {
+    // Stage specific fallbacks
+    if (stageId === 'ppa' && !readArticlesSet.has('k-clearance-issues')) {
       return {
-        title: 'Service Extensions: Causes & Appeals',
-        desc: 'Mandatory Knowledge: Understand the official triggers for service extensions and the 7-day appeal window.',
+        title: 'Clearance Troubleshooting',
+        desc: 'Official Protocol: Know the LGI reporting chain for sign-off refusals and biometric failures.',
         risk: 'high' as PriorityRisk,
-        searchLink: '/app/knowledge?search=extension'
+        searchLink: '/app/knowledge?search=clearance-issues'
       };
     }
     if (progressPercent === 100) {
       return {
-        title: 'Next Phase Readiness',
-        desc: 'You have completed all milestones for this stage. Review the State Guide for local cost benchmarks.',
+        title: 'Phase Milestone Achieved',
+        desc: 'You have completed all milestones for this stage. Review the State Guide for local cost benchmarks and PPA terrain.',
         risk: 'low' as PriorityRisk,
         searchLink: '/app/state-guide'
       };
     }
+    // General stage defaults
     switch (stageId) {
       case 'prospective':
         return !readArticlesSet.has('k-registration')
           ? { title: 'Official Registration Roadmap', desc: 'Mandatory: Ensure your senate list details are verified before portal closure.', risk: 'high' as PriorityRisk, searchLink: '/app/knowledge?search=registration' }
-          : { title: 'Clearance Preparation', desc: 'Learn about the final clearance chain for graduates.', risk: 'low' as PriorityRisk, searchLink: '/app/knowledge' };
-      case 'ppa':
-        return !readArticlesSet.has('k-clearance-issues')
-          ? { title: 'Clearance Troubleshooting', desc: 'Official Protocol: Know the LGI reporting chain for sign-off refusals.', risk: 'high' as PriorityRisk, searchLink: '/app/knowledge?search=clearance-issues' }
-          : { title: 'Monthly Biometric Window', desc: 'Secure your monthly federal allowance through timely capture.', risk: 'high' as PriorityRisk, searchLink: '/app/knowledge?search=clearance' };
+          : { title: 'Clearance Preparation', desc: 'Learn about the final clearance chain for university graduates.', risk: 'low' as PriorityRisk, searchLink: '/app/knowledge' };
+      case 'pop':
+        return !readArticlesSet.has('k-pop')
+          ? { title: 'Passing Out Parade Protocol', desc: 'Winding Up: Ensure your final release letter and kit return slip are verified.', risk: 'high' as PriorityRisk, searchLink: '/app/knowledge?search=pop' }
+          : { title: 'Career Transition Briefing', desc: 'Congratulations! You have completed your service. Prepare for your career.', risk: 'low' as PriorityRisk, searchLink: '/app/profile' };
       default:
-        return { title: 'Welcome to Command', desc: 'Your 365 days start with verified intelligence. Review current milestones.', risk: 'low' as PriorityRisk, searchLink: '/app/knowledge' };
+        return { 
+          title: 'Welcome to Command', 
+          desc: 'Your 365 days start with verified intelligence. Review current milestones and stay informed.', 
+          risk: 'low' as PriorityRisk, 
+          searchLink: '/app/knowledge' 
+        };
     }
   }, [stageId, readArticles, isInitialized, progressPercent]);
   if (!isInitialized) {
@@ -220,21 +229,6 @@ export function DashboardPage() {
                 </div>
               )}
             </CardContent>
-          </Card>
-          <Card className="shadow-sm border-gray-100 bg-gray-50/30">
-             <CardHeader className="pb-2"><CardTitle className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Quick Commands</CardTitle></CardHeader>
-             <CardContent className="grid grid-cols-2 gap-2">
-                <Link to="/app/knowledge?search=clearance" className="w-full">
-                  <Button variant="outline" className="w-full text-[9px] font-black uppercase tracking-widest h-10 border-gray-200 bg-white">
-                    <Search className="w-3 h-3 mr-1" /> Clearance
-                  </Button>
-                </Link>
-                <Link to="/app/knowledge?search=ppa" className="w-full">
-                  <Button variant="outline" className="w-full text-[9px] font-black uppercase tracking-widest h-10 border-gray-200 bg-white">
-                    <HelpCircle className="w-3 h-3 mr-1" /> PPA Help
-                  </Button>
-                </Link>
-             </CardContent>
           </Card>
         </div>
       </div>
