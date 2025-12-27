@@ -56,11 +56,11 @@ export const JOURNEY_STAGES = [
   {
     id: 'pop',
     title: 'Passing Out Parade (POP)',
-    description: 'The final stretch. Winding up and receiving your certificate.',
+    description: 'Congratulations! You have served your nation with honor. It is time to step into your future with confidence.',
     tasks: [
-      { id: 'po1', title: 'Final Clearance', description: 'LGI and Employer clearance for the final month.' },
-      { id: 'po2', title: 'Collect Discharge Certificate', description: 'Physical collection of your NYSC certificate.' },
-      { id: 'po3', title: 'Exit Interview', description: 'Briefing by the state coordinator.' },
+      { id: 'po1', title: 'Final Clearance Submission', description: 'Complete the LGI and Employer clearance chain for the final month.' },
+      { id: 'po2', title: 'Collect Discharge Certificate', description: 'The official proof of your national service completion.' },
+      { id: 'po3', title: 'Career Transition Briefing', description: 'Attend the final exit briefing by the state coordinator.' },
     ]
   }
 ];
@@ -70,7 +70,7 @@ export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
     category: 'Official/Advisory',
     title: 'NYSC Violations & Penalties Guide',
     summary: 'Absence, AWOL, uniform, forgery sanctions. Know the official disciplinary protocols.',
-    content: `Think of your NYSC service year as a National Professional Contract. You have signed an agreement with the Nigerian state to serve for 365 days. In this context, "Extensions" (extra days or months of service) are essentially penalties for "Breach of Contract." 
+    content: `Think of your NYSC service year as a National Professional Contract. You have signed an agreement with the Nigerian state to serve for 365 days. In this context, "Extensions" (extra days or months of service) are essentially penalties for "Breach of Contract."
 Compliance is not just about rules; it is about protecting your time and securing your future discharge certificate.
 1. AWOL & ABSENCE FROM DUTY:
 Absence from your Place of Primary Assignment (PPA) for up to 7 consecutive days without permission is classified as AWOL (Absent Without Leave).
@@ -185,39 +185,6 @@ DOCUMENTS: Original and 5 copies of Statement of Result, Call-up Letter, Green C
 CLOTHING: White round-neck tees, white shorts, white socks, white sneakers. NYSC provides a set, but extras are necessary.
 OTHERS: Toiletries, mosquito net (white), power bank, waist bag (for valuables).`,
     metadata: { stage: 'camp', risk: 'low', source: 'Ex-Corper Insight', featured: true }
-  },
-  {
-    id: 'k-ppa-rejection',
-    category: 'Official',
-    title: 'PPA Rejection & Acceptance Protocols',
-    summary: 'What to do if your assigned PPA rejects you or if you seek a change.',
-    content: `REJECTION: If a PPA rejects you, they must write a formal rejection letter. Take this back to the Zonal/Local Government Inspector (LGI) for a new posting.
-ACCEPTANCE: Submit your posting letter; if accepted, fill the acceptance form and return it to the LGI within 48 hours.
-SELF-REJECTION: Corpers cannot reject a PPA. Doing so without valid LGI approval is a policy violation.`,
-    metadata: { stage: 'ppa', risk: 'high', source: 'NYSC Bye-laws' }
-  },
-  {
-    id: 'k-cds',
-    category: 'Official',
-    title: 'Community Development Service (CDS): Groups & Lifecycle',
-    summary: 'Comprehensive guide on group types, weekly attendance, and project timelines.',
-    content: `CDS is a mandatory component of the NYSC scheme.
-1. CDS GROUP TYPES: Editorial, ICT, Medical, Road Safety, Anti-Corruption, Environment, Charity/SDGs.
-2. WEEKLY MEETING: Meetings are held weekly. 75% attendance is required for clearance.
-3. THE PROJECT LIFECYCLE: Identify community needs, propose to LGI, get approval, implement, and report.`,
-    metadata: { stage: 'cds', risk: 'medium', source: 'NYSC Official', featured: true }
-  },
-  {
-    id: 'k-redeployment',
-    category: 'Survival',
-    title: 'Redeployment (Relocation) Guide',
-    summary: 'Procedures for relocation based on health, marital, or security reasons.',
-    content: `Redeployment is not guaranteed but possible for:
-1. MARITAL GROUNDS: For married women (Marriage certificate, newspaper change of name).
-2. HEALTH GROUNDS: Valid medical reports from govt/military hospitals.
-3. SECURITY: In regions with high-risk advisory.
-Submit your application during the orientation camp or through the state coordinator.`,
-    metadata: { stage: 'mobilization', risk: 'medium', source: 'Official Policy' }
   }
 ];
 export const STATE_DATA: Record<string, any> = {
@@ -235,33 +202,26 @@ export const STATE_DATA: Record<string, any> = {
     ppa: 'Federal Ministries, NGOs, and International Agencies are primary options.',
     pro_tip: 'Look for accommodation in Kubwa, Lugbe, or Karu to save significantly on rent.'
   },
-  'Rivers': {
-    camp: 'Nonwa Gbam Tai Orientation Camp. Large and breezy. Registration is strictly enforced.',
-    cost: 'Moderate-High. Port Harcourt city is pricey, outskirts are affordable.',
-    metrics: { rent: 180000, food: 35000, transport: 20000 },
-    ppa: 'Oil & Gas support firms, Marine logistics, and Education sectors.',
-    pro_tip: 'Always carry your NYSC ID card; security checkpoints are common in the delta region.'
+  'Oyo': {
+    camp: 'Iseyin Orientation Camp. Located in a serene, hilly environment. Very cold at night.',
+    cost: 'Moderate-Low. Ibadan is one of the most affordable major cities in Nigeria.',
+    metrics: { rent: 110000, food: 25000, transport: 15000 },
+    ppa: 'Agriculture, Research Institutes (IITA), and Education sectors are dominant.',
+    pro_tip: 'Ibadan is vast; stay in Bodija or Samonda for proximity to social hubs.'
   },
-  'Enugu': {
-    camp: 'Awgu Orientation Camp. Located in a hilly region. Expect chilly mornings and rigorous drills.',
-    cost: 'Moderate. Food is relatively cheap due to local agriculture.',
-    metrics: { rent: 120000, food: 22000, transport: 12000 },
-    ppa: 'Strong opportunities in Education, Healthcare, and Civil Service. Coal City Tech Hub is emerging.',
-    pro_tip: 'Rent in Independence Layout or New Haven if you want a city vibe; otherwise, stay close to Awgu to save.'
+  'Kwara': {
+    camp: 'Yikpata Orientation Camp. Known for its large grounds. Bring extra water containers.',
+    cost: 'Low. Very affordable food and housing.',
+    metrics: { rent: 85000, food: 18000, transport: 10000 },
+    ppa: 'Civil Service, Manufacturing, and Higher Education (Unilorin axis).',
+    pro_tip: 'The "Harmony State" is peaceful; use Ilorin as your base for the best experience.'
   },
-  'Edo': {
-    camp: 'Okada Orientation Camp. Spacious grounds. Security is high.',
-    cost: 'Moderate. Benin City is a major hub with varied living costs.',
-    metrics: { rent: 140000, food: 28000, transport: 18000 },
-    ppa: 'History, Arts, and Civil Service. Growing opportunities in agriculture and retail.',
-    pro_tip: 'Explore the Ring Road axis for major PPA clusters, but watch out for peak hour traffic.'
-  },
-  'Kaduna': {
-    camp: 'Black Gold Orientation Camp. Well-structured and historic.',
-    cost: 'Moderate-Low. One of the more affordable northern hubs.',
-    metrics: { rent: 90000, food: 20000, transport: 10000 },
-    ppa: 'Civil Service, Defense, and Education. Many federal institutions are headquartered here.',
-    pro_tip: 'The Barnawa axis is very friendly for corpers looking for balanced accommodation.'
+  'Anambra': {
+    camp: 'Umuawulu/Mbaukwu Orientation Camp. Modern facilities, recently commissioned.',
+    cost: 'Moderate. Onitsha is pricey for business hubs; Awka is standard.',
+    metrics: { rent: 160000, food: 32000, transport: 18000 },
+    ppa: 'Commerce, Small Scale Industries, and Education.',
+    pro_tip: 'Business is the lifeblood here. Networking in Onitsha can lead to great post-NYSC roles.'
   },
   'DEFAULT': {
     camp: 'Standard NYSC Orientation facilities. Registration usually starts at 4:00 AM.',
@@ -272,9 +232,12 @@ export const STATE_DATA: Record<string, any> = {
   }
 };
 export const DEADLINES = [
-  { id: 'd1', title: 'Online Registration Ends', date: '2025-10-15', stage: 'mobilization' },
-  { id: 'd2', title: 'Camp Portal Closure', date: '2025-11-01', stage: 'camp' },
-  { id: 'd3', title: 'Upload Medical Certificate', date: '2025-06-30', stage: 'prospective' },
+  { id: 'd1', title: 'Batch A Online Registration', date: '2025-02-15', stage: 'mobilization' },
+  { id: 'd2', title: 'Medical Fitness Upload', date: '2025-01-30', stage: 'prospective' },
+  { id: 'd3', title: 'Camp Portal Closure', date: '2025-03-10', stage: 'camp' },
+  { id: 'd4', title: 'Monthly Biometric Window', date: '2025-05-30', stage: 'ppa' },
+  { id: 'd5', title: 'Project Proposal Deadline', date: '2025-07-15', stage: 'cds' },
+  { id: 'd6', title: 'Final Clearance Phase', date: '2025-11-01', stage: 'pop' },
 ];
 export const CDS_RESOURCES = {
   categories: [
@@ -317,28 +280,6 @@ export const CDS_RESOURCES = {
       requirements: ['Seedlings', 'Water Source'],
       challenges: ['Stray Animals', 'Water Scarcity'],
       metrics: ['100 Trees Planted', 'Survival Rate Tracking']
-    },
-    {
-      id: 'inf-1',
-      category: 'Infrastructure',
-      title: 'Community Well Restoration',
-      description: 'Repairing and cleaning abandoned community wells.',
-      budget: '₦50,000 - ₦130,000',
-      duration: '3 Months',
-      requirements: ['Expert Well Cleaner', 'Cement/Lids'],
-      challenges: ['Depth Risks', 'Water Purity'],
-      metrics: ['3 Wells Functional']
-    },
-    {
-      id: 'soc-1',
-      category: 'Social',
-      title: 'Artisan Skills Hub',
-      description: 'Setting up a weekend training center for vocational skills.',
-      budget: '₦50,000 - ₦150,000',
-      duration: '6 Months',
-      requirements: ['Skill Tutors', 'Basic Tools'],
-      challenges: ['Equipment Costs'],
-      metrics: ['30 Youths Trained']
     }
   ],
   templates: [

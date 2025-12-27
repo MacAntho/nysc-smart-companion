@@ -4,10 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, CheckCircle, ChevronRight, MapPin, Sparkles, ArrowRight, ShieldAlert, Briefcase, Info, Loader2 } from 'lucide-react';
-import { JOURNEY_STAGES, DEADLINES, KNOWLEDGE_ARTICLES, STATE_DATA } from '@/lib/mock-content';
+import { Calendar, CheckCircle, ChevronRight, Sparkles, ArrowRight, ShieldAlert, Briefcase, Info, Loader2, Search, HelpCircle } from 'lucide-react';
+import { JOURNEY_STAGES, DEADLINES, STATE_DATA } from '@/lib/mock-content';
 import { Link } from 'react-router-dom';
-import { formatDistanceToNow, differenceInDays, parseISO } from 'date-fns';
+import { formatDistanceToNow, differenceInDays, parseISO, isPast } from 'date-fns';
 import { cn } from '@/lib/utils';
 type PriorityRisk = 'high' | 'medium' | 'low';
 export function DashboardPage() {
@@ -27,12 +27,19 @@ export function DashboardPage() {
   const stageTasks = useMemo(() => currentStage?.tasks || [], [currentStage]);
   const completedCount = useMemo(() => stageTasks.filter(t => completedTasks.includes(t.id)).length, [stageTasks, completedTasks]);
   const progressPercent = stageTasks.length > 0 ? (completedCount / stageTasks.length) * 100 : 0;
-  const relevantDeadlines = useMemo(() => DEADLINES.filter(d => d.stage === stageId), [stageId]);
+  const relevantDeadlines = useMemo(() => {
+    return DEADLINES
+      .filter(d => d.stage === stageId)
+      .map(d => {
+        const date = parseISO(d.date);
+        const diff = differenceInDays(date, new Date());
+        const past = isPast(date);
+        return { ...d, diff, past };
+      });
+  }, [stageId]);
   const priorityContent = useMemo(() => {
     if (!isInitialized) return null;
     const readArticlesSet = new Set(readArticles);
-    // Phase 21: Sanctions Intelligence Override
-    // Prioritize the Violations Guide if not yet mastered, as it is critical across all stages
     if (!readArticlesSet.has('k-sanctions')) {
       return {
         title: 'NYSC Violations & Penalties Guide',
@@ -42,42 +49,32 @@ export function DashboardPage() {
       };
     }
     let content: { title: string; desc: string; risk: PriorityRisk; searchLink: string } | null = null;
+    // Fallback if current stage tasks are 100% complete
+    if (progressPercent === 100) {
+      content = { 
+        title: 'Next Phase Readiness', 
+        desc: 'You have completed all milestones for this stage. Review the State Guide for local intel.', 
+        risk: 'low', 
+        searchLink: '/app/state-guide' 
+      };
+      return content;
+    }
     switch (stageId) {
       case 'prospective':
         content = !readArticlesSet.has('k-registration')
           ? { title: 'Official Registration Roadmap', desc: 'Mandatory: Ensure your senate list details are verified.', risk: 'high', searchLink: '/app/knowledge?search=registration' }
           : { title: 'Clearance Preparation', desc: 'Learn about the final clearance process.', risk: 'low', searchLink: '/app/knowledge' };
         break;
-      case 'mobilization':
-        content = !readArticlesSet.has('k-registration')
-          ? { title: 'Portal Registration Critical Step', desc: 'Ensure bio-data verification is correct.', risk: 'high', searchLink: '/app/knowledge?q=registration' }
-          : { title: 'Redeployment Guide', desc: 'Review official relocation grounds.', risk: 'medium', searchLink: '/app/knowledge?q=redeployment' };
-        break;
-      case 'camp':
-        content = !readArticlesSet.has('k-camp-packing')
-          ? { title: 'Camp Packing Essentials', desc: 'Documentation is mandatory for registration.', risk: 'high', searchLink: '/app/knowledge?q=packing' }
-          : { title: 'Orientation survival', desc: 'Swearing-in protocols guide.', risk: 'low', searchLink: '/app/knowledge' };
-        break;
       case 'ppa':
         content = !readArticlesSet.has('k-clearance-issues')
           ? { title: 'Official Troubleshooting Guide', desc: 'Know the official LGI reporting chain.', risk: 'high', searchLink: '/app/knowledge?q=clearance-issues' }
           : { title: 'Monthly Clearance Protocol', desc: 'Secure your monthly allowance.', risk: 'high', searchLink: '/app/knowledge?q=clearance' };
         break;
-      case 'cds':
-        content = !readArticlesSet.has('k-cds-execution')
-          ? { title: 'CDS Execution Protocol', desc: 'Mandatory: Get LGI approval before starting.', risk: 'high', searchLink: '/app/knowledge?search=execution' }
-          : { title: 'Legacy Hub Blueprints', desc: 'Review verified project blueprints.', risk: 'low', searchLink: '/app/cds' };
-        break;
-      case 'pop':
-        content = !readArticlesSet.has('k-pop')
-          ? { title: 'POP & Certificate Guide', desc: 'Verify your CNS name details.', risk: 'high', searchLink: '/app/knowledge?q=pop' }
-          : { title: 'Career Next Steps', desc: 'Update your CV with achievements.', risk: 'low', searchLink: '/app/knowledge' };
-        break;
       default:
         content = { title: 'Welcome to Command', desc: 'Your 365 days start with verified intelligence.', risk: 'low', searchLink: '/app/knowledge' };
     }
     return content;
-  }, [stageId, readArticles, isInitialized]);
+  }, [stageId, readArticles, isInitialized, progressPercent]);
   if (!isInitialized) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
@@ -87,9 +84,9 @@ export function DashboardPage() {
     );
   }
   const riskStyles: Record<PriorityRisk, string> = {
-    high: "border-destructive/30 bg-red-50/50 shadow-destructive/5",
-    medium: "border-nysc-gold/30 bg-amber-50/50 shadow-nysc-gold/5",
-    low: "border-nysc-green-100 bg-nysc-green-50/20 shadow-nysc-green-800/5"
+    high: "border-destructive/40 bg-red-50/50 shadow-xl shadow-destructive/10 ring-1 ring-destructive/20",
+    medium: "border-nysc-gold/30 bg-amber-50/50 shadow-lg shadow-nysc-gold/5",
+    low: "border-nysc-green-100 bg-nysc-green-50/20 shadow-md shadow-nysc-green-800/5"
   };
   return (
     <div className="max-w-7xl mx-auto px-4 space-y-8 animate-fade-in py-8 md:py-10">
@@ -114,8 +111,8 @@ export function DashboardPage() {
           )}
         </div>
       </header>
-      {priorityContent && priorityContent.title && (
-        <Card className={cn("border shadow-lg overflow-hidden relative group transition-all duration-300", riskStyles[priorityContent.risk || 'low'])}>
+      {priorityContent && (
+        <Card className={cn("border overflow-hidden relative group transition-all duration-300", riskStyles[priorityContent.risk || 'low'])}>
           <div className="absolute top-0 right-0 p-4 opacity-10">
             {priorityContent.risk === 'high' ? <ShieldAlert className="w-16 h-16 text-destructive" /> : <Sparkles className="w-16 h-16 text-nysc-gold" />}
           </div>
@@ -189,9 +186,11 @@ export function DashboardPage() {
             <CardContent className="space-y-3">
               {relevantDeadlines.length > 0 ? (
                 relevantDeadlines.map(d => (
-                  <div key={d.id} className="flex items-center justify-between p-3 border rounded-xl bg-gray-50/30">
-                    <p className="text-xs font-bold text-gray-900">{d.title}</p>
-                    <p className="text-[10px] text-nysc-gold font-black uppercase">{differenceInDays(parseISO(d.date), new Date())}d Left</p>
+                  <div key={d.id} className={cn("flex items-center justify-between p-3 border rounded-xl", d.past ? "bg-red-50 border-red-100" : "bg-gray-50/30")}>
+                    <p className={cn("text-xs font-bold", d.past ? "text-destructive" : "text-gray-900")}>{d.title}</p>
+                    <p className={cn("text-[10px] font-black uppercase", d.past ? "text-destructive" : "text-nysc-gold")}>
+                      {d.past ? "Window Closed" : `${d.diff}d Left`}
+                    </p>
                   </div>
                 ))
               ) : (
@@ -201,6 +200,21 @@ export function DashboardPage() {
                 </div>
               )}
             </CardContent>
+          </Card>
+          <Card className="shadow-sm border-gray-100 bg-gray-50/30">
+             <CardHeader className="pb-2"><CardTitle className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Quick Commands</CardTitle></CardHeader>
+             <CardContent className="grid grid-cols-2 gap-2">
+                <Link to="/app/knowledge?q=clearance">
+                  <Button variant="outline" className="w-full text-[9px] font-black uppercase tracking-widest h-10 border-gray-200">
+                    <Search className="w-3 h-3 mr-1" /> Clearance
+                  </Button>
+                </Link>
+                <Link to="/app/knowledge?q=ppa">
+                  <Button variant="outline" className="w-full text-[9px] font-black uppercase tracking-widest h-10 border-gray-200">
+                    <HelpCircle className="w-3 h-3 mr-1" /> PPA Help
+                  </Button>
+                </Link>
+             </CardContent>
           </Card>
         </div>
       </div>

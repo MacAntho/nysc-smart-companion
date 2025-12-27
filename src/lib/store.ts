@@ -17,6 +17,7 @@ interface AppState {
   isSyncing: boolean;
   lastSynced: number | null;
   lastSyncedPayload: string | null;
+  lastSyncError: string | null;
   isInitialized: boolean;
   // Auth Actions
   setAuth: (data: { userId: string; email: string; role: 'user' | 'admin'; isPro: boolean }) => void;
@@ -50,6 +51,7 @@ export const useAppStore = create<AppState>()(
       isSyncing: false,
       lastSynced: null,
       lastSyncedPayload: null,
+      lastSyncError: null,
       isInitialized: false,
       setAuth: (data) => set({
         userId: data.userId,
@@ -116,11 +118,8 @@ export const useAppStore = create<AppState>()(
           isOnboarded: state.isOnboarded
         };
         const payloadString = JSON.stringify(currentPayload);
-        // Avoid redundant syncs if data hasn't changed
-        if (payloadString === lastSyncedPayload) return;
-        // If already syncing, wait for next cycle (skip this one as the next trigger will catch latest state)
-        if (isSyncing) return;
-        set({ isSyncing: true });
+        if (payloadString === lastSyncedPayload || isSyncing) return;
+        set({ isSyncing: true, lastSyncError: null });
         try {
           const response = await fetch(`/api/profile/${userId}`, {
             method: 'POST',
@@ -128,28 +127,18 @@ export const useAppStore = create<AppState>()(
             body: payloadString,
           });
           if (response.ok) {
-            set({ 
-              lastSynced: Date.now(), 
-              lastSyncedPayload: payloadString 
+            set({
+              lastSynced: Date.now(),
+              lastSyncedPayload: payloadString
             });
+          } else {
+            set({ lastSyncError: 'Sync refused by server' });
           }
         } catch (error) {
           console.error('[SYNC FAILURE]', error);
+          set({ lastSyncError: 'Connection issue' });
         } finally {
           set({ isSyncing: false });
-          // Recursive check: If local state changed while we were syncing, trigger one more time
-          const latestState = get();
-          const latestPayload = JSON.stringify({
-            stage: latestState.stage,
-            stateOfDeployment: latestState.stateOfDeployment,
-            completedTasks: latestState.completedTasks,
-            readArticles: latestState.readArticles,
-            activeProjectId: latestState.activeProjectId,
-            isOnboarded: latestState.isOnboarded
-          });
-          if (latestPayload !== payloadString) {
-            get().syncProfile();
-          }
         }
       },
       loadProfile: async (force = false) => {
@@ -161,36 +150,36 @@ export const useAppStore = create<AppState>()(
           }
           return;
         }
-        set({ isSyncing: true });
+        set({ isSyncing: true, lastSyncError: null });
         try {
           const response = await fetch(`/api/profile/${userId}`);
           if (response.ok) {
             const result = await response.json();
             if (result.success && result.data) {
               const p = result.data as NYSCProfile;
-              const incomingPayloadString = JSON.stringify({
-                stage: p.stage,
-                stateOfDeployment: p.stateOfDeployment,
-                completedTasks: p.completedTasks,
-                readArticles: p.readArticles,
-                activeProjectId: p.activeProjectId,
-                isOnboarded: p.isOnboarded
-              });
+              // Merge logic: Server data overrides local for progress arrays
               set({
-                stage: p.stage || 'prospective',
-                stateOfDeployment: p.stateOfDeployment || '',
-                completedTasks: Array.isArray(p.completedTasks) ? p.completedTasks : [],
-                readArticles: Array.isArray(p.readArticles) ? p.readArticles : [],
-                activeProjectId: p.activeProjectId || null,
-                isOnboarded: p.isOnboarded ?? false,
+                stage: p.stage || state.stage,
+                stateOfDeployment: p.stateOfDeployment || state.stateOfDeployment,
+                completedTasks: Array.isArray(p.completedTasks) ? p.completedTasks : state.completedTasks,
+                readArticles: Array.isArray(p.readArticles) ? p.readArticles : state.readArticles,
+                activeProjectId: p.activeProjectId || state.activeProjectId,
+                isOnboarded: p.isOnboarded ?? state.isOnboarded,
                 lastSynced: p.updatedAt || Date.now(),
-                isPro: p.isPro ?? false,
-                lastSyncedPayload: incomingPayloadString,
+                isPro: p.isPro ?? state.isPro,
+                lastSyncedPayload: JSON.stringify({
+                  stage: p.stage,
+                  stateOfDeployment: p.stateOfDeployment,
+                  completedTasks: p.completedTasks,
+                  readArticles: p.readArticles,
+                  activeProjectId: p.activeProjectId,
+                  isOnboarded: p.isOnboarded
+                }),
               });
             }
           }
         } catch (error) {
-          console.error('[LOAD PROFILE FAILURE]', error);
+          set({ lastSyncError: 'Failed to fetch cloud profile' });
         } finally {
           set({ isSyncing: false, isInitialized: true });
         }
@@ -210,6 +199,7 @@ export const useAppStore = create<AppState>()(
           isOnboarded: false,
           lastSynced: null,
           lastSyncedPayload: null,
+          lastSyncError: null,
           isSyncing: false,
           isInitialized: false
         });
