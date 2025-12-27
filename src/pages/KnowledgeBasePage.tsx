@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAppStore } from '@/lib/store';
 import { Input } from '@/components/ui/input';
@@ -14,7 +14,7 @@ import {
   DialogFooter,
   DialogTrigger
 } from '@/components/ui/dialog';
-import { Search, ExternalLink, Clock, CheckCircle, CircleCheck, Info, Sparkles, AlertTriangle, XCircle } from 'lucide-react';
+import { Search, ExternalLink, Clock, CheckCircle, CircleCheck, Info, Sparkles, AlertTriangle, XCircle, Loader2 } from 'lucide-react';
 import { KNOWLEDGE_ARTICLES } from '@/lib/mock-content';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -27,11 +27,30 @@ export function KnowledgeBasePage() {
   const [category, setCategory] = useState('All');
   const readArticles = useAppStore(s => s.readArticles);
   const toggleReadArticle = useAppStore(s => s.toggleReadArticle);
+  // Ref to track if we're currently typing to prevent URL sync fighting with input
+  const isTyping = useRef(false);
+  // Sync state from URL only on initial load or external change (back button)
   useEffect(() => {
-    if (queryParam && queryParam !== search) {
+    if (!isTyping.current && queryParam !== search) {
       setSearch(queryParam);
     }
-  }, [queryParam, search]);
+  }, [queryParam]);
+  // Debounce search update to URL
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (search) {
+        setSearchParams({ q: search }, { replace: true });
+      } else if (queryParam) {
+        setSearchParams({}, { replace: true });
+      }
+      isTyping.current = false;
+    }, 400);
+    return () => clearTimeout(handler);
+  }, [search, setSearchParams, queryParam]);
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    isTyping.current = true;
+    setSearch(e.target.value);
+  };
   const filtered = KNOWLEDGE_ARTICLES.filter(a => {
     const searchLower = search.toLowerCase();
     const matchesSearch =
@@ -44,6 +63,7 @@ export function KnowledgeBasePage() {
     return matchesSearch && matchesCategory;
   });
   const clearFilters = () => {
+    isTyping.current = false;
     setSearch('');
     setCategory('All');
     setSearchParams({});
@@ -62,11 +82,11 @@ export function KnowledgeBasePage() {
                 placeholder="Search redeployment, routine, packing, documents, POP, rules..."
                 className="pl-10 h-14 bg-white text-gray-900 border-none focus-visible:ring-2 focus-visible:ring-nysc-gold shadow-lg rounded-2xl"
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={handleSearchChange}
               />
               {search && (
-                <button 
-                  onClick={() => setSearch('')}
+                <button
+                  onClick={() => { setSearch(''); setSearchParams({}); }}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                 >
                   <XCircle className="w-5 h-5" />
@@ -165,7 +185,7 @@ export function KnowledgeBasePage() {
                             <DialogHeader className={cn("p-8 pb-4 border-b", isHighRisk ? "bg-red-50" : "bg-gray-50")}>
                               <div className="text-[10px] font-bold text-nysc-green-800 uppercase tracking-widest mb-1 flex items-center gap-2 flex-wrap">
                                 {article.category}
-                                {isHighRisk && <span className="text-destructive font-black">��� HIGH PRIORITY</span>}
+                                {isHighRisk && <span className="text-destructive font-black">🚩 HIGH PRIORITY</span>}
                                 {article.metadata?.featured && <span className="text-nysc-gold font-black">• Featured</span>}
                               </div>
                               <DialogTitle className={cn("text-3xl font-display font-bold leading-tight", isHighRisk && "text-destructive")}>{article.title}</DialogTitle>

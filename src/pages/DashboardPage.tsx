@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useAppStore } from '@/lib/store';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, CheckCircle, ChevronRight, MapPin, Sparkles, ArrowRight, AlertTriangle, ShieldAlert, Briefcase, Info } from 'lucide-react';
+import { Calendar, CheckCircle, ChevronRight, MapPin, Sparkles, ArrowRight, ShieldAlert, Briefcase, Info, Loader2 } from 'lucide-react';
 import { JOURNEY_STAGES, DEADLINES, KNOWLEDGE_ARTICLES, STATE_DATA } from '@/lib/mock-content';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow, differenceInDays, parseISO } from 'date-fns';
@@ -20,92 +20,101 @@ export function DashboardPage() {
   const isSyncing = useAppStore(s => s.isSyncing);
   const lastSynced = useAppStore(s => s.lastSynced);
   const loadProfile = useAppStore(s => s.loadProfile);
+  const isInitialized = useAppStore(s => s.isInitialized);
   useEffect(() => {
     loadProfile();
   }, [loadProfile]);
-  const currentStage = JOURNEY_STAGES.find(s => s.id === stageId);
+  const currentStage = useMemo(() => JOURNEY_STAGES.find(s => s.id === stageId), [stageId]);
   const stageTasks = currentStage?.tasks || [];
-  const completedCount = stageTasks.filter(t => completedTasks.includes(t.id)).length;
+  const completedCount = useMemo(() => stageTasks.filter(t => completedTasks.includes(t.id)).length, [stageTasks, completedTasks]);
   const progressPercent = stageTasks.length > 0 ? (completedCount / stageTasks.length) * 100 : 0;
-  const relevantDeadlines = DEADLINES.filter(d => d.stage === stageId);
-  const getPriorityContent = (): { title: string; desc: string; risk: PriorityRisk; searchLink: string } => {
+  const relevantDeadlines = useMemo(() => DEADLINES.filter(d => d.stage === stageId), [stageId]);
+  const priorityContent = useMemo(() => {
+    if (!isInitialized) return null;
     const readArticlesSet = new Set(readArticles);
     switch(stageId) {
       case 'mobilization':
         if (!readArticlesSet.has('k-registration')) return {
           title: 'Portal Registration Critical Step',
           desc: 'Ensure your bio-data and senate list verification are correct before the portal closes.',
-          risk: 'high',
+          risk: 'high' as PriorityRisk,
           searchLink: '/app/knowledge?q=registration'
         };
         return {
           title: 'Redeployment Guide',
           desc: 'Thinking of relocating? Review official grounds for medical or marital redeployment.',
-          risk: 'medium',
+          risk: 'medium' as PriorityRisk,
           searchLink: '/app/knowledge?q=redeployment'
         };
       case 'camp':
         if (!readArticlesSet.has('k-camp-packing')) return {
           title: 'Camp Packing Essentials',
           desc: 'The 21-day orientation requires specific documentation. Don’t be caught unprepared.',
-          risk: 'high',
+          risk: 'high' as PriorityRisk,
           searchLink: '/app/knowledge?q=packing'
         };
         return {
           title: 'Orientation survival',
           desc: 'Learn about camp registration and swearing-in protocols.',
-          risk: 'low',
+          risk: 'low' as PriorityRisk,
           searchLink: '/app/knowledge'
         };
       case 'ppa':
         if (!readArticlesSet.has('k-ppa-rejection')) return {
           title: 'PPA Rejection Protocol',
           desc: 'What to do if your employer rejects you. Know the legal LGI reporting chain.',
-          risk: 'high',
+          risk: 'high' as PriorityRisk,
           searchLink: '/app/knowledge?q=rejection'
         };
         return {
           title: 'Legacy Project Brainstorming',
           desc: 'Your PPA is stable. It is the perfect time to identify a community need for your CDS project.',
-          risk: 'medium',
+          risk: 'medium' as PriorityRisk,
           searchLink: '/app/cds'
         };
       case 'cds':
         if (!readArticlesSet.has('k-cds-execution')) return {
           title: 'CDS Execution Protocol',
           desc: 'Mandatory Procedural Warning: You MUST secure a "Letter of Approval" from the LGI before starting any implementation.',
-          risk: 'high',
+          risk: 'high' as PriorityRisk,
           searchLink: '/app/knowledge?search=execution'
         };
         return {
           title: 'Legacy Hub Blueprints',
           desc: 'Review verified project blueprints with budget benchmarks for your community.',
-          risk: 'low',
+          risk: 'low' as PriorityRisk,
           searchLink: '/app/cds'
         };
       case 'pop':
         if (!readArticlesSet.has('k-pop-guide')) return {
           title: 'Final Winding-Up Clearance',
           desc: 'Step-by-step final LGI signatures and certificate collection procedures.',
-          risk: 'high',
+          risk: 'high' as PriorityRisk,
           searchLink: '/app/knowledge?q=pop'
         };
         return {
           title: 'Career Next Steps',
           desc: 'Update your CV with your service achievements using our templates.',
-          risk: 'low',
+          risk: 'low' as PriorityRisk,
           searchLink: '/app/knowledge'
         };
       default:
         return {
           title: 'Welcome to Command',
           desc: 'Your 365 days of service start with verified intelligence.',
-          risk: 'low',
+          risk: 'low' as PriorityRisk,
           searchLink: '/app/knowledge'
         };
     }
-  };
-  const { title: priorityTitle, desc: priorityDesc, risk, searchLink: priorityLink } = getPriorityContent();
+  }, [stageId, readArticles, isInitialized]);
+  if (!isInitialized && !isSyncing) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
+        <Loader2 className="w-10 h-10 text-nysc-green-800 animate-spin" />
+        <p className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground animate-pulse">Hydrating Command Center...</p>
+      </div>
+    );
+  }
   const riskStyles: Record<PriorityRisk, string> = {
     high: "border-destructive/30 bg-red-50/50",
     medium: "border-nysc-gold/30 bg-amber-50/50",
@@ -126,21 +135,21 @@ export function DashboardPage() {
           )}
         </div>
       </header>
-      {priorityTitle && (
-        <Card className={cn("border shadow-lg overflow-hidden relative group transition-all duration-300", riskStyles[risk])}>
+      {priorityContent && (
+        <Card className={cn("border shadow-lg overflow-hidden relative group transition-all duration-300", riskStyles[priorityContent.risk])}>
           <div className="absolute top-0 right-0 p-4 opacity-10">
-             {risk === 'high' ? <ShieldAlert className="w-16 h-16 text-destructive" /> : <Sparkles className="w-16 h-16 text-nysc-gold" />}
+             {priorityContent.risk === 'high' ? <ShieldAlert className="w-16 h-16 text-destructive" /> : <Sparkles className="w-16 h-16 text-nysc-gold" />}
           </div>
           <CardHeader className="pb-2">
-            <Badge className={cn("w-fit mb-2 uppercase text-[9px] font-black tracking-widest", risk === 'high' ? "bg-destructive" : "bg-nysc-green-800")}>
-              {risk === 'high' ? 'Process Critical' : 'Priority Resource'}
+            <Badge className={cn("w-fit mb-2 uppercase text-[9px] font-black tracking-widest", priorityContent.risk === 'high' ? "bg-destructive" : "bg-nysc-green-800")}>
+              {priorityContent.risk === 'high' ? 'Process Critical' : 'Priority Resource'}
             </Badge>
-            <CardTitle className="text-xl font-display">{priorityTitle}</CardTitle>
-            <CardDescription className="font-medium text-sm text-gray-700">{priorityDesc}</CardDescription>
+            <CardTitle className="text-xl font-display">{priorityContent.title}</CardTitle>
+            <CardDescription className="font-medium text-sm text-gray-700">{priorityContent.desc}</CardDescription>
           </CardHeader>
           <CardContent className="pb-6">
-            <Link to={priorityLink}>
-              <Button className={cn("font-bold h-11 rounded-xl shadow-md", risk === 'high' ? "bg-destructive hover:bg-red-700" : "bg-nysc-gold hover:bg-amber-700")}>
+            <Link to={priorityContent.searchLink}>
+              <Button className={cn("font-bold h-11 rounded-xl shadow-md", priorityContent.risk === 'high' ? "bg-destructive hover:bg-red-700" : "bg-nysc-gold hover:bg-amber-700")}>
                 View Guide <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </Link>

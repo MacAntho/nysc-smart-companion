@@ -57,7 +57,7 @@ export const useAppStore = create<AppState>()(
         userRole: data.role,
         isAuthenticated: true,
         isPro: data.isPro,
-        isInitialized: true
+        isInitialized: false // Reset on new auth to trigger fresh hydration
       }),
       logout: () => {
         localStorage.removeItem('nysc-companion-storage');
@@ -136,6 +136,7 @@ export const useAppStore = create<AppState>()(
       loadProfile: async (force = false) => {
         const state = get();
         const { userId, isAuthenticated, isSyncing, isInitialized } = state;
+        // Critical: Don't load if already initializing or if we're not logged in
         if (!userId || !isAuthenticated || isSyncing || (isInitialized && !force)) return;
         set({ isSyncing: true });
         try {
@@ -195,7 +196,9 @@ export const useAppStore = create<AppState>()(
       name: 'nysc-companion-storage',
       onRehydrateStorage: () => (state) => {
         if (state) {
+          // Keep initialized false so loadProfile runs on page refresh
           state.isInitialized = false;
+          state.isSyncing = false;
         }
       },
       partialize: (state) => ({
