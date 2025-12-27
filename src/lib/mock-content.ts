@@ -66,6 +66,32 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-extension',
+    category: 'Official/Advisory',
+    title: 'NYSC Service Extensions: Causes, Appeals, Implications',
+    summary: 'Detailed advisory on disciplinary triggers, extension durations, and the official process for appeals.',
+    content: `A "Service Extension" is a formal disciplinary action where a Corps Member is mandated to serve beyond their original Passing Out Parade (POP) date. This is not just a delay; it is a legal penalty with financial and professional consequences.
+1. COMMON TRIGGERS FOR EXTENSION:
+Disciplinary panels (State Disciplinary Committee) usually recommend extensions based on the NYSC Bye-laws.
+• ABSENCE FROM PPA: Absence for 1 to 7 days typically results in a "Double the Number of Days Absent" extension or a fixed 1-month penalty.
+• ABSENCE FROM CDS: Consistently falling below the 75% attendance threshold without a valid medical excuse.
+• MISCONDUCT: Insubordination to the LGI, ZI, or PPA Employer, or engaging in partisan politics.
+• BREACH OF ORIENTATION RULES: Serious infractions during the 21-day camp that were deferred to the state secretariat.
+2. DURATION & FINANCIAL IMPLICATIONS:
+• DURATION: Extensions can range from 2 weeks to 4 months. In cases of "Remobilization," the user repeats the entire year.
+• NO ALLOWANCE: During the period of extension, the Corps Member is NOT entitled to the monthly Federal allowance (Alawee). You serve for free as a penalty.
+• DELAYED CERTIFICATE: Your Certificate of National Service (CNS) is withheld until the last day of your extension is cleared by the LGI.
+3. THE APPEALS PROCESS:
+If you believe an extension was recommended unfairly or there are strong extenuating circumstances (e.g., critical health crisis not captured), you have a right to appeal.
+• STEP 1: Draft a formal "Letter of Appeal" addressed to the State Coordinator through the LGI and ZI.
+• STEP 2: Provide verifiable evidence (Medical reports from Government Hospitals, Police reports, etc.).
+• STEP 3: The State Disciplinary Committee will review the appeal. Their decision is usually final.
+Note: Appeals must be submitted within 7 days of the disciplinary notification.
+4. HOW TO AVOID EXTENSIONS:
+The simplest way to avoid an extension is administrative diligence. Ensure your Monthly Clearance is done on time, your PPA attendance is logged, and any travel is supported by an official "Travel Permit" signed by the State Coordinator.`,
+    metadata: { stage: 'all', risk: 'high', source: 'NYSC Act/Bye-laws', featured: true }
+  },
+  {
     id: 'k-sanctions',
     category: 'Official/Advisory',
     title: 'NYSC Violations & Penalties Guide',

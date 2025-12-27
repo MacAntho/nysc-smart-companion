@@ -48,6 +48,15 @@ export function DashboardPage() {
         searchLink: '/app/knowledge?search=sanctions'
       };
     }
+    if (!readArticlesSet.has('k-extension')) {
+      return {
+        title: 'Service Extensions: Causes & Appeals',
+        desc: 'Critical: Understand the official triggers for service extensions and the appeal window.',
+        risk: 'high' as PriorityRisk,
+        searchLink: '/app/knowledge?search=extension'
+      };
+    }
+
     let content: { title: string; desc: string; risk: PriorityRisk; searchLink: string } | null = null;
     // Fallback if current stage tasks are 100% complete
     if (progressPercent === 100) {
