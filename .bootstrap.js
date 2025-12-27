@@ -78,7 +78,8 @@ function updateWranglerJsonc() {
 
 function runSetupCommands() {
     const commands = [
-    "bun add date-fns"
+    "bun add date-fns",
+    "bun add lucide-react framer-motion clsx tailwind-merge"
 ];
     
     if (commands.length === 0) {
