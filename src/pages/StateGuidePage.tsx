@@ -5,7 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
-import { MapPin, Tent, CreditCard, Bus, Info, ShieldAlert, TrendingUp, Sparkles, AlertCircle, ArrowRight, Lightbulb } from 'lucide-react';
+import { MapPin, Tent, CreditCard, Bus, Info, ShieldAlert, TrendingUp, Sparkles, AlertCircle, ArrowRight, Lightbulb, Briefcase } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Link } from 'react-router-dom';
 export function StateGuidePage() {

@@ -68,6 +68,7 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
     const id = c.req.param('id');
     const payload = await c.req.json<Partial<NYSCProfile>>();
     const entity = new UserEntity(c.env, id);
+    if (!await entity.exists()) return notFound(c, 'Profile not found');
     // Defensive check: Ensure we don't overwrite crucial fields with nulls
     const updated = await entity.mutate(curr => ({
       ...curr,

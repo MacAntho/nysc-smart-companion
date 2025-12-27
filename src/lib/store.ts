@@ -60,9 +60,8 @@ export const useAppStore = create<AppState>()(
         isInitialized: true
       }),
       logout: () => {
-        get().reset();
         localStorage.removeItem('nysc-companion-storage');
-        set({ lastSynced: null, userId: null, isAuthenticated: false });
+        get().reset();
         window.location.href = '/';
       },
       setUserId: (userId) => set({ userId }),
@@ -134,7 +133,13 @@ export const useAppStore = create<AppState>()(
           if (response.ok) {
             set({ lastSynced: Date.now(), lastSyncedPayload: payloadString });
           } else {
-            console.warn('[SYNC WARNING] Server rejected packet');
+            const errText = await response.text();
+            let errMsg = `[SYNC FAIL ${response.status}]`;
+            try {
+              const err = JSON.parse(errText);
+              errMsg += ` ${err.error || err.message || 'Unknown'}`;
+            } catch {}
+            console.warn(errMsg);
           }
         } catch (error) {
           console.error('[SYNC FAILURE]', error);
