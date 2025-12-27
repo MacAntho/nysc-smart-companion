@@ -30,11 +30,13 @@ export function DashboardPage() {
   const readPercent = (readArticles.length / KNOWLEDGE_ARTICLES.length) * 100;
   const relevantDeadlines = DEADLINES.filter(d => d.stage === stageId);
   const getPriorityContent = (): { title: string; desc: string; risk: PriorityRisk; searchLink: string } => {
-    const hasReadRedeployment = readArticles.includes('k-redeployment');
-    const hasReadMedicalRedeploy = readArticles.includes('k-medical-redeploy');
-    const hasReadMaritalRedeploy = readArticles.includes('k-marital-redeploy');
-    const hasReadSecurityRedeploy = readArticles.includes('k-security-redeploy');
-    const hasReadCDSGuide = readArticles.includes('k-cds');
+    const readArticlesSet = new Set(readArticles);
+    const hasReadRedeployment = readArticlesSet.has('k-redeployment');
+    const hasReadMedicalRedeploy = readArticlesSet.has('k-medical-redeploy');
+    const hasReadMaritalRedeploy = readArticlesSet.has('k-marital-redeploy');
+    const hasReadSecurityRedeploy = readArticlesSet.has('k-security-redeploy');
+    const hasReadCDSGuide = readArticlesSet.has('k-cds');
+    const hasReadPOPGuide = readArticlesSet.has('k-pop-guide');
     switch(stageId) {
       case 'prospective':
         return {
@@ -90,11 +92,17 @@ export function DashboardPage() {
           searchLink: '/app/cds'
         };
       case 'pop':
-        return {
+        if (!hasReadPOPGuide) return {
           title: 'Final Winding-Up Guide',
           desc: 'Crucial steps for your final PPA clearance and physical certificate collection.',
           risk: 'high',
           searchLink: '/app/knowledge?q=pop'
+        };
+        return {
+          title: 'Post-Service Career Toolkit',
+          desc: 'Service complete. Explore CV templates and networking guides for your next chapter.',
+          risk: 'low',
+          searchLink: '/app/knowledge?q=career'
         };
       default:
         return {
@@ -168,7 +176,7 @@ export function DashboardPage() {
         </Card>
       )}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2 shadow-sm border-gray-100 hover-glow">
+        <Card className="lg:col-span-2 shadow-sm border-gray-100">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <div className="space-y-1">
               <CardTitle className="text-xl">Current Stage: <span className="text-nysc-green-800 capitalize">{stageId}</span></CardTitle>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAppStore } from '@/lib/store';
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -29,7 +30,6 @@ export function CDSToolkitPage() {
     { id: 'm3', label: 'Implementation Phase' },
     { id: 'm4', label: 'Final Documentation' },
   ];
-  const hasReadCDSGuide = readArticles.includes('k-cds');
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-fade-in">
       <header className="space-y-2">
@@ -98,7 +98,6 @@ export function CDSToolkitPage() {
                   </Link>
                 </div>
               </div>
-              
               <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground mb-4 px-1">LGI / Zonal Standardized Forms</h4>
               <div className="divide-y border rounded-2xl overflow-hidden bg-gray-50/30">
                 {CDS_RESOURCES.templates.map((template) => (
