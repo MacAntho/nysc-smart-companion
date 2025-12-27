@@ -1,138 +1,89 @@
-// Home page of the app.
-// Currently a demo placeholder "please wait" screen.
-// Replace this file with your actual app UI. Do not delete it to use some other file as homepage. Simply replace the entire contents of this file.
-
-import { useEffect, useMemo, useState } from 'react'
-import { Sparkles } from 'lucide-react'
-
-import { ThemeToggle } from '@/components/ThemeToggle'
-import { HAS_TEMPLATE_DEMO, TemplateDemo } from '@/components/TemplateDemo'
-import { Button } from '@/components/ui/button'
-import { Toaster, toast } from '@/components/ui/sonner'
-
-function formatDuration(ms: number): string {
-  const total = Math.max(0, Math.floor(ms / 1000))
-  const m = Math.floor(total / 60)
-  const s = total % 60
-  return `${m}:${s.toString().padStart(2, '0')}`
-}
-
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { ShieldCheck, Compass, BookOpen, Bell, ArrowRight } from 'lucide-react';
+import { Toaster } from '@/components/ui/sonner';
 export function HomePage() {
-  const [coins, setCoins] = useState(0)
-  const [isRunning, setIsRunning] = useState(false)
-  const [startedAt, setStartedAt] = useState<number | null>(null)
-  const [elapsedMs, setElapsedMs] = useState(0)
-
-  useEffect(() => {
-    if (!isRunning || startedAt === null) return
-
-    const t = setInterval(() => {
-      setElapsedMs(Date.now() - startedAt)
-    }, 250)
-
-    return () => clearInterval(t)
-  }, [isRunning, startedAt])
-
-  const formatted = useMemo(() => formatDuration(elapsedMs), [elapsedMs])
-
-  const onPleaseWait = () => {
-    setCoins((c) => c + 1)
-
-    if (!isRunning) {
-      // Resume from the current elapsed time
-      setStartedAt(Date.now() - elapsedMs)
-      setIsRunning(true)
-      toast.success('Building your app…', {
-        description: "Hang tight — we're setting everything up.",
-      })
-      return
-    }
-
-    setIsRunning(false)
-    toast.info('Still working…', {
-      description: 'You can come back in a moment.',
-    })
-  }
-
-  const onReset = () => {
-    setCoins(0)
-    setIsRunning(false)
-    setStartedAt(null)
-    setElapsedMs(0)
-    toast('Reset complete')
-  }
-
-  const onAddCoin = () => {
-    setCoins((c) => c + 1)
-    toast('Coin added')
-  }
-
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground p-4 overflow-hidden relative">
-      <ThemeToggle />
-      <div className="absolute inset-0 bg-gradient-rainbow opacity-10 dark:opacity-20 pointer-events-none" />
-
-      <div className="text-center space-y-8 relative z-10 animate-fade-in w-full">
-        <div className="flex justify-center">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center shadow-primary floating">
-            <Sparkles className="w-8 h-8 text-white rotating" />
+    <div className="min-h-screen bg-background flex flex-col">
+      <nav className="border-b bg-white/50 backdrop-blur-md sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-nysc-green-800 rounded flex items-center justify-center">
+              <ShieldCheck className="text-white w-5 h-5" />
+            </div>
+            <span className="font-display font-bold text-xl text-nysc-green-900">NYSC Smart Companion</span>
           </div>
+          <Link to="/onboarding">
+            <Button className="bg-nysc-green-800 hover:bg-nysc-green-900">Start Your Journey</Button>
+          </Link>
         </div>
-
-        <div className="space-y-3">
-          <h1 className="text-5xl md:text-7xl font-display font-bold text-balance leading-tight">
-            Creating your <span className="text-gradient">app</span>
+      </nav>
+      <section className="relative py-20 md:py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-nysc-green-50 opacity-40 -z-10" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8 animate-fade-in">
+          <h1 className="text-5xl md:text-7xl font-display font-extrabold text-nysc-green-900 leading-tight tracking-tight">
+            Survive & Thrive in Your <br />
+            <span className="text-nysc-gold">Service Year</span>
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto text-pretty">
-            Your application would be ready soon.
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
+            A comprehensive, timeline-based guide and toolkit for Nigerian Youth Corps members. From Mobilization to POP, we've got you covered.
           </p>
-        </div>
-
-        {HAS_TEMPLATE_DEMO ? (
-          <div className="max-w-5xl mx-auto text-left">
-            <TemplateDemo />
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link to="/onboarding">
+              <Button size="lg" className="h-14 px-8 text-lg bg-nysc-green-800 hover:bg-nysc-green-900 shadow-lg">
+                Get Started Now <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </Link>
+            <Button size="lg" variant="outline" className="h-14 px-8 text-lg border-nysc-green-800 text-nysc-green-800">
+              Browse Guides
+            </Button>
           </div>
-        ) : (
-          <>
-            <div className="flex justify-center gap-4">
-              <Button
-                size="lg"
-                onClick={onPleaseWait}
-                className="btn-gradient px-8 py-4 text-lg font-semibold hover:-translate-y-0.5 transition-all duration-200"
-                aria-live="polite"
-              >
-                Please Wait
-              </Button>
-            </div>
-
-            <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
-              <div>
-                Time elapsed:{' '}
-                <span className="font-medium tabular-nums text-foreground">{formatted}</span>
-              </div>
-              <div>
-                Coins:{' '}
-                <span className="font-medium tabular-nums text-foreground">{coins}</span>
-              </div>
-            </div>
-
-            <div className="flex justify-center gap-2">
-              <Button variant="outline" size="sm" onClick={onReset}>
-                Reset
-              </Button>
-              <Button variant="outline" size="sm" onClick={onAddCoin}>
-                Add Coin
-              </Button>
-            </div>
-          </>
-        )}
-      </div>
-
-      <footer className="absolute bottom-8 text-center text-muted-foreground/80">
-        <p>Powered by Cloudflare</p>
+        </div>
+      </section>
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <FeatureCard 
+              icon={<Compass className="w-6 h-6 text-nysc-green-800" />} 
+              title="Journey Map" 
+              desc="Step-by-step roadmap from school to final certificate."
+            />
+            <FeatureCard 
+              icon={<ShieldCheck className="w-6 h-6 text-nysc-green-800" />} 
+              title="Verified Rules" 
+              desc="Official NYSC regulations explained in simple English."
+            />
+            <FeatureCard 
+              icon={<BookOpen className="w-6 h-6 text-nysc-green-800" />} 
+              title="State Insights" 
+              desc="Exclusive intel on camp conditions and PPA life."
+            />
+            <FeatureCard 
+              icon={<Bell className="w-6 h-6 text-nysc-green-800" />} 
+              title="Deadline Radar" 
+              desc="Never miss registration or clearance deadlines again."
+            />
+          </div>
+        </div>
+      </section>
+      <footer className="mt-auto py-12 border-t bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-muted-foreground text-sm">
+          <p>© {new Date().getFullYear()} NYSC Smart Companion. Developed for the next generation of leaders.</p>
+        </div>
       </footer>
-
-      <Toaster richColors closeButton />
+      <Toaster richColors />
     </div>
-  )
+  );
+}
+function FeatureCard({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) {
+  return (
+    <div className="p-6 rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow space-y-4">
+      <div className="w-12 h-12 rounded-xl bg-nysc-green-50 flex items-center justify-center">
+        {icon}
+      </div>
+      <h3 className="font-display font-bold text-lg text-nysc-green-900">{title}</h3>
+      <p className="text-muted-foreground leading-relaxed">{desc}</p>
+    </div>
+  );
 }

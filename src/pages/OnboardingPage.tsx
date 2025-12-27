@@ -1,21 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '@/lib/store';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import type { NYSCStage } from '@shared/types';
-import { ArrowRight, ArrowLeft, Loader2, Sparkles, ShieldCheck } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { NIGERIAN_STATES } from '@/lib/mock-content';
+import { NYSCStage } from '@/lib/store';
+import { ArrowRight, ArrowLeft, CheckCircle2 } from 'lucide-react';
 const STAGES: { value: NYSCStage; label: string }[] = [
-  { value: 'prospective', label: 'Prospective Corper (Finalist/Graduate)' },
-  { value: 'mobilization', label: 'Mobilization & Online Registration' },
-  { value: 'camp', label: 'Orientation Camp (The 21 Days)' },
-  { value: 'ppa', label: 'Primary Assignment (At PPA)' },
-  { value: 'cds', label: 'CDS Phase (Community Projects)' },
-  { value: 'pop', label: 'Winding Up / POP Phase' },
+  { value: 'prospective', label: 'Prospective Corper' },
+  { value: 'mobilization', label: 'Mobilization/Registration' },
+  { value: 'camp', label: 'Currently in Camp' },
+  { value: 'ppa', label: 'At PPA (Serving)' },
 ];
+const NIGERIAN_STATES = ['Lagos', 'Abuja', 'Oyo', 'Rivers', 'Kano', 'Kaduna', 'Enugu', 'Edo', 'Cross River', 'Delta', 'Anambra', 'Plateau', 'Kwara'];
 export function OnboardingPage() {
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
@@ -24,111 +21,73 @@ export function OnboardingPage() {
   const stateOfDeployment = useAppStore(s => s.stateOfDeployment);
   const setStateOfDeployment = useAppStore(s => s.setStateOfDeployment);
   const completeOnboarding = useAppStore(s => s.completeOnboarding);
-  const isSyncing = useAppStore(s => s.isSyncing);
-  const isOnboarded = useAppStore(s => s.isOnboarded);
-  // Redirect guard for users who have already completed onboarding
-  useEffect(() => {
-    if (isOnboarded) {
-      navigate('/app', { replace: true });
-    }
-  }, [isOnboarded, navigate]);
-  const handleFinish = async () => {
+  const handleFinish = () => {
     completeOnboarding();
     navigate('/app');
   };
-  if (isOnboarded) return null;
   return (
-    <div className="min-h-screen bg-white nysc-adire-pattern flex items-center justify-center p-6">
-      <div className="max-w-md w-full">
-        <div className="flex justify-center mb-8">
-          <div className="w-16 h-16 bg-nysc-green-800 rounded-3xl flex items-center justify-center shadow-2xl rotate-3">
-            <ShieldCheck className="text-white w-10 h-10" />
-          </div>
-        </div>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={step}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            {step === 1 && (
-              <Card className="border-gray-100 shadow-2xl rounded-3xl overflow-hidden">
-                <CardHeader className="space-y-2 text-center pb-8">
-                  <CardTitle className="text-3xl text-nysc-green-800 font-display font-bold">Current Status</CardTitle>
-                  <CardDescription className="text-base font-medium">To personalize your roadmap, tell us where you are in the service journey.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <Select value={stage} onValueChange={(v) => setStage(v as NYSCStage)}>
-                    <SelectTrigger className="h-14 rounded-2xl border-gray-100 font-bold text-gray-900 bg-gray-50/50">
-                      <SelectValue placeholder="Select current stage" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {STAGES.map(s => <SelectItem key={s.value} value={s.value} className="py-3 font-semibold">{s.label}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </CardContent>
-                <CardFooter className="pt-8">
-                  <Button onClick={() => setStep(2)} className="w-full h-14 bg-nysc-green-800 hover:bg-nysc-green-900 text-lg font-bold rounded-2xl shadow-lg shadow-nysc-green-800/20">
-                    Next Step <ArrowRight className="ml-2 w-5 h-5" />
-                  </Button>
-                </CardFooter>
-              </Card>
-            )}
-            {step === 2 && (
-              <Card className="border-gray-100 shadow-2xl rounded-3xl overflow-hidden">
-                <CardHeader className="space-y-2 text-center pb-8">
-                  <CardTitle className="text-3xl text-nysc-green-800 font-display font-bold">Deployment State</CardTitle>
-                  <CardDescription className="text-base font-medium">Select your posted state for localized intelligence and budget tools.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <Select value={stateOfDeployment} onValueChange={setStateOfDeployment}>
-                    <SelectTrigger className="h-14 rounded-2xl border-gray-100 font-bold text-gray-900 bg-gray-50/50">
-                      <SelectValue placeholder="Select State" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {NIGERIAN_STATES.map(st => <SelectItem key={st} value={st} className="py-3 font-semibold">{st}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </CardContent>
-                <CardFooter className="pt-8 gap-3">
-                  <Button variant="outline" onClick={() => setStep(1)} className="h-14 px-6 border-gray-200 rounded-2xl font-bold">
-                    <ArrowLeft className="mr-2 w-5 h-5" /> Back
-                  </Button>
-                  <Button onClick={() => setStep(3)} className="flex-1 h-14 bg-nysc-green-800 hover:bg-nysc-green-900 text-lg font-bold rounded-2xl shadow-lg shadow-nysc-green-800/20" disabled={!stateOfDeployment}>
-                    Continue
-                  </Button>
-                </CardFooter>
-              </Card>
-            )}
-            {step === 3 && (
-              <Card className="border-gray-100 shadow-2xl rounded-3xl overflow-hidden text-center">
-                <CardHeader className="space-y-2 pb-6">
-                  <div className="mx-auto w-20 h-20 rounded-full bg-nysc-green-50 flex items-center justify-center mb-4 border border-nysc-green-100 animate-bounce">
-                    <Sparkles className="w-10 h-10 text-nysc-green-800" />
-                  </div>
-                  <CardTitle className="text-3xl text-nysc-green-800 font-display font-bold">Mission Ready!</CardTitle>
-                  <CardDescription className="text-base font-medium">Your personalized survival kit is prepared. Proceed to the command center.</CardDescription>
-                </CardHeader>
-                <CardContent className="pb-8">
-                  <div className="p-4 bg-gray-50 rounded-2xl text-xs font-bold text-muted-foreground uppercase tracking-widest border border-gray-100">
-                    Encrypted Cloud Sync Active
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button onClick={handleFinish} className="w-full h-16 bg-nysc-green-800 hover:bg-nysc-green-900 text-xl font-bold rounded-2xl shadow-xl shadow-nysc-green-800/20 transition-all hover:scale-[1.02] active:scale-95" disabled={isSyncing}>
-                    {isSyncing ? <Loader2 className="mr-2 h-6 w-6 animate-spin" /> : null}
-                    Enter Dashboard
-                  </Button>
-                </CardFooter>
-              </Card>
-            )}
-          </motion.div>
-        </AnimatePresence>
-        <div className="mt-12 text-center">
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Under the Authority of NYSC Regulations</p>
-        </div>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="max-w-md w-full animate-slide-up">
+        {step === 1 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-2xl text-nysc-green-900 font-display">Welcome, Corper!</CardTitle>
+              <CardDescription>First, where are you currently in your NYSC journey?</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Select value={stage} onValueChange={(v) => setStage(v as NYSCStage)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select current stage" />
+                </SelectTrigger>
+                <SelectContent>
+                  {STAGES.map(s => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </CardContent>
+            <CardFooter>
+              <Button onClick={() => setStep(2)} className="w-full bg-nysc-green-800">Next Step <ArrowRight className="ml-2 w-4 h-4" /></Button>
+            </CardFooter>
+          </Card>
+        )}
+        {step === 2 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-2xl text-nysc-green-900 font-display">Deployment Info</CardTitle>
+              <CardDescription>Which state are you posted to? (Or select your preferred state if prospective)</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Select value={stateOfDeployment} onValueChange={setStateOfDeployment}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select State" />
+                </SelectTrigger>
+                <SelectContent>
+                  {NIGERIAN_STATES.map(st => <SelectItem key={st} value={st}>{st}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </CardContent>
+            <CardFooter className="gap-2">
+              <Button variant="outline" onClick={() => setStep(1)}><ArrowLeft className="mr-2 w-4 h-4" /> Back</Button>
+              <Button onClick={() => setStep(3)} className="flex-1 bg-nysc-green-800" disabled={!stateOfDeployment}>Continue</Button>
+            </CardFooter>
+          </Card>
+        )}
+        {step === 3 && (
+          <Card className="text-center">
+            <CardHeader>
+              <div className="mx-auto w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-2">
+                <CheckCircle2 className="w-8 h-8 text-nysc-green-500" />
+              </div>
+              <CardTitle className="text-2xl text-nysc-green-900 font-display">Ready to Go!</CardTitle>
+              <CardDescription>We've personalized your dashboard based on your stage and state.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">You can change these settings anytime in your profile.</p>
+            </CardContent>
+            <CardFooter>
+              <Button onClick={handleFinish} className="w-full bg-nysc-green-800 h-12 text-lg">Enter Dashboard</Button>
+            </CardFooter>
+          </Card>
+        )}
       </div>
     </div>
   );
