@@ -66,6 +66,19 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-cds-execution',
+    category: 'Official',
+    title: 'CDS Project Execution Process: From Proposal to Completion',
+    summary: 'A step-by-step roadmap covering needs assessment, proposal writing, funding strategies, official approvals, and implementation.',
+    content: `Executing a personal or group Community Development Service (CDS) project is the highest form of service in the NYSC scheme. Follow this 5-pillar roadmap to ensure your project is recognized and impactful.
+1. NEEDS ASSESSMENT: Do not start with what you want to build; start with what the community lacks. Speak with local leaders, school principals, or clinic heads to identify critical gaps (e.g., lack of clean water, dilapidated classrooms, or health awareness).
+2. PROJECT SELECTION: Align the community need with your skills, budget, and timeline. A project that remains 50% completed at the end of your service year is a liability, not a legacy.
+3. THE PROPOSAL: Write a formal proposal addressed to the State Coordinator through your Local Government Inspector (LGI). It must include: Project Title, Objectives, Justification, Budget Estimate, and Implementation Timeline.
+4. APPROVALS (CRITICAL): NEVER spend personal or donated funds before receiving a written "Letter of Approval" from the NYSC State Secretariat. Projects executed without prior approval will not be commissioned, and the Corper will not receive a commendation certificate.
+5. IMPLEMENTATION & REPORTING: Execute the project transparently. Upon completion, submit a "Completion Report" with "Before" and "After" photographs. Request a formal commissioning ceremony involving the LGI and community stakeholders.`,
+    metadata: { stage: 'cds', risk: 'low', source: 'NYSC Guidelines', featured: true }
+  },
+  {
     id: 'k-registration',
     category: 'Official',
     title: 'Complete Mobilization & Registration Guide',

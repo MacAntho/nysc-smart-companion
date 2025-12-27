@@ -71,15 +71,15 @@ export function DashboardPage() {
           searchLink: '/app/cds'
         };
       case 'cds':
-        if (!readArticlesSet.has('k-cds')) return {
-          title: 'CDS Group Policy',
-          desc: 'Mandatory: Review protocols for weekly attendance and project approval.',
+        if (!readArticlesSet.has('k-cds-execution')) return {
+          title: 'CDS Execution Protocol',
+          desc: 'Mandatory Procedural Warning: You MUST secure a "Letter of Approval" from the LGI before starting any implementation.',
           risk: 'high',
-          searchLink: '/app/knowledge?q=cds'
+          searchLink: '/app/knowledge?search=execution'
         };
         return {
-          title: 'Legacy Toolkit Blueprints',
-          desc: 'Explore 30+ verified project blueprints with budget benchmarks.',
+          title: 'Legacy Hub Blueprints',
+          desc: 'Review verified project blueprints with budget benchmarks for your community.',
           risk: 'low',
           searchLink: '/app/cds'
         };

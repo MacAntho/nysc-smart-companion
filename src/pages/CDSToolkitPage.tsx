@@ -29,7 +29,12 @@ import {
   Clock,
   Banknote,
   AlertTriangle,
-  Users
+  Users,
+  Flag,
+  PenTool,
+  ClipboardCheck,
+  PlayCircle,
+  Trophy
 } from 'lucide-react';
 import { CDS_RESOURCES } from '@/lib/mock-content';
 import { cn } from '@/lib/utils';
@@ -62,6 +67,13 @@ export function CDSToolkitPage() {
     { id: 'm3', label: 'Implementation Phase' },
     { id: 'm4', label: 'Final Documentation' },
   ];
+  const roadmapSteps = [
+    { title: 'Assess', desc: 'Identify Need', icon: Search },
+    { title: 'Propose', desc: 'Draft to LGI', icon: PenTool },
+    { title: 'Approve', desc: 'Get NYSC Letter', icon: ClipboardCheck },
+    { title: 'Execute', desc: 'Build Impact', icon: PlayCircle },
+    { title: 'Complete', desc: 'Report & POP', icon: Trophy },
+  ];
   const handleEnrollFromDialog = () => {
     if (dialogProject) {
       setActiveProject(dialogProject.id);
@@ -73,11 +85,14 @@ export function CDSToolkitPage() {
       <div className="py-8 md:py-10 lg:py-12 space-y-8 animate-fade-in">
         <header className="space-y-2">
           <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-display font-bold text-nysc-green-800 tracking-tight">CDS Legacy Toolkit</h1>
-            <Badge className="bg-nysc-gold text-white font-black text-[10px] uppercase tracking-widest animate-pulse">Updated</Badge>
+            <h1 className="text-3xl font-display font-bold text-nysc-green-800 tracking-tight">CDS Legacy Hub</h1>
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-nysc-gold/10 text-nysc-gold border border-nysc-gold/20">
+               <Sparkles className="w-4 h-4" />
+               <span className="text-[10px] font-black uppercase tracking-widest">Ideas to Action</span>
+            </div>
           </div>
           <p className="text-muted-foreground font-medium max-w-2xl">
-            Empowering you to leave a lasting impact. Explore verified project blueprints, operational budget benchmarks, and sponsorship templates.
+            From discovering a community need to your final commissioning. This is your operational command for personal and group projects.
           </p>
         </header>
         <Tabs defaultValue={activeProjectId ? "diary" : "ideas"} className="space-y-6">
@@ -92,7 +107,39 @@ export function CDSToolkitPage() {
               <Briefcase className="w-4 h-4" /> My Active Project
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="ideas" className="space-y-6">
+          <TabsContent value="ideas" className="space-y-8">
+            {/* Operational Roadmap Section */}
+            <Card className="border-nysc-green-100 bg-nysc-green-50/20 overflow-hidden shadow-sm">
+              <div className="p-6 md:p-8 space-y-8">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                  <div className="space-y-1">
+                    <h2 className="text-xl font-display font-bold text-nysc-green-900">Official Execution Roadmap</h2>
+                    <p className="text-sm text-nysc-green-800/70 font-medium">The mandatory procedural chain for all recognized NYSC projects.</p>
+                  </div>
+                  <Link to="/app/knowledge?search=execution">
+                    <Button className="bg-nysc-green-800 hover:bg-nysc-green-900 shadow-lg shadow-nysc-green-800/20 font-bold gap-2 rounded-xl">
+                      View Full Execution Guide <ExternalLink className="w-4 h-4" />
+                    </Button>
+                  </Link>
+                </div>
+                <div className="relative">
+                  <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-nysc-green-100 -translate-y-1/2 hidden md:block" />
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-4 relative z-10">
+                    {roadmapSteps.map((step, idx) => (
+                      <div key={idx} className="flex flex-col items-center text-center space-y-3 group">
+                        <div className="w-12 h-12 rounded-2xl bg-white border-2 border-nysc-green-100 flex items-center justify-center text-nysc-green-800 shadow-sm group-hover:scale-110 group-hover:border-nysc-green-800 transition-all duration-300">
+                           <step.icon className="w-5 h-5" />
+                        </div>
+                        <div className="space-y-0.5">
+                          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-nysc-green-900">{step.title}</p>
+                          <p className="text-[9px] font-bold text-muted-foreground whitespace-nowrap">{step.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </Card>
             <div className="flex flex-col md:flex-row gap-4">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
