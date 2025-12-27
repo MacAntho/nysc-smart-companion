@@ -73,17 +73,17 @@ export function DashboardPage() {
           searchLink: '/app/knowledge'
         };
       case 'ppa':
+        if (!readArticlesSet.has('k-clearance-issues')) return {
+          title: 'Official Troubleshooting Guide',
+          desc: 'PPA sign refusal, lost ID cards, or biometric failures? Know the official LGI reporting chain.',
+          risk: 'high' as PriorityRisk,
+          searchLink: '/app/knowledge?q=clearance-issues'
+        };
         if (!readArticlesSet.has('k-clearance')) return {
           title: 'Monthly Clearance Protocol',
           desc: 'Mandatory: Secure your monthly allowance through LGI biometric verification and PPA clearance.',
           risk: 'high' as PriorityRisk,
           searchLink: '/app/knowledge?q=clearance'
-        };
-        if (!readArticlesSet.has('k-ppa-rejection')) return {
-          title: 'PPA Rejection Protocol',
-          desc: 'What to do if your employer rejects you. Know the legal LGI reporting chain.',
-          risk: 'high' as PriorityRisk,
-          searchLink: '/app/knowledge?q=rejection'
         };
         return {
           title: 'Legacy Project Brainstorming',
@@ -92,6 +92,12 @@ export function DashboardPage() {
           searchLink: '/app/cds'
         };
       case 'cds':
+        if (!readArticlesSet.has('k-clearance-issues')) return {
+          title: 'Operational Resilience',
+          desc: 'CDS absences or documentation loss? Review official protocols to avoid service extensions.',
+          risk: 'high' as PriorityRisk,
+          searchLink: '/app/knowledge?q=clearance-issues'
+        };
         if (!readArticlesSet.has('k-cds-execution')) return {
           title: 'CDS Execution Protocol',
           desc: 'Mandatory Procedural Warning: You MUST secure a "Letter of Approval" from the LGI before starting any implementation.',
@@ -105,17 +111,17 @@ export function DashboardPage() {
           searchLink: '/app/cds'
         };
       case 'pop':
+        if (!readArticlesSet.has('k-clearance-issues')) return {
+          title: 'Final Winding-Up Resilience',
+          desc: 'Don’t let lost documents or kit return issues delay your certificate. Review the troubleshooting guide.',
+          risk: 'high' as PriorityRisk,
+          searchLink: '/app/knowledge?q=clearance-issues'
+        };
         if (!readArticlesSet.has('k-pop')) return {
           title: 'Passing Out Parade (POP) & Certificate Guide',
           desc: 'Critical: Verify your CNS name details and complete the LGI/ZI signature chain for discharge.',
           risk: 'high' as PriorityRisk,
           searchLink: '/app/knowledge?q=pop'
-        };
-        if (!readArticlesSet.has('k-clearance')) return {
-          title: 'Final Winding-Up Clearance',
-          desc: 'Mandatory: Kit return and LGI signatures are required for Discharge Certificate collection.',
-          risk: 'high' as PriorityRisk,
-          searchLink: '/app/knowledge?q=clearance'
         };
         return {
           title: 'Career Next Steps',

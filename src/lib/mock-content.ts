@@ -66,6 +66,32 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-clearance-issues',
+    category: 'Official/Troubleshooting',
+    title: 'Common NYSC Clearance Issues and Solutions',
+    summary: 'PPA sign refusal, CDS absence, lost docs, and biometric failure protocols.',
+    content: `Navigating the NYSC administrative structure can be challenging when friction occurs. This guide provides official protocols for the most common clearance issues.
+1. PPA EMPLOYER REFUSAL TO SIGN CLEARANCE:
+If your PPA employer refuses to sign your monthly clearance without a valid disciplinary reason (e.g., absenteeism), do NOT wait until the window closes.
+PROTOCOL: Report immediately to your Local Government Inspector (LGI) within 24 hours. The LGI has the authority to intervene or sign your clearance after an independent investigation.
+2. CDS ABSENCES & THE 75% THRESHOLD:
+The NYSC Bye-laws mandate a minimum of 75% attendance at weekly CDS meetings.
+PROTOCOL: If you miss a meeting due to illness, you must present a medical report from a government hospital to the LGI within 48 hours of the meeting. Retrospective excuses are generally not accepted.
+3. LOST ID CARD PROTOCOL:
+Your NYSC ID card is a legal document. Losing it is a serious policy violation that can lead to service extension.
+PROTOCOL: 
+a) Obtain a Police Report immediately. 
+b) Get a Sworn Affidavit of Loss from a High Court. 
+c) Present these to the State Secretariat to apply for a replacement. Do not attempt to use a "photocopy" for biometric clearance.
+4. BIOMETRIC CAPTURE FAILURES:
+In cases where the portal fails to recognize your thumbprints during monthly clearance.
+PROTOCOL: Request the LGI to enter your details in the "Exceptional Register" or "Manual Clearance Log." This ensures your record is flagged for manual processing so your allowance is not suspended.
+5. LOST CALL-UP LETTER OR GREEN CARD:
+These are required for camp registration and POP.
+PROTOCOL: Print "Duplicate" copies directly from your dashboard. If the portal is closed, you must visit the ICT department at the State Secretariat with a formal application letter.`,
+    metadata: { stage: 'ppa', risk: 'high', source: 'NYSC Official', featured: true }
+  },
+  {
     id: 'k-pop',
     category: 'Official',
     title: 'Passing Out Parade (POP) & Certificate Guide',
