@@ -73,11 +73,11 @@ export function KnowledgeBasePage() {
             const isFeatured = article.metadata?.featured;
             const isHighRisk = article.metadata?.risk === 'high';
             return (
-              <Card 
-                key={article.id} 
+              <Card
+                key={article.id}
                 className={cn(
                   "hover:shadow-2xl transition-all duration-300 group border-gray-100 flex flex-col h-full relative rounded-3xl overflow-hidden",
-                  isHighRisk ? "ring-2 ring-destructive bg-red-50/10" : isFeatured ? "ring-2 ring-nysc-gold bg-amber-50/10" : "bg-white"
+                  isHighRisk ? "ring-2 ring-destructive bg-red-50/10 shadow-destructive/5" : isFeatured ? "ring-2 ring-nysc-gold bg-amber-50/10 shadow-nysc-gold/5" : "bg-white"
                 )}
               >
                 <CardHeader className="pb-2">
@@ -89,9 +89,9 @@ export function KnowledgeBasePage() {
                           <AlertTriangle className="w-2 h-2" /> Risk Alert
                         </Badge>
                       )}
-                      {isFeatured && !isHighRisk && (
-                        <Badge className="bg-nysc-gold text-[8px] h-4 uppercase px-1.5 font-black animate-pulse flex items-center gap-1">
-                          <Sparkles className="w-2 h-2" /> Featured Guide
+                      {isFeatured && (
+                        <Badge className="bg-nysc-gold text-white text-[8px] h-4 uppercase px-1.5 font-black animate-pulse flex items-center gap-1">
+                          <Sparkles className="w-2 h-2" /> Featured
                         </Badge>
                       )}
                     </div>
@@ -128,9 +128,9 @@ export function KnowledgeBasePage() {
                       <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col p-0 border-none rounded-3xl overflow-hidden shadow-2xl">
                         <DialogHeader className={cn("p-8 pb-4 border-b", isHighRisk ? "bg-red-50" : "bg-gray-50")}>
                           <div className="text-[10px] font-bold text-nysc-green-800 uppercase tracking-widest mb-1 flex items-center gap-2 flex-wrap">
-                            {article.category} 
+                            {article.category}
                             {isHighRisk && <span className="text-destructive font-black">• HIGH PRIORITY</span>}
-                            {article.metadata?.featured && !isHighRisk && <span className="text-nysc-gold">• Featured</span>}
+                            {article.metadata?.featured && <span className="text-nysc-gold font-black">• Featured</span>}
                           </div>
                           <DialogTitle className={cn("text-3xl font-display font-bold leading-tight", isHighRisk && "text-destructive")}>{article.title}</DialogTitle>
                           <DialogDescription className="text-base text-muted-foreground font-medium mt-2">
@@ -153,10 +153,10 @@ export function KnowledgeBasePage() {
                             onClick={() => toggleReadArticle(article.id)}
                             className={cn(
                               "h-12 px-6 rounded-xl font-bold transition-all active:scale-95",
-                              readArticles.includes(article.id) 
-                                ? "bg-gray-100 text-gray-600 hover:bg-gray-200" 
-                                : isHighRisk 
-                                  ? "bg-destructive hover:bg-red-700 shadow-lg shadow-destructive/20" 
+                              readArticles.includes(article.id)
+                                ? "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                : isHighRisk
+                                  ? "bg-destructive hover:bg-red-700 shadow-lg shadow-destructive/20"
                                   : "bg-nysc-green-800 hover:bg-nysc-green-900 shadow-lg shadow-nysc-green-800/20"
                             )}
                           >

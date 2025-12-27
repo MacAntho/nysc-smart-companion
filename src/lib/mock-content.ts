@@ -111,6 +111,37 @@ If the employer cannot accept you, follow these steps immediately:
     }
   },
   {
+    id: 'k-ppa-clearance',
+    category: 'Official',
+    title: 'The Monthly Clearance Protocol: Allowance & Attendance',
+    summary: 'Clearance steps, registers, rejection handling.',
+    content: `The monthly clearance is the most vital administrative task during your service year. It confirms you are still at your post and eligible for allowance.
+1. THE CYCLE (1st - 25th):
+- 1st to 15th: Discharge your duties faithfully at your PPA.
+- 15th to 20th: Obtain your Monthly Clearance Letter from your Employer/Head of Organization. It must be signed and stamped.
+- 21st to 25th: Visit your Local Government Secretariat for physical clearance by the Local Government Inspector (LGI).
+2. DOCUMENTATION & "THE BOOK":
+- Present your ID Card.
+- Submit the signed letter from your employer.
+- Sign the Official Attendance Register (The "Book"). This is the legal proof of your presence. Failure to sign the book is treated as an unauthorized absence.
+3. INTEGRATED REJECTION HANDLING:
+- If you are currently in the process of being rejected, you must still report to the LGI within the clearance window. 
+- Ensure your rejection letter is filed with the LGI before the 25th to ensure your allowance for the active part of the month is processed correctly.
+4. CONSEQUENCES OF FAILURE:
+- Missing a signature without official leave results in "Extension of Service" and forfeiture of that month's allowance.
+- Two consecutive missed clearances may result in being declared an absconder.
+5. LGI REPORTING:
+- Always be respectful to the LGI. They are your primary link to the NYSC state headquarters.
+- Ensure your CDS attendance is also recorded during this period.`,
+    metadata: {
+      stage: 'ppa',
+      risk: 'medium',
+      source: 'NYSC Bye-laws',
+      last_updated: '2025',
+      featured: true
+    }
+  },
+  {
     id: 'k-ppa',
     category: 'Official',
     title: 'Primary Assignment (PPA): Posting, Reporting, Expectations',
@@ -279,34 +310,6 @@ Pro-Tip: Arrive at camp early (Day 1) to get the best bunk positions and avoid l
       stage: 'camp',
       risk: 'low',
       source: 'NYSC Official',
-      last_updated: '2025',
-      featured: true
-    }
-  },
-  {
-    id: 'k-ppa-clearance',
-    category: 'Official',
-    title: 'The Monthly Clearance Protocol: Allowance & Attendance',
-    summary: 'Step-by-step guide to securing your monthly signature, LGI reporting, and ensuring your allowance is paid on time.',
-    content: `The monthly clearance is the most vital administrative task during your service year. It confirms you are still at your post and eligible for allowance.
-1. THE CYCLE (1st - 25th):
-- 1st to 15th: Discharge your duties faithfully at your PPA.
-- 15th to 20th: Obtain your Monthly Clearance Letter from your Employer/Head of Organization. It must be signed and stamped.
-- 21st to 25th: Visit your Local Government Secretariat for physical clearance by the Local Government Inspector (LGI).
-2. DOCUMENTATION:
-- Present your ID Card.
-- Submit the signed letter from your employer.
-- Sign the official attendance register (The "Book").
-3. CONSEQUENCES OF FAILURE:
-- Missing a signature without official leave results in "Extension of Service" and forfeiture of that month's allowance.
-- Two consecutive missed clearances may result in being declared an absconder.
-4. LGI REPORTING:
-- Always be respectful to the LGI. They are your primary link to the NYSC state headquarters.
-- Ensure your CDS attendance is also recorded during this period.`,
-    metadata: {
-      stage: 'ppa',
-      risk: 'medium',
-      source: 'NYSC Bye-laws',
       last_updated: '2025',
       featured: true
     }

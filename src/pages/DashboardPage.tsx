@@ -51,8 +51,8 @@ export function DashboardPage() {
         };
       case 'ppa':
         return {
-          title: 'PPA Rejection & Reposting',
-          desc: 'HIGH ALERT: Learn the mandatory steps if your PPA rejects you to avoid service extension.',
+          title: 'Monthly Clearance & PPA Protocol',
+          desc: 'Essential: Your guide to monthly signatures, registers, and handling PPA rejection.',
           risk: 'high'
         };
       case 'cds':
