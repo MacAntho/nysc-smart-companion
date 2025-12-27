@@ -1,254 +1,77 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { ShieldAlert, Users, BookOpen, Trash2, Edit3, Search, RefreshCw, ArrowLeft, Eye, Copy, Check, GraduationCap, Trophy, LayoutGrid, Activity, Signal } from 'lucide-react';
-import { KNOWLEDGE_ARTICLES } from '@/lib/mock-content';
-import type { NYSCProfile, NYSCStage } from '@shared/types';
+import { ShieldAlert, Users, BookOpen, Calendar, MapPin, Plus, Trash2, Edit3, Save, Search } from 'lucide-react';
+import { KNOWLEDGE_ARTICLES, DEADLINES, STATE_DATA } from '@/lib/mock-content';
 import { toast } from 'sonner';
-import { format, isValid } from 'date-fns';
 export function AdminPage() {
-  const [activeTab, setActiveTab] = useState('users');
-  const [users, setUsers] = useState<NYSCProfile[]>([]);
-  const [stats, setStats] = useState({ totalUsers: 0, activeToday: 0, proUsers: 0, systemHealth: 'Healthy' });
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedUser, setSelectedUser] = useState<NYSCProfile | null>(null);
-  const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [backendStatus, setBackendStatus] = useState<'connected' | 'error'>('connected');
-  const fetchAdminData = useCallback(async (silent = false) => {
-    if (!silent) setIsLoading(true);
-    try {
-      const statsResponse = await fetch('/api/admin/stats');
-      const usersResponse = await fetch('/api/admin/users');
-      if (!statsResponse.ok || !usersResponse.ok) throw new Error('Network failure');
-      const statsRes = await statsResponse.json();
-      const usersRes = await usersResponse.json();
-      if (statsRes.success) {
-        setStats(statsRes.data || { totalUsers: 0, activeToday: 0, proUsers: 0, systemHealth: 'Operational' });
-      }
-      if (usersRes.success) {
-        const rawItems = Array.isArray(usersRes.data) ? usersRes.data : [];
-        const sanitizedUsers: NYSCProfile[] = rawItems.map((u: any) => ({
-          id: u.id || 'N/A',
-          stage: (u.stage as NYSCStage) || 'prospective',
-          stateOfDeployment: u.stateOfDeployment || 'Not Set',
-          completedTasks: Array.isArray(u.completedTasks) ? u.completedTasks : [],
-          readArticles: Array.isArray(u.readArticles) ? u.readArticles : [],
-          activeProjectId: u.activeProjectId || null,
-          isOnboarded: u.isOnboarded ?? false,
-          isPro: u.isPro ?? false,
-          updatedAt: Number(u.updatedAt) || 0
-        })).sort((a: NYSCProfile, b: NYSCProfile) => {
-          // Primary sort by recent activity (Sync Time)
-          const timeA = a.updatedAt || 0;
-          const timeB = b.updatedAt || 0;
-          return timeB - timeA;
-        });
-        setUsers(sanitizedUsers);
-        setBackendStatus('connected');
-      }
-      if (!silent) toast.success('Records Synced');
-    } catch (err) {
-      console.error('[ADMIN FETCH ERROR]', err);
-      setBackendStatus('error');
-      toast.error('System synchronization failed');
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-  useEffect(() => {
-    fetchAdminData(true);
-  }, [fetchAdminData]);
-  const filteredUsers = users.filter(u => {
-    const q = searchQuery.toLowerCase();
-    return (
-      (u.id || '').toLowerCase().includes(q) ||
-      (u.stateOfDeployment || '').toLowerCase().includes(q) ||
-      (u.stage || '').toLowerCase().includes(q)
-    );
-  });
-  const copyToClipboard = (id: string) => {
-    if (!id) return;
-    navigator.clipboard.writeText(id);
-    setCopiedId(id);
-    toast.success('ID Copied');
-    setTimeout(() => setCopiedId(null), 2000);
-  };
+  const [activeTab, setActiveTab] = useState('knowledge');
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-fade-in px-4">
-      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 p-8 bg-nysc-green-900 rounded-3xl text-white shadow-xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl" />
-        <div className="space-y-2 relative z-10">
-          <Link to="/app">
-            <Button variant="ghost" size="sm" className="text-nysc-green-100 hover:text-white hover:bg-white/10 -ml-2 mb-2 font-bold h-8 px-2 gap-1">
-              <ArrowLeft className="w-4 h-4" /> Return to Dashboard
-            </Button>
-          </Link>
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-nysc-gold rounded-lg shadow-inner">
-              <ShieldAlert className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-display font-bold">Admin Oversight</h1>
-              <div className="flex items-center gap-2 mt-1">
-                <Badge className={backendStatus === 'connected' ? 'bg-green-500/20 text-green-300 border-green-500/30' : 'bg-red-500/20 text-red-300 border-red-500/30'}>
-                   <Signal className="w-3 h-3 mr-1" /> {backendStatus === 'connected' ? 'Durable Object Linked' : 'DO Connection Fault'}
-                </Badge>
-              </div>
-            </div>
+      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 p-8 bg-nysc-green-900 rounded-3xl text-white">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <ShieldAlert className="w-5 h-5 text-nysc-gold" />
+            <h1 className="text-3xl font-display font-bold">Admin Command Center</h1>
           </div>
+          <p className="text-nysc-green-100 font-medium">Manage global content, rules, and system data.</p>
         </div>
-        <div className="flex flex-wrap gap-4 relative z-10">
-          <div className="grid grid-cols-2 gap-3">
-             <div className="bg-white/10 px-4 py-2 rounded-xl border border-white/10 min-w-[120px]">
-              <p className="text-[8px] font-black uppercase tracking-widest opacity-60">Members</p>
-              <p className="text-xl font-bold">{stats.totalUsers}</p>
-            </div>
-            <div className="bg-white/10 px-4 py-2 rounded-xl border border-white/10 min-w-[120px]">
-              <p className="text-[8px] font-black uppercase tracking-widest opacity-60">Pro Tier</p>
-              <p className="text-xl font-bold text-nysc-gold">{stats.proUsers}</p>
-            </div>
+        <div className="flex gap-4">
+          <div className="bg-white/10 px-6 py-2 rounded-2xl border border-white/20">
+            <p className="text-[10px] font-black uppercase tracking-widest opacity-60">Global Users</p>
+            <p className="text-xl font-bold">1,402</p>
           </div>
-          <Button
-            variant="secondary"
-            className="h-full px-4 rounded-xl bg-white/20 hover:bg-white/30 text-white border-none transition-all active:scale-95"
-            onClick={() => fetchAdminData()}
-            disabled={isLoading}
-          >
-            <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} /> Sync
-          </Button>
         </div>
       </header>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <TabsList className="bg-white border p-1 h-auto rounded-xl flex gap-1 shadow-sm w-fit">
-            <TabsTrigger value="users" className="gap-2 px-6 py-2.5 font-bold uppercase tracking-widest text-[9px] rounded-lg data-[state=active]:bg-nysc-green-800 data-[state=active]:text-white">
-              <Users className="w-3.5 h-3.5" /> Registry
-            </TabsTrigger>
-            <TabsTrigger value="knowledge" className="gap-2 px-6 py-2.5 font-bold uppercase tracking-widest text-[9px] rounded-lg data-[state=active]:bg-nysc-green-800 data-[state=active]:text-white">
-              <BookOpen className="w-3.5 h-3.5" /> Archives
-            </TabsTrigger>
-          </TabsList>
-          {activeTab === 'users' && (
-            <div className="relative w-full md:w-80">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <Input
-                placeholder="Search ID or Phase..."
-                className="pl-10 h-11 text-xs rounded-xl bg-white border-gray-200 focus-visible:ring-nysc-green-800"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-          )}
-        </div>
-        <TabsContent value="users">
-          <Card className="border-gray-100 shadow-sm overflow-hidden rounded-2xl">
-            <CardContent className="p-0">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm text-left border-collapse">
-                  <thead className="bg-gray-50/80 border-b">
-                    <tr className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground">
-                      <th className="px-6 py-5">Member ID</th>
-                      <th className="px-6 py-5">Phase</th>
-                      <th className="px-6 py-5">Location</th>
-                      <th className="px-6 py-5">Sync Time</th>
-                      <th className="px-6 py-5 text-right">Audit</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-50">
-                    {filteredUsers.length > 0 ? filteredUsers.map((u) => {
-                      const dateObj = new Date(u.updatedAt);
-                      const isDateValid = isValid(dateObj) && u.updatedAt > 0;
-                      return (
-                        <tr key={u.id} className="hover:bg-gray-50/50 transition-colors group">
-                          <td className="px-6 py-4">
-                            <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-full bg-nysc-green-50 flex items-center justify-center text-nysc-green-800 text-[10px] font-bold border border-nysc-green-100">
-                                 {(u.id || '??').slice(0, 2).toUpperCase()}
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <span className="font-bold text-gray-900 font-mono text-xs">{u.id || 'N/A'}</span>
-                                <button
-                                  onClick={() => copyToClipboard(u.id)}
-                                  className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-nysc-green-800 transition-all"
-                                >
-                                  {copiedId === u.id ? <Check className="w-3 h-3 text-nysc-green-500" /> : <Copy className="w-3 h-3" />}
-                                </button>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4">
-                            <Badge variant="outline" className="capitalize text-[10px] font-bold border-gray-200 bg-white">
-                              {u.stage}
-                            </Badge>
-                          </td>
-                          <td className="px-6 py-4 text-xs font-bold text-gray-600">{u.stateOfDeployment || 'Unassigned'}</td>
-                          <td className="px-6 py-4 text-[11px] font-semibold text-muted-foreground">
-                            {isDateValid ? format(dateObj, 'MMM d, HH:mm') : 'Uninitialized'}
-                          </td>
-                          <td className="px-6 py-4 text-right">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="text-nysc-green-800 font-bold h-9 px-4 rounded-xl hover:bg-nysc-green-50 transition-colors"
-                              onClick={() => setSelectedUser(u)}
-                            >
-                              <Eye className="w-4 h-4 mr-2" /> Inspect
-                            </Button>
-                          </td>
-                        </tr>
-                      );
-                    }) : (
-                      <tr>
-                        <td colSpan={5} className="px-6 py-24 text-center">
-                          <div className="flex flex-col items-center gap-4 opacity-40">
-                            <LayoutGrid className="w-12 h-12 text-gray-300" />
-                            <p className="text-xs font-bold uppercase tracking-[0.3em]">No registry matches</p>
-                          </div>
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+        <TabsList className="bg-white border p-1.5 h-auto rounded-2xl flex flex-wrap gap-2 shadow-sm">
+          <TabsTrigger value="knowledge" className="gap-2 px-6 py-2.5 font-bold uppercase tracking-widest text-[10px] rounded-xl data-[state=active]:bg-nysc-green-800 data-[state=active]:text-white">
+            <BookOpen className="w-4 h-4" /> Articles
+          </TabsTrigger>
+          <TabsTrigger value="deadlines" className="gap-2 px-6 py-2.5 font-bold uppercase tracking-widest text-[10px] rounded-xl data-[state=active]:bg-nysc-green-800 data-[state=active]:text-white">
+            <Calendar className="w-4 h-4" /> Deadlines
+          </TabsTrigger>
+          <TabsTrigger value="states" className="gap-2 px-6 py-2.5 font-bold uppercase tracking-widest text-[10px] rounded-xl data-[state=active]:bg-nysc-green-800 data-[state=active]:text-white">
+            <MapPin className="w-4 h-4" /> State Intelligence
+          </TabsTrigger>
+          <TabsTrigger value="users" className="gap-2 px-6 py-2.5 font-bold uppercase tracking-widest text-[10px] rounded-xl data-[state=active]:bg-nysc-green-800 data-[state=active]:text-white">
+            <Users className="w-4 h-4" /> User Stats
+          </TabsTrigger>
+        </TabsList>
         <TabsContent value="knowledge">
-          <Card className="border-gray-100 shadow-sm overflow-hidden rounded-2xl">
-            <CardHeader className="flex flex-row items-center justify-between border-b bg-gray-50/50 py-5 px-6">
+          <Card className="border-gray-100 shadow-sm overflow-hidden">
+            <CardHeader className="flex flex-row items-center justify-between border-b bg-gray-50/50 py-4">
               <div className="space-y-1">
-                <CardTitle className="text-lg font-bold">Protocol Archive</CardTitle>
-                <CardDescription className="text-sm font-medium">Core service guides and official bye-laws.</CardDescription>
+                <CardTitle className="text-lg">Knowledge Base Manager</CardTitle>
+                <CardDescription className="text-xs">Publish and edit official guides.</CardDescription>
               </div>
-              <Button size="sm" className="bg-nysc-green-800 hover:bg-nysc-green-900 gap-2 h-10 px-4 rounded-xl font-bold shadow-lg">
-                <GraduationCap className="w-4 h-4" /> Add Protocol
+              <Button size="sm" className="bg-nysc-green-800 hover:bg-nysc-green-900 gap-2">
+                <Plus className="w-4 h-4" /> New Article
               </Button>
             </CardHeader>
             <CardContent className="p-0">
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y">
                 {KNOWLEDGE_ARTICLES.map(a => (
-                  <div key={a.id} className="flex items-center justify-between p-5 hover:bg-gray-50 transition-colors">
+                  <div key={a.id} className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors">
                     <div className="flex gap-4 items-center">
-                      <div className="w-11 h-11 rounded-xl bg-nysc-green-50 flex items-center justify-center text-nysc-green-800 shrink-0 border border-nysc-green-100 shadow-sm">
+                      <div className="w-10 h-10 rounded-lg bg-nysc-green-50 flex items-center justify-center text-nysc-green-800">
                         <BookOpen className="w-5 h-5" />
                       </div>
                       <div>
                         <p className="text-sm font-bold text-gray-900">{a.title}</p>
-                        <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-black flex items-center gap-2">
-                           {a.category}
-                           {a.metadata?.risk === 'high' && <span className="text-destructive">• Risk Warning</span>}
-                        </p>
+                        <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{a.category}</p>
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl text-gray-400 hover:text-nysc-green-800"><Edit3 className="w-4 h-4" /></Button>
-                      <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl text-gray-400 hover:text-destructive"><Trash2 className="w-4 h-4" /></Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-400 hover:text-nysc-green-800">
+                        <Edit3 className="w-4 h-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-gray-400 hover:text-destructive">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
                     </div>
                   </div>
                 ))}
@@ -256,66 +79,95 @@ export function AdminPage() {
             </CardContent>
           </Card>
         </TabsContent>
+        <TabsContent value="deadlines">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="border-gray-100 shadow-sm">
+              <CardHeader>
+                <CardTitle className="text-lg">Active Calendar</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {DEADLINES.map(d => (
+                  <div key={d.id} className="p-4 border rounded-2xl space-y-2 group">
+                    <div className="flex justify-between items-start">
+                      <p className="text-sm font-bold">{d.title}</p>
+                      <Badge variant="outline" className="text-[10px]">{d.stage}</Badge>
+                    </div>
+                    <div className="flex justify-between items-center pt-2">
+                      <p className="text-xs text-muted-foreground">{d.date}</p>
+                      <Button variant="ghost" size="sm" className="h-8 px-2 text-destructive opacity-0 group-hover:opacity-100 transition-opacity">
+                        Remove
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+            <Card className="border-gray-100 shadow-sm h-fit">
+              <CardHeader>
+                <CardTitle className="text-lg">Broadcast New Deadline</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Title</label>
+                  <Input placeholder="Batch A Registration" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Date</label>
+                  <Input type="date" />
+                </div>
+                <Button className="w-full bg-nysc-green-800 hover:bg-nysc-green-900 font-bold">Schedule Deadline</Button>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+        <TabsContent value="states">
+          <div className="text-center py-20 border-2 border-dashed rounded-3xl bg-gray-50/50">
+             <MapPin className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+             <h3 className="text-lg font-bold">State Content System</h3>
+             <p className="text-sm text-muted-foreground max-w-xs mx-auto mb-6">Editing Lagos, Abuja, and 8 other states is currently locked to Core Admins.</p>
+             <Button variant="outline" className="border-nysc-green-800 text-nysc-green-800 font-bold">Request Content Access</Button>
+          </div>
+        </TabsContent>
+        <TabsContent value="users">
+          <Card className="border-gray-100 shadow-sm">
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle className="text-lg">Platform Engagement</CardTitle>
+              <div className="relative w-64">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Input placeholder="Search user email..." className="pl-9 h-10 text-xs" />
+              </div>
+            </CardHeader>
+            <CardContent>
+               <div className="overflow-x-auto">
+                 <table className="w-full text-sm text-left">
+                   <thead>
+                     <tr className="border-b text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                       <th className="pb-4">User Email</th>
+                       <th className="pb-4">Stage</th>
+                       <th className="pb-4">State</th>
+                       <th className="pb-4">Pro</th>
+                       <th className="pb-4">Action</th>
+                     </tr>
+                   </thead>
+                   <tbody>
+                     {['corper1@gov.ng', 'corper2@gov.ng', 'corper3@gov.ng'].map((u, i) => (
+                       <tr key={i} className="border-b last:border-0">
+                         <td className="py-4 font-bold">{u}</td>
+                         <td className="py-4 capitalize">PPA</td>
+                         <td className="py-4">Lagos</td>
+                         <td className="py-4 text-nysc-gold font-black">{i === 1 ? 'YES' : 'NO'}</td>
+                         <td className="py-4">
+                           <Button variant="ghost" size="sm" className="text-nysc-green-800 font-bold">View</Button>
+                         </td>
+                       </tr>
+                     ))}
+                   </tbody>
+                 </table>
+               </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
-      <Dialog open={!!selectedUser} onOpenChange={(o) => !o && setSelectedUser(null)}>
-        <DialogContent className="max-w-md rounded-3xl border-none shadow-2xl p-0 overflow-hidden">
-          {selectedUser && (
-            <>
-              <DialogHeader className="p-8 bg-nysc-green-900 text-white relative">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16" />
-                <div className="relative z-10 flex items-center justify-between">
-                  <DialogTitle className="font-display text-2xl font-bold">Profile Audit</DialogTitle>
-                  {selectedUser.isPro && <Badge className="bg-nysc-gold text-white font-black text-[9px]">PRO</Badge>}
-                </div>
-                <DialogDescription className="text-nysc-green-200 font-mono text-xs font-bold mt-2 relative z-10">
-                  ID: {selectedUser.id}
-                </DialogDescription>
-              </DialogHeader>
-              <div className="p-8 space-y-8">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 bg-white rounded-2xl border border-gray-100 shadow-sm">
-                    <div className="flex items-center gap-2 text-nysc-green-800 mb-1">
-                      <Trophy className="w-3.5 h-3.5" />
-                      <p className="text-[9px] font-black uppercase tracking-widest opacity-60">Phase</p>
-                    </div>
-                    <p className="text-sm font-bold text-gray-900 truncate capitalize">{selectedUser.stage}</p>
-                  </div>
-                  <div className="p-4 bg-white rounded-2xl border border-gray-100 shadow-sm">
-                    <div className="flex items-center gap-2 text-nysc-green-800 mb-1">
-                      <GraduationCap className="w-3.5 h-3.5" />
-                      <p className="text-[9px] font-black uppercase tracking-widest opacity-60">Location</p>
-                    </div>
-                    <p className="text-sm font-bold text-gray-900 truncate capitalize">{selectedUser.stateOfDeployment || 'Unset'}</p>
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                     <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Progression Node</p>
-                     <Badge variant="outline" className="text-[8px] font-black uppercase tracking-widest px-1.5 h-4">
-                       {selectedUser.isOnboarded ? 'Active Member' : 'Ghost User'}
-                     </Badge>
-                  </div>
-                  <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 font-mono text-[10px] overflow-auto max-h-48 whitespace-pre text-gray-700">
-                    {JSON.stringify({
-                      tasksCompleted: (selectedUser.completedTasks || []).length,
-                      articlesRead: (selectedUser.readArticles || []).length,
-                      activeProject: selectedUser.activeProjectId || 'None',
-                      isOnboarded: selectedUser.isOnboarded,
-                      updatedAt: selectedUser.updatedAt
-                    }, null, 2)}
-                  </div>
-                </div>
-              </div>
-              <div className="p-6 bg-gray-50 border-t flex justify-end gap-3">
-                <Button variant="outline" onClick={() => setSelectedUser(null)} className="font-bold rounded-xl border-gray-200">Dismiss</Button>
-                <Button className="bg-nysc-green-800 hover:bg-nysc-green-900 font-bold rounded-xl" onClick={() => copyToClipboard(selectedUser.id)}>
-                  Copy Identity
-                </Button>
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

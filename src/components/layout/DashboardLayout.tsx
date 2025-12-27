@@ -6,13 +6,19 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { motion, AnimatePresence } from "framer-motion";
 import { Toaster } from "@/components/ui/sonner";
+import { MobileNav } from "./MobileNav";
+import { useAppStore } from "@/lib/store";
+import { Badge } from "@/components/ui/badge";
+import { Sparkles } from "lucide-react";
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const pathParts = location.pathname.split('/').filter(Boolean);
+  const isPro = useAppStore(s => s.isPro);
+  const userRole = useAppStore(s => s.userRole);
   return (
     <SidebarProvider defaultOpen={true}>
       <AppSidebar />
-      <SidebarInset className="bg-white nysc-adire-pattern">
+      <SidebarInset className="bg-white nysc-adire-pattern min-h-screen flex flex-col">
         <header className="flex h-16 shrink-0 items-center justify-between border-b px-6 bg-white/80 backdrop-blur-md sticky top-0 z-30">
           <div className="flex items-center gap-4">
             <SidebarTrigger className="hover:text-nysc-green-800 transition-colors" />
@@ -38,20 +44,32 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             </Breadcrumb>
           </div>
           <div className="flex items-center gap-4">
+            {isPro && (
+              <Badge className="bg-nysc-gold text-white font-black text-[9px] uppercase tracking-widest hidden sm:flex items-center gap-1">
+                <Sparkles className="w-3 h-3" /> PRO TIER
+              </Badge>
+            )}
+            {userRole === 'admin' && (
+              <Link to="/app/admin">
+                <Badge variant="outline" className="border-nysc-green-800 text-nysc-green-800 text-[9px] font-black uppercase tracking-widest">
+                  Admin
+                </Badge>
+              </Link>
+            )}
             <ThemeToggle className="static" />
           </div>
         </header>
-        <main className="flex-1">
+        <main className="flex-1 pb-20 md:pb-8">
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
-              transition={{ 
-                duration: 0.35, 
+              transition={{
+                duration: 0.35,
                 ease: [0.22, 1, 0.36, 1],
-                delay: 0.1 
+                delay: 0.1
               }}
               className="py-8 md:py-12"
             >
@@ -59,6 +77,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             </motion.div>
           </AnimatePresence>
         </main>
+        <MobileNav />
         <Toaster position="top-right" richColors expand={true} />
       </SidebarInset>
     </SidebarProvider>
