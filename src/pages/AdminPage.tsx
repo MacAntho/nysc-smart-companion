@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ShieldAlert, Users, BookOpen, Trash2, Edit3, Search, RefreshCw, ArrowLeft, Eye, Copy, Check, GraduationCap, Trophy, LayoutGrid, Clock } from 'lucide-react';
 import { KNOWLEDGE_ARTICLES } from '@/lib/mock-content';
-import type { NYSCProfile } from '@shared/types';
+import type { NYSCProfile, NYSCStage } from '@shared/types';
 import { toast } from 'sonner';
 import { format, isValid } from 'date-fns';
 export function AdminPage() {
@@ -28,11 +28,15 @@ export function AdminPage() {
       ]);
       if (statsRes.success) setStats(statsRes.data);
       if (usersRes.success) {
-        const sanitizedUsers = (usersRes.data || []).map((u: any) => ({
-          ...u,
+        const sanitizedUsers: NYSCProfile[] = (usersRes.data || []).map((u: any) => ({
+          id: u.id || '',
+          stage: (u.stage as NYSCStage) || 'prospective',
+          stateOfDeployment: u.stateOfDeployment || 'Not Set',
           completedTasks: Array.isArray(u.completedTasks) ? u.completedTasks : [],
           readArticles: Array.isArray(u.readArticles) ? u.readArticles : [],
-          stateOfDeployment: u.stateOfDeployment || 'Not Set',
+          activeProjectId: u.activeProjectId || null,
+          isOnboarded: u.isOnboarded ?? false,
+          isPro: u.isPro ?? false,
           updatedAt: Number(u.updatedAt) || 0
         })).sort((a: NYSCProfile, b: NYSCProfile) => (b.updatedAt || 0) - (a.updatedAt || 0));
         setUsers(sanitizedUsers);
@@ -57,6 +61,7 @@ export function AdminPage() {
     );
   });
   const copyToClipboard = (id: string) => {
+    if (!id) return;
     navigator.clipboard.writeText(id);
     setCopiedId(id);
     toast.success('ID copied');
@@ -147,10 +152,10 @@ export function AdminPage() {
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
                               <div className="w-8 h-8 rounded-full bg-nysc-green-50 flex items-center justify-center text-nysc-green-800 text-[10px] font-bold border border-nysc-green-100">
-                                 {u.id.slice(0, 2).toUpperCase()}
+                                 {(u.id || '??').slice(0, 2).toUpperCase()}
                               </div>
                               <div className="flex items-center gap-2">
-                                <span className="font-bold text-gray-900 font-mono text-xs">{u.id}</span>
+                                <span className="font-bold text-gray-900 font-mono text-xs">{u.id || 'NO-ID'}</span>
                                 <button
                                   onClick={() => copyToClipboard(u.id)}
                                   className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-nysc-green-800 transition-all"
@@ -169,11 +174,11 @@ export function AdminPage() {
                           <td className="px-6 py-4 text-xs font-bold text-gray-600">{u.stateOfDeployment}</td>
                           <td className="px-6 py-4">
                              <div className="flex items-center gap-2">
-                               <span className="text-xs font-black text-nysc-green-800">{u.readArticles.length}</span>
+                               <span className="text-xs font-black text-nysc-green-800">{u.readArticles?.length || 0}</span>
                                <div className="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                                   <div
                                     className="h-full bg-nysc-green-800"
-                                    style={{ width: `${Math.min(100, (u.readArticles.length / Math.max(1, KNOWLEDGE_ARTICLES.length)) * 100)}%` }}
+                                    style={{ width: `${Math.min(100, ((u.readArticles?.length || 0) / Math.max(1, KNOWLEDGE_ARTICLES.length)) * 100)}%` }}
                                   />
                                </div>
                              </div>
@@ -266,15 +271,15 @@ export function AdminPage() {
                   )}
                 </div>
                 <DialogDescription className="text-nysc-green-200 font-mono text-xs font-bold mt-2 relative z-10">
-                  Identity: {selectedUser.id}
+                  Identity: {selectedUser.id || 'UNDEFINED'}
                 </DialogDescription>
               </DialogHeader>
               <div className="p-8 space-y-8">
                 <div className="grid grid-cols-2 gap-4">
                   <AuditStat label="Service Phase" value={selectedUser.stage} icon={<Trophy className="w-3.5 h-3.5" />} />
                   <AuditStat label="Deployment" value={selectedUser.stateOfDeployment} icon={<GraduationCap className="w-3.5 h-3.5" />} />
-                  <AuditStat label="Tasks Completed" value={selectedUser.completedTasks?.length.toString()} icon={<Check className="w-3.5 h-3.5" />} />
-                  <AuditStat label="Articles Read" value={selectedUser.readArticles?.length.toString()} icon={<BookOpen className="w-3.5 h-3.5" />} />
+                  <AuditStat label="Tasks Completed" value={(selectedUser.completedTasks?.length || 0).toString()} icon={<Check className="w-3.5 h-3.5" />} />
+                  <AuditStat label="Articles Read" value={(selectedUser.readArticles?.length || 0).toString()} icon={<BookOpen className="w-3.5 h-3.5" />} />
                 </div>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">

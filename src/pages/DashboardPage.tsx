@@ -59,7 +59,7 @@ export function DashboardPage() {
       return { title: 'Verified NYSC FAQs', desc: 'Master the entire service cycle with answers to 50+ common official questions.', risk: 'low' as PriorityRisk, link: '/app/knowledge?search=faqs' };
     }
     return { title: 'Phase Readiness Active', desc: 'You are tracking well. Review your current milestones to ensure 100% compliance.', risk: 'low' as PriorityRisk, link: '/app/journey' };
-  }, [readArticles, isInitialized, isOnboarded]);
+  }, [readArticles, isInitialized, isOnboarded, stageId]);
   const syncStatus = useMemo(() => {
     if (isSyncing) return { text: 'Cloud Sync Active', color: 'bg-amber-500', pulse: true };
     if (!lastSynced) return { text: 'Session Started', color: 'bg-nysc-green-800', pulse: false };
