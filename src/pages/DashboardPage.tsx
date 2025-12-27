@@ -20,10 +20,17 @@ export function DashboardPage() {
   const lastSynced = useAppStore(s => s.lastSynced);
   const isInitialized = useAppStore(s => s.isInitialized);
   const isOnboarded = useAppStore(s => s.isOnboarded);
+  const lastSyncError = useAppStore(s => s.lastSyncError);
   const currentStage = useMemo(() => JOURNEY_STAGES.find(s => s.id === stageId), [stageId]);
   const stageTasks = useMemo(() => currentStage?.tasks || [], [currentStage]);
-  const completedCount = useMemo(() => (stageTasks || []).filter(t => (completedTasks || []).includes(t.id)).length, [stageTasks, completedTasks]);
-  const progressPercent = stageTasks.length > 0 ? (completedCount / stageTasks.length) * 100 : 0;
+  const completedCount = useMemo(() => {
+    const tasksArr = completedTasks ?? [];
+    return (stageTasks || []).filter(t => tasksArr.includes(t.id)).length;
+  }, [stageTasks, completedTasks]);
+  const progressPercent = useMemo(() => {
+    if (!stageTasks || stageTasks.length === 0) return 100; // Phase completed by default if no tasks
+    return (completedCount / stageTasks.length) * 100;
+  }, [stageTasks, completedCount]);
   const relevantDeadlines = useMemo(() => {
     return (DEADLINES || [])
       .filter(d => d.stage === stageId)
@@ -61,17 +68,18 @@ export function DashboardPage() {
     if (!readArticlesSet.has('k-insider-tips')) {
       return { title: '100 Practical Survival Tips', desc: 'Expert Intelligence: Battle-tested tips for camp, finance, and PPA survival.', risk: 'medium' as PriorityRisk, link: '/app/knowledge?search=tips' };
     }
-    // 6. General FAQs
-    if (!readArticlesSet.has('k-faqs')) {
-      return { title: 'Verified NYSC FAQs', desc: 'Master the entire service cycle with answers to 50+ common official questions.', risk: 'low' as PriorityRisk, link: '/app/knowledge?search=faqs' };
-    }
-    return { title: 'Phase Readiness Active', desc: 'You are tracking well. Review your current milestones to ensure 100% compliance.', risk: 'low' as PriorityRisk, link: '/app/journey' };
+    return { title: 'Operational Readiness Active', desc: 'System status stable. Review your current milestones to ensure 100% compliance with NYSC Bye-laws.', risk: 'low' as PriorityRisk, link: '/app/journey' };
   }, [readArticles, isInitialized, isOnboarded, stageId]);
   const syncStatus = useMemo(() => {
-    if (isSyncing) return { text: 'Cloud Sync Active', color: 'bg-amber-500', pulse: true };
-    if (!lastSynced) return { text: 'Session Started', color: 'bg-nysc-green-800', pulse: false };
-    return { text: `Synced ${formatDistanceToNow(lastSynced, { addSuffix: true })}`, color: 'bg-nysc-green-800', pulse: false };
-  }, [isSyncing, lastSynced]);
+    if (isSyncing) return { text: 'Syncing Intelligence...', color: 'bg-amber-500', pulse: true };
+    if (lastSyncError) return { text: 'Offline Mode Active', color: 'bg-red-500', pulse: false };
+    if (!lastSynced) return { text: 'Local Session', color: 'bg-nysc-green-800', pulse: false };
+    try {
+      return { text: `Synced ${formatDistanceToNow(lastSynced, { addSuffix: true })}`, color: 'bg-nysc-green-800', pulse: false };
+    } catch (e) {
+      return { text: 'Cloud Verified', color: 'bg-nysc-green-800', pulse: false };
+    }
+  }, [isSyncing, lastSynced, lastSyncError]);
   return (
     <div className="max-w-7xl mx-auto px-4 space-y-8 animate-fade-in">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -86,7 +94,7 @@ export function DashboardPage() {
       </header>
       {priorityContent && (
         <Card className={cn(
-          "border relative group transition-all duration-300 rounded-3xl overflow-hidden",
+          "border relative group transition-all duration-300 rounded-3xl overflow-hidden shadow-sm",
           priorityContent.risk === 'high' ? "bg-red-50/50 border-red-100" : "bg-nysc-green-50/20 border-nysc-green-100/50"
         )}>
           <CardHeader className="pb-2">
@@ -118,7 +126,7 @@ export function DashboardPage() {
             <Progress value={progressPercent} className="h-2.5 bg-gray-100" />
             <div className="grid grid-cols-1 gap-2 pt-2">
               {stageTasks.map(task => {
-                const isDone = completedTasks.includes(task.id);
+                const isDone = (completedTasks ?? []).includes(task.id);
                 return (
                   <div key={task.id} className="flex items-center gap-3 p-4 border rounded-xl bg-white hover:bg-gray-50 transition-colors">
                     <div className={cn("w-2 h-2 rounded-full", isDone ? "bg-nysc-green-800" : "bg-gray-200")} />

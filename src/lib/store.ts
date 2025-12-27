@@ -78,7 +78,7 @@ export const useAppStore = create<AppState>()(
         if (get().isAuthenticated) get().syncProfile();
       },
       toggleTask: (taskId) => {
-        const currentTasks = get().completedTasks;
+        const currentTasks = get().completedTasks || [];
         const isRemoving = currentTasks.includes(taskId);
         set({
           completedTasks: isRemoving
@@ -89,7 +89,7 @@ export const useAppStore = create<AppState>()(
         if (get().isAuthenticated) get().syncProfile();
       },
       toggleReadArticle: (articleId) => {
-        const currentArticles = get().readArticles;
+        const currentArticles = get().readArticles || [];
         const isRead = currentArticles.includes(articleId);
         set({
           readArticles: isRead
@@ -113,8 +113,8 @@ export const useAppStore = create<AppState>()(
         const generatePayload = () => JSON.stringify({
           stage: get().stage,
           stateOfDeployment: get().stateOfDeployment,
-          completedTasks: get().completedTasks,
-          readArticles: get().readArticles,
+          completedTasks: get().completedTasks || [],
+          readArticles: get().readArticles || [],
           activeProjectId: get().activeProjectId,
           isOnboarded: get().isOnboarded
         });
@@ -133,13 +133,13 @@ export const useAppStore = create<AppState>()(
               lastSyncedPayload: currentPayload,
               isSyncing: false
             });
-            // Re-check for consistency
+            // Consistency check for rapid updates
             const finalPayload = generatePayload();
             if (finalPayload !== currentPayload) {
-              setTimeout(() => get().syncProfile(), 200);
+              setTimeout(() => get().syncProfile(), 500);
             }
           } else {
-            set({ isSyncing: false, lastSyncError: 'Sync refused by server' });
+            set({ isSyncing: false, lastSyncError: 'Sync refused' });
           }
         } catch (error) {
           console.error('[SYNC ERROR]', error);
@@ -152,6 +152,7 @@ export const useAppStore = create<AppState>()(
           set({ isInitialized: true });
           return;
         }
+        // Prevent concurrent loads unless forced
         if (state.isSyncing && !force) return;
         if (state.isInitialized && !force) return;
         set({ isSyncing: true, lastSyncError: null });
@@ -164,16 +165,16 @@ export const useAppStore = create<AppState>()(
               const remotePayload = JSON.stringify({
                 stage: p.stage,
                 stateOfDeployment: p.stateOfDeployment,
-                completedTasks: p.completedTasks,
-                readArticles: p.readArticles,
+                completedTasks: p.completedTasks || [],
+                readArticles: p.readArticles || [],
                 activeProjectId: p.activeProjectId,
                 isOnboarded: p.isOnboarded
               });
               set({
                 stage: p.stage || state.stage,
                 stateOfDeployment: p.stateOfDeployment || state.stateOfDeployment,
-                completedTasks: Array.isArray(p.completedTasks) ? p.completedTasks : state.completedTasks,
-                readArticles: Array.isArray(p.readArticles) ? p.readArticles : state.readArticles,
+                completedTasks: Array.isArray(p.completedTasks) ? p.completedTasks : (state.completedTasks || []),
+                readArticles: Array.isArray(p.readArticles) ? p.readArticles : (state.readArticles || []),
                 activeProjectId: p.activeProjectId || state.activeProjectId,
                 isOnboarded: p.isOnboarded ?? state.isOnboarded,
                 lastSynced: p.updatedAt || Date.now(),
@@ -189,9 +190,9 @@ export const useAppStore = create<AppState>()(
           }
         } catch (error) {
           console.error('[LOAD ERROR]', error);
-          set({ lastSyncError: 'Failed to fetch cloud profile', isInitialized: true });
+          set({ lastSyncError: 'Network failure during hydration', isInitialized: true });
         } finally {
-          set({ isSyncing: false });
+          set({ isSyncing: false, isInitialized: true });
         }
       },
       reset: () => {
