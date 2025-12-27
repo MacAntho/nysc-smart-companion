@@ -12,6 +12,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogFooter
 } from '@/components/ui/dialog';
 import {
@@ -42,7 +43,15 @@ import { CDSProject } from '@shared/types';
 export function CDSToolkitPage() {
   const activeProjectId = useAppStore(s => s.activeProjectId);
   const setActiveProject = useAppStore(s => s.setActiveProject);
-  const [tabValue, setTabValue] = useState<string>(activeProjectId ? "diary" : "ideas");
+  const [tabValue, setTabValue] = useState<string>("ideas");
+  
+  React.useEffect(() => {
+    if (activeProjectId && tabValue !== "diary") {
+      setTabValue("diary");
+    } else if (!activeProjectId && tabValue === "diary") {
+      setTabValue("ideas");
+    }
+  }, [activeProjectId]);
   const [search, setSearch] = useState('');
   const [activeFilter, setActiveFilter] = useState<'all' | 'low-budget' | 'short-term'>('all');
   const [dialogProject, setDialogProject] = useState<CDSProject | null>(null);
@@ -295,11 +304,11 @@ export function CDSToolkitPage() {
         <DialogContent className="max-w-xl rounded-3xl p-0 overflow-hidden border-none shadow-2xl">
           {dialogProject && (
             <>
-              <div className="bg-nysc-green-900 p-8 text-white">
+              <DialogHeader className="bg-nysc-green-900 p-8 text-white">
                 <Badge className="bg-nysc-gold mb-3">{dialogProject.category}</Badge>
                 <DialogTitle className="text-2xl font-display font-bold">{dialogProject.title}</DialogTitle>
-                <p className="text-nysc-green-100 mt-2 text-sm leading-relaxed">{dialogProject.description}</p>
-              </div>
+                <DialogDescription className="text-nysc-green-100 mt-2 text-sm leading-relaxed">{dialogProject.description}</DialogDescription>
+              </DialogHeader>
               <div className="p-8 space-y-6 max-h-[60vh] overflow-y-auto">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
