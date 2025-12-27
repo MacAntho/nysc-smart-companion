@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useAppStore } from '@/lib/store';
 import { STATE_DATA } from '@/lib/mock-content';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -9,6 +9,27 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { Link } from 'react-router-dom';
 export function StateGuidePage() {
   const stateOfDeployment = useAppStore(s => s.stateOfDeployment);
+  const data = useMemo(() => {
+    if (!stateOfDeployment) return null;
+    return STATE_DATA[stateOfDeployment] || STATE_DATA['DEFAULT'];
+  }, [stateOfDeployment]);
+  const chartData = useMemo(() => {
+    if (!data) return [];
+    const defaultMetrics = STATE_DATA['DEFAULT'].metrics;
+    // Defensive check: Ensure all metrics are valid numbers >= 0
+    const getMetric = (val: any, fallback: number) => {
+      const num = Number(val);
+      return isNaN(num) ? fallback : Math.max(0, num);
+    };
+    const rent = getMetric(data.metrics?.rent, defaultMetrics.rent);
+    const food = getMetric(data.metrics?.food, defaultMetrics.food);
+    const transport = getMetric(data.metrics?.transport, defaultMetrics.transport);
+    return [
+      { name: 'Rent', amount: rent, avg: 180000 },
+      { name: 'Food', amount: food, avg: 35000 },
+      { name: 'Transport', amount: transport, avg: 20000 },
+    ];
+  }, [data]);
   if (!stateOfDeployment) {
     return (
       <div className="max-w-4xl mx-auto py-20 px-4 text-center space-y-6">
@@ -29,16 +50,6 @@ export function StateGuidePage() {
       </div>
     );
   }
-  const data = STATE_DATA[stateOfDeployment] || STATE_DATA['DEFAULT'];
-  const defaultMetrics = STATE_DATA['DEFAULT'].metrics;
-  const rentMetric = Number(data.metrics?.rent) || Number(defaultMetrics.rent) || 0;
-  const foodMetric = Number(data.metrics?.food) || Number(defaultMetrics.food) || 0;
-  const transportMetric = Number(data.metrics?.transport) || Number(defaultMetrics.transport) || 0;
-  const chartData = [
-    { name: 'Rent', amount: rentMetric, avg: 180000 },
-    { name: 'Food', amount: foodMetric, avg: 35000 },
-    { name: 'Transport', amount: transportMetric, avg: 20000 },
-  ];
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-fade-in px-4">
       <div className="flex flex-col sm:flex-row sm:items-center gap-6 p-6 bg-white border rounded-2xl shadow-sm">
@@ -61,8 +72,8 @@ export function StateGuidePage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-8 px-6">
-              <div className="w-full h-[300px] relative overflow-hidden">
-                <ResponsiveContainer width="100%" height={300}>
+              <div className="w-full h-[300px] min-h-[300px] relative overflow-hidden">
+                <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={chartData} margin={{ top: 20, right: 30, left: 10, bottom: 20 }}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                     <XAxis dataKey="name" fontSize={11} fontWeight={700} tickLine={false} axisLine={false} dy={10} />
@@ -95,41 +106,51 @@ export function StateGuidePage() {
               <TabsTrigger value="ppa" className="rounded-none border-b-2 border-transparent data-[state=active]:border-nysc-green-800 data-[state=active]:text-nysc-green-800 data-[state=active]:bg-transparent pb-4 text-xs font-bold uppercase tracking-widest">PPA Terrain</TabsTrigger>
               <TabsTrigger value="living" className="rounded-none border-b-2 border-transparent data-[state=active]:border-nysc-green-800 data-[state=active]:text-nysc-green-800 data-[state=active]:bg-transparent pb-4 text-xs font-bold uppercase tracking-widest">Living Guide</TabsTrigger>
             </TabsList>
-            <TabsContent value="camp" className="pt-8 space-y-6">
-              <Card className="border-gray-100 shadow-sm"><CardHeader><CardTitle className="text-lg flex items-center gap-3"><Tent className="w-5 h-5 text-nysc-green-800" /> Camp Intelligence</CardTitle></CardHeader>
-                <CardContent><p className="text-sm text-gray-700 font-medium leading-relaxed">{data.camp}</p></CardContent></Card>
-            </TabsContent>
-            <TabsContent value="ppa" className="pt-8 space-y-6">
-              <Card className="border-gray-100 shadow-sm"><CardHeader><CardTitle className="text-lg flex items-center gap-3"><Briefcase className="w-5 h-5 text-nysc-green-800" /> PPA Opportunities</CardTitle></CardHeader>
-                <CardContent><p className="text-sm text-gray-700 font-medium leading-relaxed">{data.ppa}</p></CardContent></Card>
-            </TabsContent>
-            <TabsContent value="living" className="pt-8 space-y-6">
-              <Card className="border-gray-100 shadow-sm"><CardHeader><CardTitle className="text-lg flex items-center gap-3"><CreditCard className="w-5 h-5 text-nysc-green-800" /> Cost of Living Index</CardTitle></CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-sm text-gray-700 font-medium leading-relaxed">{data.cost}</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
-                    <div className="p-4 bg-gray-50 rounded-xl border text-center">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1">Avg Rent</p>
-                      <p className="font-bold text-nysc-green-800">₦{rentMetric.toLocaleString()}</p>
-                    </div>
-                    <div className="p-4 bg-gray-50 rounded-xl border text-center">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1">Avg Food</p>
-                      <p className="font-bold text-nysc-green-800">₦{foodMetric.toLocaleString()}</p>
-                    </div>
-                    <div className="p-4 bg-gray-50 rounded-xl border text-center">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1">Transport</p>
-                      <p className="font-bold text-nysc-green-800">₦{transportMetric.toLocaleString()}</p>
-                    </div>
-                  </div>
-                </CardContent></Card>
-            </TabsContent>
+            {data && (
+              <>
+                <TabsContent value="camp" className="pt-8 space-y-6">
+                  <Card className="border-gray-100 shadow-sm">
+                    <CardHeader><CardTitle className="text-lg flex items-center gap-3"><Tent className="w-5 h-5 text-nysc-green-800" /> Camp Intelligence</CardTitle></CardHeader>
+                    <CardContent><p className="text-sm text-gray-700 font-medium leading-relaxed">{data.camp}</p></CardContent>
+                  </Card>
+                </TabsContent>
+                <TabsContent value="ppa" className="pt-8 space-y-6">
+                  <Card className="border-gray-100 shadow-sm">
+                    <CardHeader><CardTitle className="text-lg flex items-center gap-3"><Briefcase className="w-5 h-5 text-nysc-green-800" /> PPA Opportunities</CardTitle></CardHeader>
+                    <CardContent><p className="text-sm text-gray-700 font-medium leading-relaxed">{data.ppa}</p></CardContent>
+                  </Card>
+                </TabsContent>
+                <TabsContent value="living" className="pt-8 space-y-6">
+                  <Card className="border-gray-100 shadow-sm">
+                    <CardHeader><CardTitle className="text-lg flex items-center gap-3"><CreditCard className="w-5 h-5 text-nysc-green-800" /> Cost of Living Index</CardTitle></CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-sm text-gray-700 font-medium leading-relaxed">{data.cost}</p>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
+                        <div className="p-4 bg-gray-50 rounded-xl border text-center">
+                          <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1">Avg Rent</p>
+                          <p className="font-bold text-nysc-green-800">₦{chartData[0]?.amount.toLocaleString()}</p>
+                        </div>
+                        <div className="p-4 bg-gray-50 rounded-xl border text-center">
+                          <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1">Avg Food</p>
+                          <p className="font-bold text-nysc-green-800">₦{chartData[1]?.amount.toLocaleString()}</p>
+                        </div>
+                        <div className="p-4 bg-gray-50 rounded-xl border text-center">
+                          <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1">Transport</p>
+                          <p className="font-bold text-nysc-green-800">₦{chartData[2]?.amount.toLocaleString()}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              </>
+            )}
           </Tabs>
         </div>
         <div className="space-y-6">
           <Card className="bg-nysc-green-800 text-white border-none shadow-xl overflow-hidden relative">
             <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-12 -mt-12" />
             <CardHeader><CardTitle className="text-sm font-black uppercase tracking-widest flex items-center gap-2"><Lightbulb className="w-5 h-5 text-nysc-gold" /> Local Pro Tip</CardTitle></CardHeader>
-            <CardContent><p className="text-sm font-bold text-nysc-green-50 leading-relaxed italic">"{data.pro_tip || 'Always keep your NYSC ID card within reach for local navigation.'}"</p></CardContent>
+            <CardContent><p className="text-sm font-bold text-nysc-green-50 leading-relaxed italic">"{data?.pro_tip || 'Always keep your NYSC ID card within reach for local navigation.'}"</p></CardContent>
           </Card>
           <Card className="border-nysc-gold/30 bg-amber-50/20 shadow-sm">
             <CardHeader className="pb-2"><CardTitle className="text-xs font-black uppercase tracking-widest text-amber-900 flex items-center gap-2"><ShieldAlert className="w-4 h-4 text-nysc-gold" /> State Safety</CardTitle></CardHeader>

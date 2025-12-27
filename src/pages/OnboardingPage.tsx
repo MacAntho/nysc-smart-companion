@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '@/lib/store';
 import { Button } from '@/components/ui/button';
@@ -25,10 +25,18 @@ export function OnboardingPage() {
   const setStateOfDeployment = useAppStore(s => s.setStateOfDeployment);
   const completeOnboarding = useAppStore(s => s.completeOnboarding);
   const isSyncing = useAppStore(s => s.isSyncing);
+  const isOnboarded = useAppStore(s => s.isOnboarded);
+  // Redirect guard for users who have already completed onboarding
+  useEffect(() => {
+    if (isOnboarded) {
+      navigate('/app', { replace: true });
+    }
+  }, [isOnboarded, navigate]);
   const handleFinish = async () => {
     completeOnboarding();
     navigate('/app');
   };
+  if (isOnboarded) return null;
   return (
     <div className="min-h-screen bg-white nysc-adire-pattern flex items-center justify-center p-6">
       <div className="max-w-md w-full">

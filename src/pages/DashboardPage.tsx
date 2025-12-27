@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, CheckCircle, ChevronRight, Sparkles, ArrowRight, ShieldAlert, Briefcase, Info, Search } from 'lucide-react';
+import { Calendar, CheckCircle, ChevronRight, Sparkles, ArrowRight, ShieldAlert, Briefcase, Info } from 'lucide-react';
 import { JOURNEY_STAGES, DEADLINES } from '@/lib/mock-content';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow, differenceInDays, parseISO, isPast } from 'date-fns';
@@ -19,6 +19,7 @@ export function DashboardPage() {
   const isSyncing = useAppStore(s => s.isSyncing);
   const lastSynced = useAppStore(s => s.lastSynced);
   const isInitialized = useAppStore(s => s.isInitialized);
+  const isOnboarded = useAppStore(s => s.isOnboarded);
   const currentStage = useMemo(() => JOURNEY_STAGES.find(s => s.id === stageId), [stageId]);
   const stageTasks = useMemo(() => currentStage?.tasks || [], [currentStage]);
   const completedCount = useMemo(() => stageTasks.filter(t => completedTasks.includes(t.id)).length, [stageTasks, completedTasks]);
@@ -34,7 +35,15 @@ export function DashboardPage() {
       });
   }, [stageId]);
   const priorityContent = useMemo(() => {
-    if (!isInitialized) return null;
+    // Return loading placeholder if store is not yet initialized to prevent layout jumps
+    if (!isInitialized || !isOnboarded) {
+      return {
+        title: 'Initializing Intelligence...',
+        desc: 'Fetching verified official rules and strategic field guides for your deployment phase.',
+        risk: 'low' as PriorityRisk,
+        searchLink: '/app/knowledge'
+      };
+    }
     const readArticlesSet = new Set(readArticles ?? []);
     // 0. Essential Foundational Knowledge (Eligibility)
     if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-eligibility')) {
@@ -45,7 +54,7 @@ export function DashboardPage() {
         searchLink: '/app/knowledge?search=eligibility'
       };
     }
-    // 1. Batch System Intelligence (Requested Official Guide)
+    // 1. Batch System Intelligence
     if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-batches')) {
       return {
         title: 'Batch System Intelligence',
@@ -71,7 +80,7 @@ export function DashboardPage() {
         searchLink: '/app/knowledge?search=sanctions'
       };
     }
-    // 2.5 Relocation Intelligence (Promotion for Camp/PPA)
+    // 2.5 Relocation Intelligence
     if ((stageId === 'camp' || stageId === 'ppa') && !readArticlesSet.has('k-relocation')) {
       return {
         title: 'NYSC Relocation Intelligence',
@@ -113,23 +122,6 @@ export function DashboardPage() {
         searchLink: '/app/knowledge?search=pop'
       };
     }
-    // 4. Featured Guides based on user profile
-    if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-foreign')) {
-      return {
-        title: 'Foreign-Trained Graduates',
-        desc: 'Strategic Roadmap: International degrees require official evaluation and physical verification.',
-        risk: 'medium' as PriorityRisk,
-        searchLink: '/app/knowledge?search=foreign'
-      };
-    }
-    if (!readArticlesSet.has('k-pregnancy')) {
-      return {
-        title: 'Maternity Provisions Guide',
-        desc: 'Official Advisory: Learn about concessionary posting and the mandatory 12-week maternity leave protocol.',
-        risk: 'low' as PriorityRisk,
-        searchLink: '/app/knowledge?search=pregnancy'
-      };
-    }
     // 5. Milestone Achievement Fallback
     if (progressPercent === 100) {
       return {
@@ -145,12 +137,19 @@ export function DashboardPage() {
       risk: 'low' as PriorityRisk,
       searchLink: '/app/journey'
     };
-  }, [stageId, readArticles, isInitialized, progressPercent]);
+  }, [stageId, readArticles, isInitialized, isOnboarded, progressPercent]);
   const riskStyles: Record<PriorityRisk, string> = {
     high: "border-destructive/40 bg-red-50/40 shadow-xl shadow-destructive/10 ring-1 ring-destructive/20",
     medium: "border-nysc-gold/30 bg-amber-50/40 shadow-lg shadow-nysc-gold/5",
     low: "border-nysc-green-100 bg-nysc-green-50/20 shadow-md shadow-nysc-green-800/5"
   };
+  const syncStatusText = useMemo(() => {
+    if (isSyncing) return 'Syncing...';
+    if (!lastSynced) return 'First Session';
+    const diffMs = Date.now() - lastSynced;
+    if (diffMs < 30000) return 'Just now';
+    return `Synced ${formatDistanceToNow(lastSynced, { addSuffix: true })}`;
+  }, [isSyncing, lastSynced]);
   return (
     <div className="max-w-7xl mx-auto px-4 space-y-8 animate-fade-in py-8 md:py-10">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -159,19 +158,10 @@ export function DashboardPage() {
           <p className="text-muted-foreground font-medium">Serving the Nation with Digital Intelligence.</p>
         </div>
         <div className="flex items-center gap-3 text-[11px] font-semibold px-4 py-2 rounded-full bg-white border shadow-sm">
-          {isSyncing ? (
-            <>
-              <div className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
-              <span className="text-muted-foreground uppercase tracking-wider">Syncing...</span>
-            </>
-          ) : (
-            <>
-              <div className="h-2 w-2 rounded-full bg-nysc-green-800" />
-              <span className="text-muted-foreground uppercase tracking-wider">
-                Cloud Synced {lastSynced ? formatDistanceToNow(lastSynced, { addSuffix: true }) : 'now'}
-              </span>
-            </>
-          )}
+          <div className={cn("h-2 w-2 rounded-full", isSyncing ? "bg-amber-500 animate-pulse" : "bg-nysc-green-800")} />
+          <span className="text-muted-foreground uppercase tracking-wider">
+            Cloud {syncStatusText}
+          </span>
         </div>
       </header>
       {priorityContent && (
