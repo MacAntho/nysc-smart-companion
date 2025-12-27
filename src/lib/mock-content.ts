@@ -261,12 +261,16 @@ export const STATE_DATA: Record<string, any> = {
   }
 };
 export const DEADLINES = [
-  { id: 'd1', title: 'Batch A Online Registration', date: '2025-02-15', stage: 'mobilization' },
-  { id: 'd2', title: 'Medical Fitness Upload', date: '2025-01-30', stage: 'prospective' },
-  { id: 'd3', title: 'Camp Portal Closure', date: '2025-03-10', stage: 'camp' },
-  { id: 'd4', title: 'Monthly Biometric Window', date: '2025-05-30', stage: 'ppa' },
-  { id: 'd5', title: 'Project Proposal Deadline', date: '2025-07-15', stage: 'cds' },
-  { id: 'd6', title: 'Final Clearance Phase', date: '2025-11-01', stage: 'pop' },
+  { id: 'd1', title: 'Batch A Online Registration', date: '2025-02-15', stage: 'mobilization', importance: 'high' },
+  { id: 'd2', title: 'Medical Fitness Upload', date: '2025-01-30', stage: 'prospective', importance: 'medium' },
+  { id: 'd3', title: 'Camp Portal Closure', date: '2025-03-10', stage: 'camp', importance: 'high' },
+  { id: 'd4', title: 'Monthly Biometric Window', date: '2025-05-30', stage: 'ppa', importance: 'high' },
+  { id: 'd5', title: 'Project Proposal Deadline', date: '2025-07-15', stage: 'cds', importance: 'medium' },
+  { id: 'd6', title: 'Final Clearance Phase', date: '2025-11-01', stage: 'pop', importance: 'high' },
+  { id: 'd7', title: 'Senate List Verification', date: '2025-01-15', stage: 'prospective', importance: 'high' },
+  { id: 'd8', title: 'Call-up Printing Window', date: '2025-02-25', stage: 'mobilization', importance: 'high' },
+  { id: 'd9', title: 'Stream 2 Deployment', date: '2025-04-12', stage: 'camp', importance: 'medium' },
+  { id: 'd10', title: 'CDS Project Commissioning', date: '2025-09-20', stage: 'cds', importance: 'low' },
 ];
 export const CDS_RESOURCES = {
   categories: [

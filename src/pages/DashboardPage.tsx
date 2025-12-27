@@ -235,9 +235,12 @@ export function DashboardPage() {
           </Card>
           <Card className="shadow-sm border-gray-100 bg-white">
             <CardHeader className="pb-2">
-              <CardTitle className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-muted-foreground">
-                <Calendar className="w-4 h-4 text-nysc-green-800" /> Deadline Radar
-              </CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-muted-foreground">
+                  <Calendar className="w-4 h-4 text-nysc-green-800" /> Deadline Radar
+                </CardTitle>
+                <Link to="/app/deadlines" className="text-[9px] font-black uppercase text-nysc-green-800 hover:underline">Full View</Link>
+              </div>
             </CardHeader>
             <CardContent className="space-y-3">
               {relevantDeadlines.length > 0 ? (

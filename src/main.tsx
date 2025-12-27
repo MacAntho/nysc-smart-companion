@@ -22,6 +22,7 @@ import { ProfilePage } from '@/pages/ProfilePage'
 import { AdminPage } from '@/pages/AdminPage'
 import { AuthPage } from '@/pages/AuthPage'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
+import DeadlineTrackerPage from '@/pages/DeadlineTrackerPage'
 import { ProtectedRoute, AdminRoute, AuthGuard } from '@/components/ProtectedRoute'
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
@@ -54,6 +55,11 @@ const router = createBrowserRouter([
   {
     path: "/app/knowledge",
     element: <ProtectedRoute><DashboardLayout><KnowledgeBasePage /></DashboardLayout></ProtectedRoute>,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/app/deadlines",
+    element: <ProtectedRoute><DashboardLayout><DeadlineTrackerPage /></DashboardLayout></ProtectedRoute>,
     errorElement: <RouteErrorBoundary />,
   },
   {

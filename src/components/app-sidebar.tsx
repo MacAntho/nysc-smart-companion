@@ -25,6 +25,7 @@ const NAV_ITEMS = [
   { title: "Dashboard", icon: LayoutDashboard, url: "/app" },
   { title: "Journey Map", icon: Map, url: "/app/journey" },
   { title: "Knowledge Base", icon: BookOpen, url: "/app/knowledge" },
+  { title: "Deadline Radar", icon: Bell, url: "/app/deadlines" },
   { title: "State Guide", icon: MapPin, url: "/app/state-guide" },
   { title: "CDS Toolkit", icon: Briefcase, url: "/app/cds" },
 ];
