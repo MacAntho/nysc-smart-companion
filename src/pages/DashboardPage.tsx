@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, CheckCircle, ChevronRight, MapPin, BookOpen, LayoutList, Sparkles, Lock, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Calendar, CheckCircle, ChevronRight, MapPin, BookOpen, LayoutList, Sparkles, Lock, ArrowRight } from 'lucide-react';
 import { JOURNEY_STAGES, DEADLINES, KNOWLEDGE_ARTICLES } from '@/lib/mock-content';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow, differenceInDays, parseISO } from 'date-fns';
@@ -27,8 +27,8 @@ export function DashboardPage() {
   const progressPercent = stageTasks.length > 0 ? (completedCount / stageTasks.length) * 100 : 0;
   const readPercent = (readArticles.length / KNOWLEDGE_ARTICLES.length) * 100;
   const relevantDeadlines = DEADLINES.filter(d => d.stage === stageId);
-  // Surfacing logic for priority resources based on stage
-  const showPriorityAction = ['prospective', 'mobilization', 'camp'].includes(stageId);
+  // Surfacing logic for priority resources based on stage - Now covers ALL phases
+  const showPriorityAction = true;
   const getPriorityContent = () => {
     switch(stageId) {
       case 'prospective':
@@ -46,8 +46,23 @@ export function DashboardPage() {
           title: 'Camp Packing & Doc Checklist',
           desc: 'Ensure you have all mandatory documents and gear before reporting to your orientation camp.'
         };
+      case 'ppa':
+        return {
+          title: 'Monthly Clearance Protocol',
+          desc: 'Master the steps for your monthly attendance and allowance verification to avoid extensions.'
+        };
+      case 'cds':
+        return {
+          title: 'CDS Project Lifecycle',
+          desc: 'Navigate the approval, implementation, and documentation of your legacy community project.'
+        };
+      case 'pop':
+        return {
+          title: 'Final Winding-Up Guide',
+          desc: 'Crucial steps for your final PPA clearance and physical certificate collection.'
+        };
       default:
-        return { title: '', desc: '' };
+        return { title: 'Essential Knowledge', desc: 'Browse the verified knowledge base for official rules.' };
     }
   };
   const { title: priorityTitle, desc: priorityDesc } = getPriorityContent();
@@ -83,7 +98,7 @@ export function DashboardPage() {
           </CardHeader>
           <CardContent className="pb-6">
             <Link to="/app/knowledge">
-              <Button className="bg-nysc-gold hover:bg-amber-700 text-white font-bold h-12 rounded-xl group">
+              <Button className="bg-nysc-gold hover:bg-amber-700 text-white font-bold h-12 rounded-xl group shadow-md">
                 Open Guide <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>

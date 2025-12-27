@@ -55,8 +55,12 @@ export const useAppStore = create<AppState>()(
         isPro: data.isPro
       }),
       logout: () => {
+        // 1. Reset the runtime state
         get().reset();
+        // 2. Clear persistent storage to prevent hydration of old state
         localStorage.removeItem('nysc-companion-storage');
+        // 3. Clear cookies or other tokens if applicable (not used in current simplified auth)
+        // 4. Final redirect to landing
         window.location.href = '/';
       },
       setUserId: (userId) => set({ userId }),
@@ -104,7 +108,15 @@ export const useAppStore = create<AppState>()(
         if (get().isAuthenticated) get().syncProfile();
       },
       syncProfile: async () => {
-        const { userId, isAuthenticated, stage, stateOfDeployment, completedTasks, readArticles, activeProjectId, isOnboarded, isSyncing } = get();
+        const userId = get().userId;
+        const isAuthenticated = get().isAuthenticated;
+        const stage = get().stage;
+        const stateOfDeployment = get().stateOfDeployment;
+        const completedTasks = get().completedTasks;
+        const readArticles = get().readArticles;
+        const activeProjectId = get().activeProjectId;
+        const isOnboarded = get().isOnboarded;
+        const isSyncing = get().isSyncing;
         if (!userId || !isAuthenticated || isSyncing) return;
         set({ isSyncing: true });
         try {
@@ -130,7 +142,8 @@ export const useAppStore = create<AppState>()(
         }
       },
       loadProfile: async () => {
-        const { userId, isAuthenticated } = get();
+        const userId = get().userId;
+        const isAuthenticated = get().isAuthenticated;
         if (!userId || !isAuthenticated) return;
         try {
           const response = await fetch(`/api/profile/${userId}`);

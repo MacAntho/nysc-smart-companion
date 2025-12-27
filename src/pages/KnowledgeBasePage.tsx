@@ -13,7 +13,7 @@ import {
   DialogFooter,
   DialogTrigger
 } from '@/components/ui/dialog';
-import { Search, ExternalLink, Clock, CheckCircle, CircleCheck, Info } from 'lucide-react';
+import { Search, ExternalLink, Clock, CheckCircle, CircleCheck, Info, Sparkles } from 'lucide-react';
 import { KNOWLEDGE_ARTICLES } from '@/lib/mock-content';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -34,15 +34,16 @@ export function KnowledgeBasePage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="py-8 md:py-10 lg:py-12 space-y-8">
-        <div className="bg-nysc-green-900 rounded-2xl p-8 md:p-12 text-white relative overflow-hidden">
+        <div className="bg-nysc-green-900 rounded-2xl p-8 md:p-12 text-white relative overflow-hidden shadow-xl">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl" />
           <div className="relative z-10 max-w-2xl space-y-4">
             <h1 className="text-3xl md:text-4xl font-display font-bold">Verified Knowledge Base</h1>
-            <p className="text-nysc-green-100">Browse through official rules, survival tips, and legal exemptions.</p>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <p className="text-nysc-green-100 font-medium">Browse through official rules, survival tips, and clearance procedures.</p>
+            <div className="relative group">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 transition-colors group-focus-within:text-nysc-gold" />
               <Input
-                placeholder="Search packing, documents, exemptions, rules..."
-                className="pl-10 h-12 bg-white text-gray-900 border-none focus-visible:ring-nysc-gold"
+                placeholder="Search packing, documents, clearance, POP, rules..."
+                className="pl-10 h-14 bg-white text-gray-900 border-none focus-visible:ring-2 focus-visible:ring-nysc-gold shadow-lg rounded-2xl"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -51,17 +52,17 @@ export function KnowledgeBasePage() {
         </div>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <Tabs value={category} onValueChange={setCategory} className="w-full md:w-auto">
-            <TabsList className="bg-white border">
-              <TabsTrigger value="All">All Topics</TabsTrigger>
-              <TabsTrigger value="Official">Official</TabsTrigger>
-              <TabsTrigger value="Survival">Survival</TabsTrigger>
-              <TabsTrigger value="CDS">CDS</TabsTrigger>
+            <TabsList className="bg-white border rounded-xl p-1 shadow-sm h-auto flex gap-2">
+              <TabsTrigger value="All" className="px-4 py-2 font-bold text-xs uppercase tracking-widest rounded-lg">All Topics</TabsTrigger>
+              <TabsTrigger value="Official" className="px-4 py-2 font-bold text-xs uppercase tracking-widest rounded-lg">Official</TabsTrigger>
+              <TabsTrigger value="Survival" className="px-4 py-2 font-bold text-xs uppercase tracking-widest rounded-lg">Survival</TabsTrigger>
+              <TabsTrigger value="CDS" className="px-4 py-2 font-bold text-xs uppercase tracking-widest rounded-lg">CDS</TabsTrigger>
             </TabsList>
           </Tabs>
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <Badge variant="secondary">{readArticles.length} Read</Badge>
-            <span>/</span>
-            <span>{KNOWLEDGE_ARTICLES.length} Total</span>
+          <div className="flex items-center gap-3 text-xs text-muted-foreground font-black uppercase tracking-widest px-4 py-2 bg-gray-50 rounded-full border">
+            <Badge variant="secondary" className="bg-nysc-green-50 text-nysc-green-800 border-nysc-green-100">{readArticles.length} Read</Badge>
+            <span>•</span>
+            <span>{KNOWLEDGE_ARTICLES.length} Available</span>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -69,26 +70,30 @@ export function KnowledgeBasePage() {
             const isRead = readArticles.includes(article.id);
             const isFeatured = article.metadata?.featured;
             return (
-              <Card key={article.id} className={`hover:shadow-md transition-all group border-gray-100 flex flex-col h-full relative ${isFeatured ? 'ring-2 ring-nysc-gold bg-amber-50/10 shadow-lg' : ''}`}>
+              <Card key={article.id} className={`hover:shadow-2xl transition-all duration-300 group border-gray-100 flex flex-col h-full relative rounded-3xl overflow-hidden ${isFeatured ? 'ring-2 ring-nysc-gold bg-amber-50/10' : 'bg-white'}`}>
                 <CardHeader className="pb-2">
                   <div className="flex justify-between items-start">
                     <div className="flex items-center gap-2 mb-1">
                       <div className="text-[10px] font-bold text-nysc-green-800 uppercase tracking-widest">{article.category}</div>
-                      {isFeatured && <Badge className="bg-nysc-gold text-[8px] h-4 uppercase px-1.5 font-black">Featured Guide</Badge>}
+                      {isFeatured && (
+                        <Badge className="bg-nysc-gold text-[8px] h-4 uppercase px-1.5 font-black animate-pulse flex items-center gap-1">
+                          <Sparkles className="w-2 h-2" /> Featured Guide
+                        </Badge>
+                      )}
                     </div>
                     {isRead && <CircleCheck className="w-4 h-4 text-nysc-green-500" />}
                   </div>
-                  <CardTitle className="text-lg group-hover:text-nysc-green-800 transition-colors leading-tight">{article.title}</CardTitle>
+                  <CardTitle className="text-xl group-hover:text-nysc-green-800 transition-colors leading-tight font-display font-bold">{article.title}</CardTitle>
                   {article.metadata?.source && (
-                    <p className="text-[9px] text-muted-foreground font-medium uppercase tracking-tighter">
-                      Source: {article.metadata.source} {article.metadata.last_updated && `| Updated: ${article.metadata.last_updated}`}
+                    <p className="text-[9px] text-muted-foreground font-medium uppercase tracking-widest mt-1 opacity-70">
+                      Source: {article.metadata.source} {article.metadata.last_updated && `| 2025 Edition`}
                     </p>
                   )}
                 </CardHeader>
-                <CardContent className="space-y-4 flex-1 flex flex-col justify-between">
-                  <p className="text-sm text-muted-foreground line-clamp-2">{article.summary}</p>
+                <CardContent className="space-y-4 flex-1 flex flex-col justify-between pt-2">
+                  <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed font-medium">{article.summary}</p>
                   <div className="flex items-center justify-between pt-4">
-                    <div className="flex items-center gap-1.5 text-xs text-gray-400">
+                    <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-gray-400">
                       <Clock className="w-3 h-3" /> ~5 min read
                     </div>
                     <Dialog>
@@ -96,37 +101,38 @@ export function KnowledgeBasePage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="h-8 text-nysc-green-800 hover:text-nysc-green-900 hover:bg-nysc-green-50 gap-1"
+                          className="h-10 text-nysc-green-800 hover:text-nysc-green-900 hover:bg-nysc-green-50 gap-2 font-bold rounded-xl"
                         >
-                          Read More <ExternalLink className="w-3 h-3" />
+                          Read Guide <ExternalLink className="w-3 h-3" />
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col p-0">
-                        <DialogHeader className="p-6 pb-2">
-                          <div className="text-[10px] font-bold text-nysc-green-800 uppercase tracking-widest mb-1">
-                            {article.category} {article.metadata?.featured && "• Featured"}
+                      <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col p-0 border-none rounded-3xl overflow-hidden shadow-2xl">
+                        <DialogHeader className="p-8 pb-4 bg-gray-50 border-b">
+                          <div className="text-[10px] font-bold text-nysc-green-800 uppercase tracking-widest mb-1 flex items-center gap-2">
+                            {article.category} {article.metadata?.featured && <span className="text-nysc-gold">• Featured</span>}
                           </div>
-                          <DialogTitle className="text-2xl font-bold">{article.title}</DialogTitle>
-                          <DialogDescription className="text-sm text-muted-foreground">
+                          <DialogTitle className="text-3xl font-display font-bold leading-tight">{article.title}</DialogTitle>
+                          <DialogDescription className="text-base text-muted-foreground font-medium mt-2">
                             {article.summary}
                           </DialogDescription>
                         </DialogHeader>
-                        <ScrollArea className="flex-1 p-6 pt-2">
-                          <div className="prose prose-sm text-muted-foreground space-y-4 leading-relaxed max-w-none">
-                            <p className="text-lg text-gray-900 font-medium">{article.summary}</p>
-                            <div className="h-px bg-gray-100 w-full my-4" />
-                            <div className="whitespace-pre-wrap text-sm text-gray-700 leading-relaxed">
+                        <ScrollArea className="flex-1 p-8 pt-6">
+                          <div className="prose prose-sm text-muted-foreground space-y-6 leading-relaxed max-w-none">
+                            <div className="whitespace-pre-wrap text-[15px] text-gray-700 leading-loose font-medium">
                               {article.content}
                             </div>
                           </div>
                         </ScrollArea>
-                        <DialogFooter className="p-4 bg-gray-50 border-t flex flex-row items-center justify-between sm:justify-between">
-                          <span className="text-[10px] text-muted-foreground italic">Source: {article.metadata?.source || 'Verified Official'}</span>
+                        <DialogFooter className="p-6 bg-white border-t flex flex-row items-center justify-between sm:justify-between">
+                          <div className="flex flex-col">
+                            <span className="text-[10px] text-muted-foreground font-black uppercase tracking-widest">Official Source</span>
+                            <span className="text-xs font-bold">{article.metadata?.source || 'Verified NYSC Guidelines'}</span>
+                          </div>
                           <Button
                             onClick={() => toggleReadArticle(article.id)}
-                            className={readArticles.includes(article.id) ? "bg-gray-200 text-gray-700 hover:bg-gray-300" : "bg-nysc-green-800 hover:bg-nysc-green-900"}
+                            className={`h-12 px-6 rounded-xl font-bold transition-all active:scale-95 ${readArticles.includes(article.id) ? "bg-gray-100 text-gray-600 hover:bg-gray-200" : "bg-nysc-green-800 hover:bg-nysc-green-900 shadow-lg shadow-nysc-green-800/20"}`}
                           >
-                            {readArticles.includes(article.id) ? "Mark as Unread" : <><CheckCircle className="w-4 h-4 mr-2" /> Mark as Read</>}
+                            {readArticles.includes(article.id) ? "Mark as Unread" : <><CheckCircle className="w-4 h-4 mr-2" /> Mark as Mastered</>}
                           </Button>
                         </DialogFooter>
                       </DialogContent>
@@ -137,14 +143,14 @@ export function KnowledgeBasePage() {
             );
           })}
         </div>
-        <footer className="mt-12 p-8 border-2 border-dashed rounded-2xl bg-gray-50/50 flex flex-col md:flex-row items-center gap-6">
-          <div className="w-12 h-12 bg-white rounded-xl shadow-sm border flex items-center justify-center text-nysc-green-800 shrink-0">
-            <Info className="w-6 h-6" />
+        <footer className="mt-12 p-10 border-2 border-dashed rounded-3xl bg-gray-50/50 flex flex-col md:flex-row items-center gap-8 shadow-inner">
+          <div className="w-16 h-16 bg-white rounded-2xl shadow-sm border-2 border-nysc-green-100 flex items-center justify-center text-nysc-green-800 shrink-0">
+            <Info className="w-8 h-8" />
           </div>
-          <div className="space-y-1 text-center md:text-left">
-            <h4 className="font-bold text-sm text-gray-900">Official Disclaimer</h4>
-            <p className="text-xs text-muted-foreground max-w-3xl font-medium leading-relaxed">
-              NYSC Smart Companion is an independent operational support tool. While we strive for accuracy, this is NOT an official NYSC portal. Always verify dates, payments, and policy changes directly via official communications on the <a href="https://portal.nysc.org.ng" className="text-nysc-green-800 underline font-bold" target="_blank" rel="noreferrer">NYSC Portal</a>.
+          <div className="space-y-2 text-center md:text-left">
+            <h4 className="font-display font-bold text-lg text-gray-900">Official Operational Disclaimer</h4>
+            <p className="text-xs text-muted-foreground max-w-4xl font-medium leading-relaxed">
+              NYSC Smart Companion provides independent operational support and educational resources. This platform is NOT an official NYSC portal and is not affiliated with the National Youth Service Corps directorate. Always verify critical dates, official payments, and policy changes directly via official government communications on the <a href="https://portal.nysc.org.ng" className="text-nysc-green-800 underline font-black" target="_blank" rel="noreferrer">Official NYSC Portal</a>. Your use of this tool indicates acknowledgment of this advisory.
             </p>
           </div>
         </footer>

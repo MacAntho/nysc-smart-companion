@@ -93,6 +93,61 @@ Pro-Tip: Arrive at camp early (Day 1) to get the best bunk positions and avoid l
     }
   },
   {
+    id: 'k-ppa-clearance',
+    category: 'Official',
+    title: 'The Monthly Clearance Protocol: Allowance & Attendance',
+    summary: 'Step-by-step guide to securing your monthly signature, LGI reporting, and ensuring your allowance is paid on time.',
+    content: `The monthly clearance is the most vital administrative task during your service year. It confirms you are still at your post and eligible for allowance.
+1. THE CYCLE (1st - 25th):
+- 1st to 15th: Discharge your duties faithfully at your PPA.
+- 15th to 20th: Obtain your Monthly Clearance Letter from your Employer/Head of Organization. It must be signed and stamped.
+- 21st to 25th: Visit your Local Government Secretariat for physical clearance by the Local Government Inspector (LGI).
+2. DOCUMENTATION:
+- Present your ID Card.
+- Submit the signed letter from your employer.
+- Sign the official attendance register (The "Book").
+3. CONSEQUENCES OF FAILURE:
+- Missing a signature without official leave results in "Extension of Service" and forfeiture of that month's allowance.
+- Two consecutive missed clearances may result in being declared an absconder.
+4. LGI REPORTING:
+- Always be respectful to the LGI. They are your primary link to the NYSC state headquarters.
+- Ensure your CDS attendance is also recorded during this period.`,
+    metadata: {
+      stage: 'ppa',
+      risk: 'medium',
+      source: 'NYSC Bye-laws',
+      last_updated: '2025',
+      featured: true
+    }
+  },
+  {
+    id: 'k-pop-clearance',
+    category: 'Official',
+    title: 'Final Winding-Up & POP: The Exit Checklist',
+    summary: 'Navigating the final month of service, from final PPA clearance to the physical collection of your NYSC Discharge Certificate.',
+    content: `Passing Out Parade (POP) is the culmination of your service year. Follow these steps to ensure you leave with your certificate in hand.
+1. FINAL PPA CLEARANCE:
+- Request a final letter of commendation/clearance from your employer.
+- Ensure all official property (keys, books, etc.) are returned to the PPA.
+2. THE WINDING-UP WEEK:
+- Attend the mandatory winding-up briefings organized by the LGI.
+- Complete the "Final Clearance Form" which requires signatures from the LGI, Zonal Inspector (ZI), and sometimes the State Coordinator.
+3. ID CARD RETURN:
+- You must return your NYSC Identity Card to collect your Certificate of National Service.
+- If lost, you must present a Police Report and a sworn Affidavit.
+4. THE POP DAY:
+- Dress in full 6/6 ceremonial uniform (Crested vest, Khaki jacket/trousers, Jungle boots, Belt, Face cap, Socks).
+- Arrive at the designated parade ground or secretariat by 7:00 AM.
+- Certificates are issued physically after the parade/briefing.`,
+    metadata: {
+      stage: 'pop',
+      risk: 'high',
+      source: 'NYSC Official',
+      last_updated: '2025',
+      featured: true
+    }
+  },
+  {
     id: 'k-exemptions',
     category: 'Official',
     title: 'Guide to NYSC Exemptions and Exclusions',
@@ -193,14 +248,6 @@ Issued to graduates who are not eligible for national service but are not techni
     summary: 'Understanding the legal framework of your service year.',
     content: 'The National Youth Service Corps (NYSC) Act is the enabling law for the scheme. It mandates that every Nigerian graduate under the age of 30 at graduation must serve for one year. The act covers discipline, allowance, and the four cardinal programs of the NYSC.',
     metadata: { source: 'NYSC Act 1993', last_updated: '2024' }
-  },
-  {
-    id: 'k2',
-    category: 'Survival',
-    title: 'Camp Packing List',
-    summary: 'Everything you need to bring to the orientation camp.',
-    content: 'Essential items for camp include: White t-shirts (4-6), White shorts (4-6), White socks (6 pairs), White sneakers, Toiletries, Mosquito net, Waist bag, and original documents (Statement of Result, Call-up Letter, Medical Fitness Certificate).',
-    metadata: { source: 'Corper Alumnus Guide', last_updated: '2025' }
   },
   {
     id: 'k3',
