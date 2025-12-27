@@ -12,7 +12,7 @@ import {
   DialogFooter,
   DialogTrigger
 } from '@/components/ui/dialog';
-import { Search, BookOpen, ExternalLink, Filter, Clock, CheckCircle, CircleCheck } from 'lucide-react';
+import { Search, ExternalLink, Clock, CheckCircle, CircleCheck, Sparkles, Info } from 'lucide-react';
 import { KNOWLEDGE_ARTICLES } from '@/lib/mock-content';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -23,12 +23,15 @@ export function KnowledgeBasePage() {
   const readArticles = useAppStore(s => s.readArticles);
   const toggleReadArticle = useAppStore(s => s.toggleReadArticle);
   const filtered = KNOWLEDGE_ARTICLES.filter(a => {
-    const matchesSearch = a.title.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch = 
+      a.title.toLowerCase().includes(search.toLowerCase()) || 
+      a.content.toLowerCase().includes(search.toLowerCase()) ||
+      a.metadata?.source?.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = category === 'All' || a.category === category;
     return matchesSearch && matchesCategory;
   });
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-7xl mx-auto px-4 pb-20">
       <div className="bg-nysc-green-900 rounded-2xl p-8 md:p-12 text-white relative overflow-hidden">
         <div className="relative z-10 max-w-2xl space-y-4">
           <h1 className="text-3xl md:text-4xl font-display font-bold">Verified Knowledge Base</h1>
@@ -62,14 +65,23 @@ export function KnowledgeBasePage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filtered.map(article => {
           const isRead = readArticles.includes(article.id);
+          const isFeatured = article.metadata?.featured;
           return (
-            <Card key={article.id} className="hover:shadow-md transition-all group border-gray-100 flex flex-col h-full relative">
+            <Card key={article.id} className={`hover:shadow-md transition-all group border-gray-100 flex flex-col h-full relative ${isFeatured ? 'ring-2 ring-nysc-gold bg-amber-50/10' : ''}`}>
               <CardHeader className="pb-2">
                 <div className="flex justify-between items-start">
-                  <div className="text-[10px] font-bold text-nysc-green-800 uppercase tracking-widest mb-1">{article.category}</div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="text-[10px] font-bold text-nysc-green-800 uppercase tracking-widest">{article.category}</div>
+                    {isFeatured && <Badge className="bg-nysc-gold text-[8px] h-4 uppercase px-1.5 font-black">Featured</Badge>}
+                  </div>
                   {isRead && <CircleCheck className="w-4 h-4 text-nysc-green-500" />}
                 </div>
                 <CardTitle className="text-lg group-hover:text-nysc-green-800 transition-colors">{article.title}</CardTitle>
+                {article.metadata?.source && (
+                  <p className="text-[9px] text-muted-foreground font-medium uppercase tracking-tighter">
+                    Source: {article.metadata.source} {article.metadata.last_updated && `| Updated: ${article.metadata.last_updated}`}
+                  </p>
+                )}
               </CardHeader>
               <CardContent className="space-y-4 flex-1 flex flex-col justify-between">
                 <p className="text-sm text-muted-foreground line-clamp-2">{article.summary}</p>
@@ -91,25 +103,26 @@ export function KnowledgeBasePage() {
                     <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col p-0">
                       <DialogHeader className="p-6 pb-2">
                         <div className="text-[10px] font-bold text-nysc-green-800 uppercase tracking-widest mb-1">
-                          {selectedArticle?.category}
+                          {selectedArticle?.category} {selectedArticle?.metadata?.featured && "• Featured"}
                         </div>
                         <DialogTitle className="text-2xl font-bold">{selectedArticle?.title}</DialogTitle>
                       </DialogHeader>
                       <ScrollArea className="flex-1 p-6 pt-2">
-                        <div className="prose prose-sm text-muted-foreground space-y-4 leading-relaxed">
+                        <div className="prose prose-sm text-muted-foreground space-y-4 leading-relaxed max-w-none">
                           <p className="text-lg text-gray-900 font-medium">{selectedArticle?.summary}</p>
                           <div className="h-px bg-gray-100 w-full my-4" />
-                          <p>{selectedArticle?.content}</p>
+                          <div className="whitespace-pre-wrap text-sm text-gray-700 leading-relaxed">
+                            {selectedArticle?.content}
+                          </div>
                         </div>
                       </ScrollArea>
                       <DialogFooter className="p-4 bg-gray-50 border-t flex flex-row items-center justify-between sm:justify-between">
-                        <span className="text-[10px] text-muted-foreground italic">Last verified: 2025</span>
-                        <Button 
+                        <span className="text-[10px] text-muted-foreground italic">Source: {selectedArticle?.metadata?.source || 'Verified Official'}</span>
+                        <Button
                           onClick={() => selectedArticle && toggleReadArticle(selectedArticle.id)}
                           className={isRead ? "bg-gray-200 text-gray-700 hover:bg-gray-300" : "bg-nysc-green-800 hover:bg-nysc-green-900"}
-                          gap-2
                         >
-                          {isRead ? "Mark as Unread" : <><CheckCircle className="w-4 h-4" /> Mark as Read</>}
+                          {isRead ? "Mark as Unread" : <><CheckCircle className="w-4 h-4 mr-2" /> Mark as Read</>}
                         </Button>
                       </DialogFooter>
                     </DialogContent>
@@ -120,6 +133,17 @@ export function KnowledgeBasePage() {
           );
         })}
       </div>
+      <footer className="mt-20 p-8 border-2 border-dashed rounded-2xl bg-gray-50/50 flex flex-col md:flex-row items-center gap-6">
+        <div className="w-12 h-12 bg-white rounded-xl shadow-sm border flex items-center justify-center text-nysc-green-800 shrink-0">
+          <Info className="w-6 h-6" />
+        </div>
+        <div className="space-y-1 text-center md:text-left">
+          <h4 className="font-bold text-sm text-gray-900">Official Disclaimer</h4>
+          <p className="text-xs text-muted-foreground max-w-3xl font-medium leading-relaxed">
+            NYSC Smart Companion is an independent operational support tool. While we strive for accuracy, this is NOT an official NYSC portal. Always verify dates, payments, and policy changes directly via official communications on the <a href="https://portal.nysc.org.ng" className="text-nysc-green-800 underline font-bold" target="_blank" rel="noreferrer">NYSC Portal</a>.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

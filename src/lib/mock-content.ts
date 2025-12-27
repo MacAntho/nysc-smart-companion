@@ -1,3 +1,4 @@
+import { KnowledgeArticle } from "@shared/types";
 export const JOURNEY_STAGES = [
   {
     id: 'prospective',
@@ -13,9 +14,9 @@ export const JOURNEY_STAGES = [
     title: 'Mobilization & Registration',
     description: 'The period of online registration and call-up letters.',
     tasks: [
-      { id: 'm1', title: 'Online Registration', description: 'Register on the portal with thumbprint.' },
-      { id: 'm2', title: 'Print Call-up Letter', description: 'Download your deployment letter.' },
-      { id: 'm3', title: 'Medical Certificate', description: 'Obtain a valid medical fitness certificate.' },
+      { id: 'm1', title: 'Online Registration', description: 'Register on the portal. Refer to the Complete Registration Guide.' },
+      { id: 'm2', title: 'Print Call-up Letter', description: 'Download your deployment letter from the portal.' },
+      { id: 'm3', title: 'Medical Certificate', description: 'Obtain a valid medical fitness certificate from a govt hospital.' },
     ]
   },
   {
@@ -48,72 +49,83 @@ export const JOURNEY_STAGES = [
     ]
   }
 ];
-export const KNOWLEDGE_ARTICLES = [
+export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
+  {
+    id: 'k-registration',
+    category: 'Official',
+    title: 'Complete Guide to NYSC Online Registration Process',
+    summary: 'Step-by-step from prerequisites to printing call-up letter, errors, and deadlines.',
+    content: `Online registration is the most critical phase of your service journey. 
+1. PREREQUISITES:
+- Ensure your name is on the Senate List of your institution.
+- Ensure you have a valid JAMB registration number.
+- Ensure your date of birth is correct on your school record.
+2. BIOMETRIC CAPTURING:
+- Fingerprint capturing is mandatory. Use a high-quality scanner.
+- Do not use proxy fingers; this will lead to disqualification.
+3. DOCUMENT UPLOADS:
+- Upload a clear passport photograph with a white background.
+- Upload your Statement of Result or Degree Certificate.
+- For foreign-trained graduates, upload your evaluation letter and international passport.
+4. CALL-UP PRINTING:
+- Once processed, you will be notified via SMS/Email.
+- Login to the dashboard to download and print your Call-up Letter.
+- Do not laminate your Call-up Letter as it may be invalidated.
+5. COMMON ERRORS:
+- Name Mismatch: If your name on the portal differs from your ID, apply for a name correction immediately.
+- Institution Not Found: Contact your school's Student Affairs Unit.`,
+    metadata: {
+      stage: 'mobilization',
+      risk: 'low',
+      source: 'NYSC Official (2025)',
+      last_updated: '2025',
+      featured: true
+    }
+  },
   {
     id: 'k1',
     category: 'Official',
     title: 'The NYSC Act',
     summary: 'Understanding the legal framework of your service year.',
-    content: 'The National Youth Service Corps (NYSC) Act is the enabling law for the scheme. It mandates that every Nigerian graduate under the age of 30 at graduation must serve for one year. The act covers discipline, allowance, and the four cardinal programs of the NYSC.'
+    content: 'The National Youth Service Corps (NYSC) Act is the enabling law for the scheme. It mandates that every Nigerian graduate under the age of 30 at graduation must serve for one year. The act covers discipline, allowance, and the four cardinal programs of the NYSC.',
+    metadata: { source: 'NYSC Act 1993', last_updated: '2024' }
   },
   {
     id: 'k2',
     category: 'Survival',
     title: 'Camp Packing List',
     summary: 'Everything you need to bring to the orientation camp.',
-    content: 'Essential items for camp include: White t-shirts (4-6), White shorts (4-6), White socks (6 pairs), White sneakers, Toiletries, Mosquito net, Waist bag, and original documents (Statement of Result, Call-up Letter, Medical Fitness Certificate).'
+    content: 'Essential items for camp include: White t-shirts (4-6), White shorts (4-6), White socks (6 pairs), White sneakers, Toiletries, Mosquito net, Waist bag, and original documents (Statement of Result, Call-up Letter, Medical Fitness Certificate).',
+    metadata: { source: 'Corper Alumnus Guide', last_updated: '2025' }
   },
   {
     id: 'k3',
     category: 'CDS',
     title: 'Project Ideas',
     summary: 'How to start a meaningful community project.',
-    content: 'A Community Development Service (CDS) project is successful when it meets a felt need in the community. Steps include: Needs assessment, Proposal writing, Seeking approval from the Local Government Inspector (LGI), Execution, and Commissioning.'
+    content: 'A Community Development Service (CDS) project is successful when it meets a felt need in the community. Steps include: Needs assessment, Proposal writing, Seeking approval from the Local Government Inspector (LGI), Execution, and Commissioning.',
+    metadata: { source: 'CDS Handbook', last_updated: '2024' }
   },
 ];
 export const STATE_DATA: Record<string, any> = {
   'Lagos': {
     camp: 'Iyana Ipaja Orientation Camp',
     cost: 'High cost of living, transport heavy.',
-    costScale: 5,
     metrics: { rent: 250000, food: 45000, transport: 30000 },
     ppa: 'Corporate firms, tech hubs in Yaba/Island, schools in suburbs.',
   },
   'Abuja': {
     camp: 'Kubwa Orientation Camp',
     cost: 'Moderate to High. Good roads.',
-    costScale: 4,
     metrics: { rent: 300000, food: 40000, transport: 20000 },
     ppa: 'Government MDAs, International NGOs, Law firms.',
   },
   'Oyo': {
     camp: 'Iseyin Orientation Camp',
     cost: 'Relatively low cost of living. Large state.',
-    costScale: 2,
     metrics: { rent: 120000, food: 25000, transport: 15000 },
     ppa: 'University of Ibadan research institutes, agribusiness, private colleges.',
   },
-  'Rivers': {
-    camp: 'Nonwa Gbam Tai Orientation Camp',
-    cost: 'Moderate to High. Security conscious.',
-    costScale: 4,
-    metrics: { rent: 200000, food: 40000, transport: 25000 },
-    ppa: 'Oil & Gas services, private schools, maritime agencies.',
-  },
-  'Enugu': {
-    camp: 'Awgu Orientation Camp',
-    cost: 'Moderate. Friendly environment.',
-    costScale: 3,
-    metrics: { rent: 150000, food: 30000, transport: 12000 },
-    ppa: 'Hospitals, government secretariat, private tech startups.',
-  },
-  'Kano': {
-    camp: 'Kusalla Dam Orientation Camp',
-    cost: 'Low to Moderate. Commercial hub.',
-    costScale: 2,
-    metrics: { rent: 100000, food: 20000, transport: 10000 },
-    ppa: 'Manufacturing firms, trading companies, islamic studies centers.',
-  }
 };
 export const DEADLINES = [
   { id: 'd1', title: 'Online Registration Ends', date: '2025-10-15', stage: 'mobilization' },
@@ -141,13 +153,6 @@ export const CDS_RESOURCES = {
       title: 'Deworming Exercise',
       description: 'Partner with local clinics to provide deworming medication for school children.',
       requirements: ['Medical Supervisor', 'LGI Approval']
-    },
-    {
-      id: 'cp3',
-      category: 'Environment',
-      title: 'Clean-up Campaign',
-      description: 'Monthly sanitation sensitization and drainage clearing exercise.',
-      requirements: ['Community Head Consent', 'Basic Tools']
     }
   ],
   templates: [

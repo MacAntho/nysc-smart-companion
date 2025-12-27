@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, CheckCircle, ChevronRight, MapPin, BookOpen, Clock, LayoutList, Sparkles, Lock } from 'lucide-react';
+import { Calendar, CheckCircle, ChevronRight, MapPin, BookOpen, LayoutList, Sparkles, Lock, ShieldCheck, ArrowRight } from 'lucide-react';
 import { JOURNEY_STAGES, DEADLINES, KNOWLEDGE_ARTICLES } from '@/lib/mock-content';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow, differenceInDays, parseISO } from 'date-fns';
@@ -27,6 +27,7 @@ export function DashboardPage() {
   const progressPercent = stageTasks.length > 0 ? (completedCount / stageTasks.length) * 100 : 0;
   const readPercent = (readArticles.length / KNOWLEDGE_ARTICLES.length) * 100;
   const relevantDeadlines = DEADLINES.filter(d => d.stage === stageId);
+  const showPriorityAction = stageId === 'prospective' || stageId === 'mobilization';
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-fade-in px-4">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -47,6 +48,25 @@ export function DashboardPage() {
           )}
         </div>
       </header>
+      {showPriorityAction && (
+        <Card className="border-nysc-gold border-2 bg-amber-50/50 shadow-lg shadow-nysc-gold/10 overflow-hidden relative group">
+          <div className="absolute top-0 right-0 p-4">
+             <Sparkles className="w-12 h-12 text-nysc-gold opacity-20 group-hover:scale-125 transition-transform duration-500" />
+          </div>
+          <CardHeader className="pb-2">
+            <Badge className="w-fit bg-nysc-gold mb-2 uppercase text-[9px] font-black tracking-widest">Priority Phase Resource</Badge>
+            <CardTitle className="text-xl font-display text-amber-900">Official Registration Guide</CardTitle>
+            <CardDescription className="text-amber-800 font-medium">Critical step-by-step instructions for your current stage.</CardDescription>
+          </CardHeader>
+          <CardContent className="pb-6">
+            <Link to="/app/knowledge">
+              <Button className="bg-nysc-gold hover:bg-amber-700 text-white font-bold h-12 rounded-xl group">
+                Open Registration Guide <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      )}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-2 shadow-sm border-gray-100 hover-glow">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -159,7 +179,7 @@ export function DashboardPage() {
         <Card className="shadow-sm border-gray-100">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 font-display text-lg">
-              <BookOpen className="w-5 h-5 text-nysc-green-800" /> Quick Access
+              <BookOpen className="w-5 h-5 text-nysc-green-800" /> Essential Knowledge
             </CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 gap-3">
@@ -168,7 +188,7 @@ export function DashboardPage() {
                <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-nysc-green-800" />
              </Link>
              <Link to="/app/knowledge" className="flex items-center justify-between p-4 border rounded-xl hover:bg-nysc-green-50/20 group">
-               <span className="text-sm font-bold">Bye-laws Explained</span>
+               <span className="text-sm font-bold">Registration & Rules</span>
                <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-nysc-green-800" />
              </Link>
           </CardContent>
