@@ -71,6 +71,15 @@ export function DashboardPage() {
         searchLink: '/app/knowledge?search=sanctions'
       };
     }
+    // 2.5 Relocation Intelligence (Promotion for Camp/PPA)
+    if ((stageId === 'camp' || stageId === 'ppa') && !readArticlesSet.has('k-relocation')) {
+      return {
+        title: 'NYSC Relocation Intelligence',
+        desc: 'Strategic Roadmap: Understand valid grounds (Marital/Medical) and the 3-month post-camp application window before deadlines close.',
+        risk: 'medium' as PriorityRisk,
+        searchLink: '/app/knowledge?search=relocation'
+      };
+    }
     // 3. Stage-Specific Critical Intelligence
     if (stageId === 'prospective' && !readArticlesSet.has('k-registration')) {
       return {

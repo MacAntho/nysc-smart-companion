@@ -111,6 +111,31 @@ Streams are assigned randomly based on the order of registration and state capac
     metadata: { stage: 'mobilization', risk: 'low', source: 'NYSC Mobilization Dept', featured: true }
   },
   {
+    id: 'k-relocation',
+    category: 'Official/Advisory',
+    title: 'NYSC Relocation & Redeployment Guide',
+    summary: 'Comprehensive roadmap for state transfers: Marital, health, and security grounds, plus post-camp application protocols.',
+    content: `Relocation is a procedural privilege granted to corps members under specific conditions. Understanding the timeline and documentation is critical.
+1. VALID GROUNDS FOR RELOCATION:
+A. MARITAL: Exclusively for married female corps members who wish to serve in the state where their husband resides.
+B. MEDICAL: For members with chronic health conditions (Asthma, Sickle Cell, Kidney issues, etc.) that require specialized care or proximity to specific hospitals.
+C. SECURITY: Applicable in cases of verifiable personal threats or documented security volatility in the current deployment zone.
+2. THE TWO APPLICATION WINDOWS:
+- CAMP RELOCATION: Applied for during the 21-day orientation camp via the portal. Results are usually announced on the last day of camp.
+- POST-CAMP RELOCATION: If you missed camp relocation, a new window usually opens approximately 3 months after camp. You must apply through your dashboard.
+3. MANDATORY DOCUMENT CHAIN:
+A. MARITAL: Marriage Certificate, Newspaper Change of Name, Husband’s Identity Card, and a Utility Bill/Employer Letter proving husband's residence in the target state.
+B. MEDICAL: A comprehensive medical report from a Government Hospital or Military Hospital. Reports from private clinics are strictly rejected.
+C. SECURITY: A formal affidavit or police report detailing the nature of the security risk.
+4. THE APPROVAL & PRINTING PROCESS:
+- Once approved on the portal, you MUST pay the relocation processing fee (usually ~₦1,000 via Remita).
+- Print the Relocation Letter and report to the State Secretariat of your NEW state within 48 hours of printing.
+- Your allowance (allowee) will be paused until you complete the biometrics registration in your new state.
+5. IMPORTANT CAVEAT:
+Relocation is not guaranteed. Do not vacate your current PPA until you have the physical printout of your new posting letter.`,
+    metadata: { stage: 'camp', risk: 'medium', source: 'NYSC Bye-laws', featured: true }
+  },
+  {
     id: 'k-registration',
     category: 'Official',
     title: 'Online Registration Roadmap',
