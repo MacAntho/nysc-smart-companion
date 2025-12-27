@@ -1,6 +1,7 @@
 export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
+  error?: string;
 }
 export type NYSCStage = 'prospective' | 'mobilization' | 'camp' | 'ppa' | 'cds' | 'pop';
 export interface NYSCProfile {
