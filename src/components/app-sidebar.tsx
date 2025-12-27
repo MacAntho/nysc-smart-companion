@@ -1,12 +1,13 @@
 import React from "react";
-import { 
-  LayoutDashboard, 
-  Map, 
-  BookOpen, 
-  MapPin, 
-  Briefcase, 
+import {
+  LayoutDashboard,
+  Map,
+  BookOpen,
+  MapPin,
+  Briefcase,
   ExternalLink,
-  ShieldCheck
+  ShieldCheck,
+  Bell
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
