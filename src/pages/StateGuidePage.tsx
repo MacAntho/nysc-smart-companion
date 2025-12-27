@@ -7,7 +7,18 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Tent, CreditCard, ShieldAlert, TrendingUp, Lightbulb, Briefcase, Info } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Cell } from 'recharts';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+const chartConfig = {
+  amount: {
+    label: "Monthly Cost",
+    color: "#00843D", // Official NYSC Green
+  },
+  avg: {
+    label: "National Average",
+    color: "#D97706", // Official NYSC Gold
+  }
+};
 export function StateGuidePage() {
   const profileState = useAppStore(s => s.stateOfDeployment);
   const [selectedState, setSelectedState] = useState<string>(profileState || '');
@@ -80,16 +91,15 @@ export function StateGuidePage() {
                 )}
               </CardHeader>
               <CardContent className="pt-8 px-6">
-                <div className="w-full h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%" minHeight="300px">
+                <div className="w-full aspect-video min-h-[300px]">
+                  <ChartContainer config={chartConfig} className="w-full h-full">
                     <BarChart data={chartData} margin={{ top: 20, right: 30, left: 10, bottom: 20 }}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                       <XAxis dataKey="name" fontSize={11} fontWeight={700} tickLine={false} axisLine={false} dy={10} />
                       <YAxis hide />
-                      <Tooltip
+                      <ChartTooltip
                         cursor={{ fill: '#f8fafc', opacity: 0.4 }}
-                        contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', fontWeight: 600, fontSize: '12px' }}
-                        formatter={(val: any) => [`₦${Number(val).toLocaleString()}`, 'Monthly Cost']}
+                        content={<ChartTooltipContent indicator="dot" />}
                       />
                       <Bar dataKey="amount" radius={[6, 6, 0, 0]} barSize={60}>
                         {chartData.map((entry, index) => (
@@ -97,7 +107,7 @@ export function StateGuidePage() {
                         ))}
                       </Bar>
                     </BarChart>
-                  </ResponsiveContainer>
+                  </ChartContainer>
                 </div>
               </CardContent>
             </Card>

@@ -5,7 +5,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import {
   Dialog,
@@ -23,15 +22,9 @@ import {
   CheckCircle2,
   Sparkles,
   Target,
-  ShieldCheck,
   ExternalLink,
   ArrowRight,
   Search,
-  Clock,
-  Banknote,
-  AlertTriangle,
-  Users,
-  Flag,
   PenTool,
   ClipboardCheck,
   PlayCircle,
@@ -43,39 +36,43 @@ import { CDSProject } from '@shared/types';
 export function CDSToolkitPage() {
   const activeProjectId = useAppStore(s => s.activeProjectId);
   const setActiveProject = useAppStore(s => s.setActiveProject);
-  const completedTasks = useAppStore(s => s.completedTasks);
-  // Decoupled tab state: Start on 'ideas' if no project, or allow manual navigation
+  const completedTasksRaw = useAppStore(s => s.completedTasks);
+  const completedTasks = Array.isArray(completedTasksRaw) ? completedTasksRaw : [];
   const [tabValue, setTabValue] = useState<string>(activeProjectId ? "diary" : "ideas");
   const [search, setSearch] = useState('');
   const [dialogProject, setDialogProject] = useState<CDSProject | null>(null);
   const filteredProjects = useMemo(() => {
-    return CDS_RESOURCES.projects.filter(p => {
+    return (CDS_RESOURCES.projects || []).filter(p => {
       const matchesSearch = p.title.toLowerCase().includes(search.toLowerCase()) ||
                             p.category.toLowerCase().includes(search.toLowerCase());
       return matchesSearch;
     });
   }, [search]);
-  const activeProject = CDS_RESOURCES.projects.find(p => p.id === activeProjectId);
+  const activeProject = useMemo(() => 
+    (CDS_RESOURCES.projects || []).find(p => p.id === activeProjectId), 
+    [activeProjectId]
+  );
   const milestones = useMemo(() => {
-    const cdsPhase = JOURNEY_STAGES.find(s => s.id === 'cds');
-    return cdsPhase?.tasks.map(t => ({
+    const cdsPhase = (JOURNEY_STAGES || []).find(s => s.id === 'cds');
+    if (!cdsPhase) return [];
+    return (cdsPhase.tasks || []).map(t => ({
       id: t.id,
       label: t.title,
       isDone: completedTasks.includes(t.id)
-    })) || [];
+    }));
   }, [completedTasks]);
   const progressPercent = useMemo(() => {
     if (milestones.length === 0) return 0;
     const done = milestones.filter(m => m.isDone).length;
     return Math.round((done / milestones.length) * 100);
   }, [milestones]);
-  const roadmapSteps = [
+  const roadmapSteps = useMemo(() => [
     { title: 'Assess', desc: 'Identify Need', icon: Search },
     { title: 'Propose', desc: 'Draft to LGI', icon: PenTool },
     { title: 'Approve', desc: 'Get NYSC Letter', icon: ClipboardCheck },
     { title: 'Execute', desc: 'Build Impact', icon: PlayCircle },
     { title: 'Complete', desc: 'Report & POP', icon: Trophy },
-  ];
+  ], []);
   const handleEnroll = (projectId: string) => {
     setActiveProject(projectId);
     setTabValue("diary");
@@ -162,7 +159,7 @@ export function CDSToolkitPage() {
                           className={cn("font-bold", activeProjectId === project.id ? 'bg-gray-100' : 'bg-nysc-green-800 hover:bg-nysc-green-900')}
                           disabled={activeProjectId === project.id}
                         >
-                          {activeProjectId === project.id ? "Active" : "Enroll"}
+                          {activeProjectId === project.id ? "Active" : "Adopt"}
                         </Button>
                     </div>
                   </CardContent>
@@ -232,7 +229,7 @@ export function CDSToolkitPage() {
           </TabsContent>
           <TabsContent value="templates" className="space-y-6">
              <div className="divide-y border rounded-2xl overflow-hidden bg-white shadow-sm">
-                {CDS_RESOURCES.templates.map((template) => (
+                {(CDS_RESOURCES.templates || []).map((template) => (
                 <div key={template.id} className="flex items-center justify-between p-5 hover:bg-gray-50 transition-colors">
                     <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-xl bg-nysc-green-50 border border-nysc-green-100 flex items-center justify-center text-nysc-green-800"><FileText className="w-6 h-6" /></div>
@@ -271,7 +268,7 @@ export function CDSToolkitPage() {
                 <div className="space-y-3">
                   <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground border-b pb-1">Mandatory Requirements</h4>
                   <ul className="grid grid-cols-1 gap-2">
-                    {dialogProject.requirements.map((req, i) => (
+                    {(dialogProject.requirements || []).map((req, i) => (
                       <li key={i} className="flex items-center gap-2 text-sm font-semibold text-gray-700">
                         <CheckCircle2 className="w-4 h-4 text-nysc-green-500" /> {req}
                       </li>

@@ -109,9 +109,8 @@ export const useAppStore = create<AppState>()(
       },
       syncProfile: async () => {
         const state = get();
-        // Guard: Prevent sync if unauth or missing userId to avoid ghosting the storage key
         if (!state.userId || !state.isAuthenticated || state.isSyncing) return;
-        if (state.userId.length < 5) return; 
+        if (state.userId.length < 5) return;
         const generatePayload = () => JSON.stringify({
           stage: get().stage,
           stateOfDeployment: get().stateOfDeployment,
@@ -137,7 +136,7 @@ export const useAppStore = create<AppState>()(
               lastSyncError: null
             });
           } else {
-            set({ isSyncing: false, lastSyncError: 'Sync refused' });
+            set({ isSyncing: false, lastSyncError: `Sync failed with status: ${response.status}` });
           }
         } catch (error) {
           set({ isSyncing: false, lastSyncError: 'Network contention' });
@@ -145,7 +144,6 @@ export const useAppStore = create<AppState>()(
       },
       loadProfile: async (force = false) => {
         const state = get();
-        // Crucial: Set initialized even if unauthenticated to allow UI flow
         if (!state.userId || !state.isAuthenticated) {
           set({ isInitialized: true });
           return;
@@ -178,9 +176,10 @@ export const useAppStore = create<AppState>()(
                 isPro: p.isPro ?? state.isPro,
                 lastSyncedPayload: remotePayload,
                 lastSyncError: null,
-                isInitialized: true
               });
             }
+          } else {
+            set({ lastSyncError: `Load failed with status: ${response.status}` });
           }
         } catch (error) {
           set({ lastSyncError: 'Hydration fault' });
@@ -228,7 +227,6 @@ export const useAppStore = create<AppState>()(
         completedTasks: Array.isArray(state.completedTasks) ? state.completedTasks : [],
         readArticles: Array.isArray(state.readArticles) ? state.readArticles : [],
         activeProjectId: state.activeProjectId,
-        isOnboarded: state.isOnboarded,
         lastSynced: state.lastSynced,
         lastSyncedPayload: state.lastSyncedPayload,
       }),
