@@ -66,6 +66,39 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-pop-guide',
+    category: 'Official',
+    title: 'Passing Out Parade (POP) & Certification Guide',
+    summary: 'Final clearance, certificate collection, and winding-up protocols for a successful service exit.',
+    content: `The Passing Out Parade (POP) marks the official end of your service year. It is a strictly regulated process that requires meticulous documentation.
+1. FINAL CLEARANCE PROTOCOL
+Before you can receive your certificate, you must be cleared by two primary entities:
+- Employer Clearance: A final "Letter of Recommendation/Clearance" from your PPA, stating you have completed your duties and are not owing any organization property.
+- LGI Clearance: Your Local Government Inspector must sign your final clearance form, verifying your monthly attendance and CDS participation throughout the year.
+2. THE WINDING-UP EXERCISE
+In the weeks leading to POP:
+- Zonal Briefing: Attend the mandatory briefing by the Zonal or State Coordinator.
+- ID Card Return: You must surrender your NYSC ID card before or during the certificate collection.
+- Final CDS Report: Ensure your project completion report is submitted and approved.
+3. COLLECTION OF DISCHARGE CERTIFICATE
+- Physical Presence: Certificates are NEVER issued by proxy. You must be physically present.
+- Fingerprint Verification: Many states now use biometric verification at the point of collection.
+- Signature: You will sign the official Certificate Register.
+4. CERTIFICATE SAFETY & POLICY
+- No Replacement Policy: NYSC does NOT replace lost or damaged Discharge Certificates. They can only issue a "Letter of Confirmation." Treat this document with the highest security.
+- Verification: Most employers will verify the certificate's authenticity with the NYSC National Directorate Headquarters.
+5. POST-SERVICE ADVISORY
+- SAED Continuation: Utilize the skills gained in SAED for post-service employment or entrepreneurship.
+- Alumni Network: Join the NYSC Alumni association to stay connected with your peers.`,
+    metadata: {
+      stage: 'pop',
+      risk: 'high',
+      source: 'NYSC Official',
+      last_updated: '2025',
+      featured: true
+    }
+  },
+  {
     id: 'k-security-redeploy',
     category: 'Official',
     title: 'Security-Based Redeployment Guide',
@@ -104,7 +137,7 @@ To formalize the relocation after securing safety, you will need:
     id: 'k-marital-redeploy',
     category: 'Official',
     title: 'Marital Redeployment Guide',
-    summary: 'Official relocation protocol for married female corps members wishing to serve in their husband��s state of residence.',
+    summary: 'Official relocation protocol for married female corps members wishing to serve in their husband’s state of residence.',
     content: `Marital Redeployment is a specific provision granted to married female corps members to ensure family stability during the service year.
 1. ELIGIBILITY
 - This provision applies exclusively to married female corps members.

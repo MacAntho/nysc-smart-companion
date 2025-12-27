@@ -42,14 +42,13 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
         updatedAt: Date.now()
       };
       await profileEntity.save(newProfile);
-      // CRITICAL: Ensure immediate indexing for admin visibility
       const userIndex = new Index(c.env, UserEntity.indexName);
       await userIndex.add(userId);
     } else {
-      // Synchronize isPro and updatedAt on every login
+      // Hardened: Synchronize activity and Pro status on every login
       await profileEntity.mutate(curr => ({
         ...curr,
-        isPro: isPro,
+        isPro: isPro || curr.isPro, // Preserve Pro status if already granted
         updatedAt: Date.now()
       }));
     }
@@ -69,11 +68,12 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
     const payload = await c.req.json<Partial<NYSCProfile>>();
     const entity = new UserEntity(c.env, id);
     if (!await entity.exists()) return notFound(c, 'Profile not found');
-    // Defensive check: Ensure we don't overwrite crucial fields with nulls
+    // Defensive: Ensure crucial system fields aren't corrupted
     const updated = await entity.mutate(curr => ({
       ...curr,
       ...payload,
-      id,
+      id, // Force ID consistency
+      isPro: curr.isPro || payload.isPro || false, // Pro status stickiness
       updatedAt: Date.now()
     }));
     return ok(c, updated);
@@ -82,22 +82,25 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
    * ADMIN: ENDPOINTS
    */
   app.get('/api/admin/stats', async (c) => {
-    const users = await UserEntity.list(c.env);
+    const usersRes = await UserEntity.list(c.env);
+    const users = usersRes.items || [];
     const now = Date.now();
     const oneDayMs = 24 * 60 * 60 * 1000;
-    // Improved activeToday logic: users who updated in the last 24 hours
-    const activeToday = users.items.filter(u => (now - u.updatedAt) < oneDayMs).length;
+    // Defensive check: handle empty user lists
+    const totalUsers = users.length;
+    const activeToday = totalUsers === 0 ? 0 : users.filter(u => (now - (u.updatedAt || 0)) < oneDayMs).length;
+    const proUsers = totalUsers === 0 ? 0 : users.filter(u => u.isPro).length;
     return ok(c, {
-      totalUsers: users.items.length,
-      activeToday: activeToday || 1, // Fallback for testing
-      proUsers: users.items.filter(u => u.isPro).length,
+      totalUsers,
+      activeToday,
+      proUsers,
       systemHealth: 'Optimal'
     });
   });
   app.get('/api/admin/users', async (c) => {
     const users = await UserEntity.list(c.env);
-    // Sort by latest update to highlight recent activity
-    const sorted = users.items.sort((a, b) => b.updatedAt - a.updatedAt);
+    // Hardened: Sort by latest activity to surface priority engagements
+    const sorted = (users.items || []).sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
     return ok(c, sorted);
   });
 }

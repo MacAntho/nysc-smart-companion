@@ -111,7 +111,6 @@ export const useAppStore = create<AppState>()(
       syncProfile: async () => {
         const state = get();
         const { userId, isAuthenticated, isSyncing, lastSyncedPayload } = state;
-        // Defensive check: handle transient null userId or sync status
         if (!userId || !isAuthenticated || isSyncing) return;
         const payload = {
           stage: state.stage,
@@ -122,7 +121,6 @@ export const useAppStore = create<AppState>()(
           isOnboarded: state.isOnboarded
         };
         const payloadString = JSON.stringify(payload);
-        // Prevent redundant syncs if the payload hasn't changed since last successful sync
         if (payloadString === lastSyncedPayload) return;
         set({ isSyncing: true });
         try {
@@ -144,8 +142,12 @@ export const useAppStore = create<AppState>()(
       },
       loadProfile: async () => {
         const state = get();
-        const { userId, isAuthenticated, isSyncing, lastSyncedPayload } = state;
-        if (!userId || !isAuthenticated || isSyncing) return;
+        const { userId, isAuthenticated, isSyncing } = state;
+        // Refined check: Ensure valid userId and prevent concurrent redundant loads
+        if (!userId || !isAuthenticated || isSyncing) {
+            if (!isSyncing) set({ isInitialized: true });
+            return;
+        }
         set({ isSyncing: true });
         try {
           const response = await fetch(`/api/profile/${userId}`);
@@ -161,11 +163,6 @@ export const useAppStore = create<AppState>()(
                 activeProjectId: p.activeProjectId,
                 isOnboarded: p.isOnboarded
               });
-              // Optimization: Skip state updates if incoming cloud data is identical to local state
-              if (incomingPayloadString === lastSyncedPayload) {
-                set({ isInitialized: true, isSyncing: false });
-                return;
-              }
               set({
                 stage: p.stage || 'prospective',
                 stateOfDeployment: p.stateOfDeployment || '',
@@ -176,14 +173,15 @@ export const useAppStore = create<AppState>()(
                 lastSynced: p.updatedAt || Date.now(),
                 isPro: p.isPro ?? false,
                 lastSyncedPayload: incomingPayloadString,
-                isInitialized: true
               });
             }
           }
         } catch (error) {
           console.error('[LOAD PROFILE FAILURE]', error);
+          toast.error('Cloud sync failed. Local data preserved.');
         } finally {
-          set({ isSyncing: false });
+          // Hardened: Always set isInitialized to true after attempt
+          set({ isSyncing: false, isInitialized: true });
         }
       },
       reset: () => {
@@ -209,9 +207,9 @@ export const useAppStore = create<AppState>()(
     {
       name: 'nysc-companion-storage',
       onRehydrateStorage: () => (state) => {
-        // Hardening: Ensure initialized state is captured immediately upon rehydration
+        // Rehydrated from local storage, but not yet verified with cloud
         if (state) {
-          state.isInitialized = true;
+          state.isInitialized = false; 
         }
       },
       partialize: (state) => ({
