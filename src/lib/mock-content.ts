@@ -365,6 +365,48 @@ Relocation is not guaranteed. Do not vacate your current PPA until you have the 
     metadata: { stage: 'pop', risk: 'high', source: 'NYSC Operations', featured: true }
   },
   {
+    id: 'k-career-leverage',
+    category: 'Career/POP',
+    title: 'Leveraging NYSC for Career Transition',
+    summary: 'Strategic Roadmap: Mastering your transition from service to the labor market through skills, networking, and digital presence.',
+    content: `National service is not just a mandatory gap year; it is a strategic launchpad. For those in their final months, the transition to the labor market requires intentional planning.
+
+I. SAED & SKILL MONETIZATION
+The Skills Acquisition and Entrepreneurship Development (SAED) program is more than camp lectures. Successful corps members use their PPA downtime to master technical or vocational skills. 
+1. CERTIFICATION: Ensure you collect your SAED certificates. They are recognized by the Bank of Industry (BOI) for start-up loans.
+2. PORTFOLIO BUILDING: If your PPA is in a school, bank, or firm, document your contributions. A "Recommendation Letter" from your employer is as valuable as the NYSC certificate.
+
+II. NETWORKING WITHIN THE PPA & COMMUNITY
+Your PPA is your first professional network.
+1. VISIBILITY: Ensure your supervisors know your long-term career goals. Many corps members are retained or referred to partner organizations based on their performance.
+2. THE NYSC NETWORK: Connect with other corps members in different PPAs. Today’s bunkmate could be tomorrow’s HR manager.
+3. LOCAL LEADERS: If you did a CDS project, the community leaders and sponsors you interacted with are valuable professional references.
+
+III. LEVERAGING THE DISCHARGE CERTIFICATE
+The NYSC Discharge Certificate is a legal prerequisite for employment in Nigeria for graduates.
+1. THE ANOMALY: Never lose your original certificate. NYSC does not reissue lost certificates; they only provide a "Letter of Confirmation."
+2. VERIFICATION: Employers can verify certificates on the portal. Ensure your name on the certificate matches your NIN and Degree exactly to avoid background check delays.
+3. THE 'EX-CORPER' EDGE: Many government and multinational roles prioritize candidates who have successfully completed the service year.
+
+IV. DIGITAL BRANDING (LINKEDIN OPTIMIZATION)
+Transition from "Corper" to "Professional" on social media.
+1. UPDATE PROFILE: Change your LinkedIn headline from "Serving Corps Member" to "Graduate [Your Major] | [Your Skillset]."
+2. CONTENT: Post about your CDS project or a challenge you solved at your PPA. Use keywords relevant to your industry.
+3. RECOMMENDATIONS: Ask your LGI or PPA supervisor to write a LinkedIn recommendation for you before you POP.
+
+V. POST-SERVICE FINANCIAL PLANNING
+The "Allowee" will stop. You need a buffer.
+1. SAVINGS: Save at least 20% of your final 3 months' allowance as a "Job Hunt Fund."
+2. HEALTH INSURANCE: Note that your NHIS coverage ends with your service. Research affordable private health insurance options immediately.
+3. TERMINAL CLEARANCE: Ensure your final clearance is flawless. Any delay in signing off will delay your final payment, which is crucial for your transition.
+
+VI. THE 90-DAY POST-POP WINDOW
+Statistics show that the first 90 days after POP are the most critical. 
+1. RESUME UPDATE: Include your NYSC experience as a "Professional Experience" entry, not just an "Extra-curricular" one. 
+2. CAREER FAIR: Attend the post-service briefings organized by the state. Multinational recruiters often attend these exit ceremonies to scout for talent.`,
+    metadata: { stage: 'pop', risk: 'low', source: 'NYSC Smart Companion', featured: true }
+  },
+  {
     id: 'k-execution',
     category: 'CDS',
     title: 'CDS Project Execution Blueprint',

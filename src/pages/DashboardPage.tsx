@@ -47,6 +47,10 @@ export function DashboardPage() {
     if (!readArticlesSet.has('k-disqualification')) {
       return { title: 'Disqualification Protocol', desc: 'Critical Risk: Understand the grounds for service cancellation and legal implications.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=disqualification' };
     }
+    // Surface Career Leverage guide for those in POP stage
+    if (stageId === 'pop' && !readArticlesSet.has('k-career-leverage')) {
+      return { title: 'Career Transition Roadmap', desc: 'Strategy Active: Leverage your NYSC experience, certificates, and PPA network for the labor market.', risk: 'medium' as PriorityRisk, link: '/app/knowledge?search=career' };
+    }
     // Promoted survival tips for ALL stages once basic emergency guides are read
     if (!readArticlesSet.has('k-insider-tips')) {
       return { title: '100 Practical Survival Tips', desc: 'Expert Intelligence: Battle-tested tips for camp, finance, and PPA survival.', risk: 'medium' as PriorityRisk, link: '/app/knowledge?search=tips' };

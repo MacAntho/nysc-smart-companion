@@ -5,6 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
 import { MapPin, Tent, CreditCard, ShieldAlert, TrendingUp, Sparkles, AlertCircle, ArrowRight, Lightbulb, Briefcase, Info } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Link } from 'react-router-dom';
@@ -67,9 +68,9 @@ export function StateGuidePage() {
             </Select>
           </div>
           {profileState && selectedState !== profileState && (
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => setSelectedState(profileState)}
               className="text-[10px] font-black uppercase tracking-widest border-nysc-green-100 text-nysc-green-800 rounded-xl h-12"
             >
@@ -85,7 +86,7 @@ export function StateGuidePage() {
           </div>
           <div className="space-y-2">
             <h2 className="text-2xl font-display font-bold text-gray-900">Choose a State</h2>
-            <p className="text-muted-foreground max-w-sm mx-auto font-medium">
+            <p className="text-muted-foreground max-sm mx-auto font-medium">
               Select a state from the dropdown above to view camp intelligence, cost of living, and PPA opportunities.
             </p>
           </div>
@@ -112,7 +113,7 @@ export function StateGuidePage() {
                       <Tooltip
                         cursor={{ fill: '#f8fafc', opacity: 0.4 }}
                         contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', fontWeight: 600, fontSize: '12px' }}
-                        formatter={(value: number) => [`��${value.toLocaleString()}`, 'Monthly Cost']}
+                        formatter={(value: number) => [`₦${value.toLocaleString()}`, 'Monthly Cost']}
                       />
                       <Bar dataKey="amount" radius={[6, 6, 0, 0]} barSize={60}>
                         {chartData.map((entry, index) => (
