@@ -1,4 +1,4 @@
-import { KnowledgeArticle, CDSProject } from "@shared/types";
+import { KnowledgeArticle } from "@shared/types";
 export const NIGERIAN_STATES = [
   'Lagos', 'Abuja', 'Oyo', 'Rivers', 'Kano', 'Kaduna', 'Enugu', 'Edo',
   'Cross River', 'Delta', 'Anambra', 'Plateau', 'Kwara', 'Imo', 'Akwa Ibom'
@@ -66,27 +66,96 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-registration',
+    category: 'Official',
+    title: 'Complete Mobilization & Registration Guide',
+    summary: 'Step-by-step instructions for Senate List verification and portal registration.',
+    content: `Online registration is the first official step of your NYSC journey.
+1. SENATE LIST: Check your name on the NYSC portal under "Check Senate List". If not found, contact your institution's Student Affairs.
+2. ACCOUNT CREATION: Use a functional email. Keep your password safe.
+3. BIOMETRICS: Thumbprint capture is mandatory and cannot be done by proxy.
+4. CALL-UP NUMBER: Generated after successful registration.`,
+    metadata: { stage: 'mobilization', risk: 'medium', source: 'NYSC Official', featured: true }
+  },
+  {
+    id: 'k-camp-packing',
+    category: 'Survival',
+    title: 'The Ultimate Camp Packing List',
+    summary: 'Essentials for the 21-day orientation: Documents, clothing, and survival gear.',
+    content: `Don't be caught off-guard. Pack these essentials:
+DOCUMENTS: Original and 5 copies of Statement of Result, Call-up Letter, Green Card, Medical Fitness Certificate, and Passport photos.
+CLOTHING: White round-neck tees, white shorts, white socks, white sneakers. NYSC provides a set, but extras are necessary.
+OTHERS: Toiletries, mosquito net (white), power bank, waist bag (for valuables).`,
+    metadata: { stage: 'camp', risk: 'low', source: 'Ex-Corper Insight', featured: true }
+  },
+  {
+    id: 'k-ppa-rejection',
+    category: 'Official',
+    title: 'PPA Rejection & Acceptance Protocols',
+    summary: 'What to do if your assigned PPA rejects you or if you seek a change.',
+    content: `REJECTION: If a PPA rejects you, they must write a formal rejection letter. Take this back to the Zonal/Local Government Inspector (LGI) for a new posting.
+ACCEPTANCE: Submit your posting letter; if accepted, fill the acceptance form and return it to the LGI within 48 hours.
+SELF-REJECTION: Corpers cannot reject a PPA. Doing so without valid LGI approval is a policy violation.`,
+    metadata: { stage: 'ppa', risk: 'high', source: 'NYSC Bye-laws' }
+  },
+  {
     id: 'k-cds',
     category: 'Official',
     title: 'Community Development Service (CDS): Groups & Lifecycle',
-    summary: 'Comprehensive guide on group types, weekly attendance, project timelines, and clearance protocols.',
-    content: `Community Development Service (CDS) is a mandatory component of the NYSC scheme designed to impact host communities through sustainable projects.
-1. CDS GROUP TYPES
-- Editorial, ICT, Medical, Road Safety, Anti-Corruption, Environment, Charity/SDGs.
-2. WEEKLY MEETING MANDATE
-- Meetings are held weekly (usually Thursdays). 75% attendance is required for clearance.
-3. THE PROJECT LIFECYCLE
-- Identify, Propose, Approve, Implement, Report.`,
-    metadata: {
-      stage: 'cds',
-      risk: 'low',
-      source: 'NYSC Official',
-      last_updated: '2025',
-      featured: true
-    }
+    summary: 'Comprehensive guide on group types, weekly attendance, and project timelines.',
+    content: `CDS is a mandatory component of the NYSC scheme.
+1. CDS GROUP TYPES: Editorial, ICT, Medical, Road Safety, Anti-Corruption, Environment, Charity/SDGs.
+2. WEEKLY MEETING: Meetings are held weekly. 75% attendance is required for clearance.
+3. THE PROJECT LIFECYCLE: Identify community needs, propose to LGI, get approval, implement, and report.`,
+    metadata: { stage: 'cds', risk: 'medium', source: 'NYSC Official', featured: true }
+  },
+  {
+    id: 'k-redeployment',
+    category: 'Survival',
+    title: 'Redeployment (Relocation) Guide',
+    summary: 'Procedures for relocation based on health, marital, or security reasons.',
+    content: `Redeployment is not guaranteed but possible for:
+1. MARITAL GROUNDS: For married women (Marriage certificate, newspaper change of name).
+2. HEALTH GROUNDS: Valid medical reports from govt/military hospitals.
+3. SECURITY: In regions with high-risk advisory.
+Submit your application during the orientation camp or through the state coordinator.`,
+    metadata: { stage: 'mobilization', risk: 'medium', source: 'Official Policy' }
+  },
+  {
+    id: 'k-pop-guide',
+    category: 'Official',
+    title: 'Passing Out Parade (POP) & Final Clearance',
+    summary: 'Ensuring your certificate is ready and your records are clear for discharge.',
+    content: `Winding up is the final phase.
+1. FINAL CLEARANCE: Get signatures from your PPA and LGI for the final month.
+2. DISCHARGE CERTIFICATE: Issued only after successful final clearance.
+3. EXIT INTERVIEW: Mandatory briefing before the final parade.
+Ensure no outstanding dues or disciplinary cases are against you.`,
+    metadata: { stage: 'pop', risk: 'high', source: 'NYSC HQ', featured: true }
   }
 ];
 export const STATE_DATA: Record<string, any> = {
+  'Lagos': {
+    camp: 'Iyana-Ipaja Orientation Camp. Facilities are decent but crowded. Expect high discipline and early mornings.',
+    cost: 'High. Lagos is expensive. Rent averages ₦250k+, transport is a significant expense.',
+    metrics: { rent: 280000, food: 45000, transport: 35000 },
+    ppa: 'Strong opportunities in Tech, Finance, and Media. Many private firms offer high stipends.',
+    pro_tip: 'Apply for PPA at the Ikorodu or Epe axis if you want a lower cost of living while staying in Lagos.'
+  },
+  'Abuja': {
+    camp: 'Kubwa Orientation Camp. Generally well-maintained. Close to the city center.',
+    cost: 'High. Rent in the city center is exorbitant. Suburbs are more manageable.',
+    metrics: { rent: 350000, food: 40000, transport: 25000 },
+    ppa: 'Federal Ministries, NGOs, and International Agencies are primary options.',
+    pro_tip: 'Look for accommodation in Kubwa, Lugbe, or Karu to save significantly on rent.'
+  },
+  'Rivers': {
+    camp: 'Nonwa Gbam Tai Orientation Camp. Large and breezy. Registration is strictly enforced.',
+    cost: 'Moderate-High. Port Harcourt city is pricey, outskirts are affordable.',
+    metrics: { rent: 180000, food: 35000, transport: 20000 },
+    ppa: 'Oil & Gas support firms, Marine logistics, and Education sectors.',
+    pro_tip: 'Always carry your NYSC ID card; security checkpoints are common in the delta region.'
+  },
   'DEFAULT': {
     camp: 'Standard NYSC Orientation facilities. Registration usually starts at 4:00 AM.',
     cost: 'Moderate. Aligns with national averages.',
@@ -109,7 +178,6 @@ export const CDS_RESOURCES = {
     { id: 'Social', name: 'Social Welfare', icon: 'Users' },
   ],
   projects: [
-    // --- EDUCATION (6) ---
     {
       id: 'edu-1',
       category: 'Education',
@@ -122,62 +190,6 @@ export const CDS_RESOURCES = {
       metrics: ['1,000+ Books Collected', '200 Weekly Users']
     },
     {
-      id: 'edu-2',
-      category: 'Education',
-      title: 'Digital Literacy for Teachers',
-      description: 'Training rural school teachers on basic computer operations and digital teaching tools.',
-      budget: '₦40,000 - ₦100,000',
-      duration: '2 Months',
-      requirements: ['Laptops', 'Training Manual', 'Venue'],
-      challenges: ['Power Supply', 'Varying Tech Backgrounds'],
-      metrics: ['50 Teachers Certified', '10 Schools Impacted']
-    },
-    {
-      id: 'edu-3',
-      category: 'Education',
-      title: 'Inter-School Debate Trophy',
-      description: 'Organizing a LGA-wide debate competition to foster intellectual growth.',
-      budget: '₦30,000 - ₦70,000',
-      duration: '6 Weeks',
-      requirements: ['Judges', 'Medals/Trophies', 'Participating Schools'],
-      challenges: ['Transport for Students', 'Judging Fairness'],
-      metrics: ['12 Schools Participating', '500+ Audience']
-    },
-    {
-      id: 'edu-4',
-      category: 'Education',
-      title: 'School Desk Refurbishment',
-      description: 'Repairing broken desks in dilapidated community schools.',
-      budget: '₦60,000 - ₦150,000',
-      duration: '3 Months',
-      requirements: ['Carpenter', 'Materials', 'School Permission'],
-      challenges: ['Lumber Costs', 'Logistics of Moving Desks'],
-      metrics: ['200 Desks Repaired', '400 Students Seated']
-    },
-    {
-      id: 'edu-5',
-      category: 'Education',
-      title: 'Career Guidance Seminar',
-      description: 'Providing professional counseling to SS3 students for university selection.',
-      budget: '₦20,000 - ₦40,000',
-      duration: '1 Month',
-      requirements: ['Resource Persons', 'Handouts'],
-      challenges: ['Student Attendance', 'Venue Size'],
-      metrics: ['300 Students Reached', '10 Career Paths Explained']
-    },
-    {
-      id: 'edu-6',
-      category: 'Education',
-      title: 'Adult Literacy Classes',
-      description: 'Evening classes for local artisans and market women to learn basic reading.',
-      budget: '₦15,000 - ₦50,000',
-      duration: '6 Months',
-      requirements: ['Venue', 'Teaching Aids'],
-      challenges: ['Market Timings', 'Cultural Barriers'],
-      metrics: ['40 Adults Literate', 'Weekly Sessions']
-    },
-    // --- HEALTH (6) ---
-    {
       id: 'health-1',
       category: 'Health',
       title: 'Community De-worming Campaign',
@@ -188,62 +200,6 @@ export const CDS_RESOURCES = {
       challenges: ['Parental Consent', 'Drug Storage'],
       metrics: ['1,000 Children Treated']
     },
-    {
-      id: 'health-2',
-      category: 'Health',
-      title: 'Rural Health Sensitization',
-      description: 'Door-to-door awareness on hygiene, Lassa fever, and Malaria prevention.',
-      budget: '₦10,000 - ₦30,000',
-      duration: '3 Months',
-      requirements: ['Fliers', 'Megaphone'],
-      challenges: ['Language Barrier', 'Terrain'],
-      metrics: ['500 Households Reached']
-    },
-    {
-      id: 'health-3',
-      category: 'Health',
-      title: 'Blood Donation Drive',
-      description: 'Partnering with the National Blood Service to organize a donation clinic.',
-      budget: '₦25,000 - ₦60,000',
-      duration: '1 Month',
-      requirements: ['Hospital Partnership', 'Post-donation snacks'],
-      challenges: ['Myths about Blood Donation', 'Eligibility'],
-      metrics: ['100 Pints of Blood Collected']
-    },
-    {
-      id: 'health-4',
-      category: 'Health',
-      title: 'First Aid Kit Distribution',
-      description: 'Donating equipped first aid boxes to remote schools and police posts.',
-      budget: '₦40,000 - ₦90,000',
-      duration: '2 Months',
-      requirements: ['Kits', 'Basic Training Manuals'],
-      challenges: ['Refill Sustainability'],
-      metrics: ['20 Centers Equipped']
-    },
-    {
-      id: 'health-5',
-      category: 'Health',
-      title: 'Maternal Nutrition Workshop',
-      description: 'Teaching pregnant women about affordable local nutrition.',
-      budget: '₦30,000 - ₦70,000',
-      duration: '3 Months',
-      requirements: ['Nutritionist', 'Samples'],
-      challenges: ['Cultural Taboos', 'Affordability'],
-      metrics: ['150 Women Trained']
-    },
-    {
-      id: 'health-6',
-      category: 'Health',
-      title: 'Free Eye Screening',
-      description: 'Partnering with optometrists for free community vision tests.',
-      budget: '₦50,000 - ₦150,000',
-      duration: '2 Months',
-      requirements: ['Optometrist', 'Basic Equipment'],
-      challenges: ['Crowd Management', 'Referral Costs'],
-      metrics: ['200 Patients Screened']
-    },
-    // --- ENVIRONMENT (6) ---
     {
       id: 'env-1',
       category: 'Environment',
@@ -256,62 +212,6 @@ export const CDS_RESOURCES = {
       metrics: ['100 Trees Planted', 'Survival Rate Tracking']
     },
     {
-      id: 'env-2',
-      category: 'Environment',
-      title: 'Waste Bin Distribution',
-      description: 'Placing color-coded waste bins in public markets.',
-      budget: '₦70,000 - ₦150,000',
-      duration: '3 Months',
-      requirements: ['Bins', 'Waste Agency Partnership'],
-      challenges: ['Vandalism', 'Regular Evacuation'],
-      metrics: ['50 Bins Deployed']
-    },
-    {
-      id: 'env-3',
-      category: 'Environment',
-      title: 'Drainage Clearing Drive',
-      description: 'Leading community youth to clear blocked gutters before rainy season.',
-      budget: '₦10,000 - ₦25,000',
-      duration: '2 Months',
-      requirements: ['Tools', 'Local Youth Mobilization'],
-      challenges: ['Solid Waste Volume', 'Odor/Health Risks'],
-      metrics: ['2km Drainage Cleared']
-    },
-    {
-      id: 'env-4',
-      category: 'Environment',
-      title: 'Climate Change Awareness',
-      description: 'Workshops for local farmers on sustainable agricultural practices.',
-      budget: '₦20,000 - ₦50,000',
-      duration: '3 Months',
-      requirements: ['Expert Speakers', 'Demonstration Plot'],
-      challenges: ['Traditional Mindsets'],
-      metrics: ['100 Farmers Reached']
-    },
-    {
-      id: 'env-5',
-      category: 'Environment',
-      title: 'Anti-Erosion Barriers',
-      description: 'Building sandbag or tire barriers in erosion-prone hilly areas.',
-      budget: '₦30,000 - ₦90,000',
-      duration: '4 Months',
-      requirements: ['Tires/Sandbags', 'Labor'],
-      challenges: ['Physical Exhaustion', 'Material Supply'],
-      metrics: ['5 Critical Spots Secured']
-    },
-    {
-      id: 'env-6',
-      category: 'Environment',
-      title: 'Community Orchard',
-      description: 'Converting a wasteland into a fruit orchard for community use.',
-      budget: '₦60,000 - ₦120,000',
-      duration: '6 Months',
-      requirements: ['Fenced Land', 'Seedlings'],
-      challenges: ['Land Ownership Disputes'],
-      metrics: ['1 Acre Restored']
-    },
-    // --- INFRASTRUCTURE (6) ---
-    {
       id: 'inf-1',
       category: 'Infrastructure',
       title: 'Community Well Restoration',
@@ -323,62 +223,6 @@ export const CDS_RESOURCES = {
       metrics: ['3 Wells Functional']
     },
     {
-      id: 'inf-2',
-      category: 'Infrastructure',
-      title: 'Solar Street Lights',
-      description: 'Installing solar-powered lamps at dark community junctions.',
-      budget: '₦150,000 - ₦400,000',
-      duration: '4 Months',
-      requirements: ['Solar Kits', 'Technician', 'Approval'],
-      challenges: ['High Capital', 'Battery Theft'],
-      metrics: ['5 Critical Junctions Lit']
-    },
-    {
-      id: 'inf-3',
-      category: 'Infrastructure',
-      title: 'Market Shed Construction',
-      description: 'Building simple wooden/iron sheds for rural market women.',
-      budget: '₦100,000 - ₦300,000',
-      duration: '5 Months',
-      requirements: ['Land Space', 'Construction Materials'],
-      challenges: ['High Material Cost'],
-      metrics: ['10 Sheds Built']
-    },
-    {
-      id: 'inf-4',
-      category: 'Infrastructure',
-      title: 'Culvert Repair',
-      description: 'Fixing minor road culverts to prevent seasonal cut-offs.',
-      budget: '₦80,000 - ₦250,000',
-      duration: '4 Months',
-      requirements: ['Engineer', 'Cement/Stone'],
-      challenges: ['Heavy Traffic', 'Material Transport'],
-      metrics: ['2 Key Access Roads Saved']
-    },
-    {
-      id: 'inf-5',
-      category: 'Infrastructure',
-      title: 'Signage & Directions',
-      description: 'Erecting permanent direction signs for hospitals and government offices.',
-      budget: '₦30,000 - ₦70,000',
-      duration: '2 Months',
-      requirements: ['Metal Sheets', 'Paint', 'Welder'],
-      challenges: ['Durability/Rust'],
-      metrics: ['15 Signs Installed']
-    },
-    {
-      id: 'inf-6',
-      category: 'Infrastructure',
-      title: 'Public Toilet Renovation',
-      description: 'Repairing doors and plumbing of public/school latrines.',
-      budget: '₦60,000 - ₦180,000',
-      duration: '3 Months',
-      requirements: ['Plumber', 'Tiles/Doors'],
-      challenges: ['Hygiene Standards', 'Water Connection'],
-      metrics: ['4 Toilets Restored']
-    },
-    // --- SOCIAL (6) ---
-    {
       id: 'soc-1',
       category: 'Social',
       title: 'Artisan Skills Hub',
@@ -388,61 +232,6 @@ export const CDS_RESOURCES = {
       requirements: ['Skill Tutors', 'Basic Tools'],
       challenges: ['Equipment Costs'],
       metrics: ['30 Youths Trained']
-    },
-    {
-      id: 'soc-2',
-      category: 'Social',
-      title: 'Orphanage Visitation Program',
-      description: 'Coordinated monthly visits with food and educational supplies.',
-      budget: '₦20,000 - ₦60,000',
-      duration: 'Continuous',
-      requirements: ['Sponsorship', 'Transport'],
-      challenges: ['Donation Consistency'],
-      metrics: ['50 Children Supported']
-    },
-    {
-      id: 'soc-3',
-      category: 'Social',
-      title: 'Drug Abuse Sensitization',
-      description: 'Rallies and seminars in secondary schools on the dangers of drug abuse.',
-      budget: '₦15,000 - ₦40,000',
-      duration: '2 Months',
-      requirements: ['Police/NDLEA Speakers'],
-      challenges: ['Sensitive Audience'],
-      metrics: ['10 Schools Covered']
-    },
-    {
-      id: 'soc-4',
-      category: 'Social',
-      title: 'Women Empowerment (Tailoring)',
-      description: 'Donating sewing machines to top-performing women in vocational training.',
-      budget: '₦100,000 - ₦250,000',
-      duration: '4 Months',
-      requirements: ['Machines', 'Selection Criteria'],
-      challenges: ['Selection Fairness'],
-      metrics: ['5 Women Empowered']
-    },
-    {
-      id: 'soc-5',
-      category: 'Social',
-      title: 'Community Sports Tournament',
-      description: 'Organizing a "Peace Cup" to unite conflicting local youth groups.',
-      budget: '₦40,000 - ₦100,000',
-      duration: '2 Months',
-      requirements: ['Jerseys', 'Pitch', 'Community Leaders'],
-      challenges: ['Security during Finals'],
-      metrics: ['8 Teams Participated']
-    },
-    {
-      id: 'soc-6',
-      category: 'Social',
-      title: 'Prisoners Welfare Drive',
-      description: 'Donating toiletries and basic reading materials to local correctional centers.',
-      budget: '₦30,000 - ₦80,000',
-      duration: '3 Months',
-      requirements: ['Correctional Clearance', 'Items'],
-      challenges: ['Access Restrictions'],
-      metrics: ['200 Inmates Reached']
     }
   ],
   templates: [

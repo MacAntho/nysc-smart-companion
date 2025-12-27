@@ -30,7 +30,7 @@ interface AppState {
   setActiveProject: (projectId: string | null) => void;
   completeOnboarding: () => void;
   syncProfile: () => Promise<void>;
-  loadProfile: () => Promise<void>;
+  loadProfile: (force?: boolean) => Promise<void>;
   reset: () => void;
 }
 export const useAppStore = create<AppState>()(
@@ -97,11 +97,6 @@ export const useAppStore = create<AppState>()(
       },
       setActiveProject: (activeProjectId) => {
         set({ activeProjectId });
-        if (activeProjectId) {
-          toast.success('Project enrolled successfully');
-        } else {
-          toast.info('Project removed');
-        }
         if (get().isAuthenticated) get().syncProfile();
       },
       completeOnboarding: () => {
@@ -131,8 +126,6 @@ export const useAppStore = create<AppState>()(
           });
           if (response.ok) {
             set({ lastSynced: Date.now(), lastSyncedPayload: payloadString });
-          } else {
-            console.warn(`[SYNC FAIL ${response.status}]`);
           }
         } catch (error) {
           console.error('[SYNC FAILURE]', error);
@@ -140,14 +133,10 @@ export const useAppStore = create<AppState>()(
           set({ isSyncing: false });
         }
       },
-      loadProfile: async () => {
+      loadProfile: async (force = false) => {
         const state = get();
-        const { userId, isAuthenticated, isSyncing } = state;
-        // Refined check: Ensure valid userId and prevent concurrent redundant loads
-        if (!userId || !isAuthenticated || isSyncing) {
-            if (!isSyncing) set({ isInitialized: true });
-            return;
-        }
+        const { userId, isAuthenticated, isSyncing, isInitialized } = state;
+        if (!userId || !isAuthenticated || isSyncing || (isInitialized && !force)) return;
         set({ isSyncing: true });
         try {
           const response = await fetch(`/api/profile/${userId}`);
@@ -178,9 +167,7 @@ export const useAppStore = create<AppState>()(
           }
         } catch (error) {
           console.error('[LOAD PROFILE FAILURE]', error);
-          toast.error('Cloud sync failed. Local data preserved.');
         } finally {
-          // Hardened: Always set isInitialized to true after attempt
           set({ isSyncing: false, isInitialized: true });
         }
       },
@@ -207,9 +194,8 @@ export const useAppStore = create<AppState>()(
     {
       name: 'nysc-companion-storage',
       onRehydrateStorage: () => (state) => {
-        // Rehydrated from local storage, but not yet verified with cloud
         if (state) {
-          state.isInitialized = false; 
+          state.isInitialized = false;
         }
       },
       partialize: (state) => ({
