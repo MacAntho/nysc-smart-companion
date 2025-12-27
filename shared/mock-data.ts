@@ -1,24 +1,26 @@
 import type { NYSCProfile, User, Chat, ChatMessage } from './types';
 export const MOCK_USERS: NYSCProfile[] = [
-  { 
-    id: 'u1', 
-    stage: 'ppa', 
+  {
+    id: 'u1',
+    stage: 'ppa',
     stateOfDeployment: 'Lagos',
     completedTasks: ['p1', 'm1', 'c1'],
     readArticles: ['k1', 'k2'],
     activeProjectId: 'cp1',
     isOnboarded: true,
-    updatedAt: Date.now() 
+    isPro: false,
+    updatedAt: Date.now()
   },
-  { 
-    id: 'u2', 
-    stage: 'prospective', 
+  {
+    id: 'u2',
+    stage: 'prospective',
     stateOfDeployment: 'Abuja',
     completedTasks: [],
     readArticles: [],
     activeProjectId: null,
     isOnboarded: true,
-    updatedAt: Date.now() 
+    isPro: false,
+    updatedAt: Date.now()
   }
 ];
 // Keep legacy mock types for compatibility with any existing boilerplate references

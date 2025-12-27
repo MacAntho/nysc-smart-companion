@@ -20,11 +20,24 @@ export function AuthPage() {
     e.preventDefault();
     if (!email.includes('@')) return toast.error('Enter a valid email');
     setIsLoading(true);
-    // Simulate API delay
-    await new Promise(r => setTimeout(r, 1000));
-    setIsLoading(false);
-    setStep(2);
-    toast.success('OTP sent to your email');
+    try {
+      const res = await fetch('/api/auth/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const result = await res.json();
+      if (result.success) {
+        toast.success('OTP sent to your email');
+        setStep(2);
+      } else {
+        toast.error(result.error || 'Failed to send OTP');
+      }
+    } catch (e) {
+      toast.error('Network error sending OTP');
+    } finally {
+      setIsLoading(false);
+    }
   };
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
