@@ -36,6 +36,16 @@ export const JOURNEY_STAGES = [
       { id: 'pa1', title: 'Acceptance/Rejection', description: 'Submit posting letter to PPA for response.' },
       { id: 'pa2', title: 'Monthly Clearance', description: 'Get monthly signature for allowance.' },
     ]
+  },
+  {
+    id: 'pop',
+    title: 'Passing Out Parade (POP)',
+    description: 'The final stretch. Winding up and receiving your certificate.',
+    tasks: [
+      { id: 'po1', title: 'Final Clearance', description: 'LGI and Employer clearance for the final month.' },
+      { id: 'po2', title: 'Collect Discharge Certificate', description: 'Physical collection of your NYSC certificate.' },
+      { id: 'po3', title: 'Exit Interview', description: 'Briefing by the state coordinator.' },
+    ]
   }
 ];
 export const KNOWLEDGE_ARTICLES = [
@@ -66,36 +76,42 @@ export const STATE_DATA: Record<string, any> = {
     camp: 'Iyana Ipaja Orientation Camp',
     cost: 'High cost of living, transport heavy.',
     costScale: 5,
+    metrics: { rent: 250000, food: 45000, transport: 30000 },
     ppa: 'Corporate firms, tech hubs in Yaba/Island, schools in suburbs.',
   },
   'Abuja': {
     camp: 'Kubwa Orientation Camp',
     cost: 'Moderate to High. Good roads.',
     costScale: 4,
+    metrics: { rent: 300000, food: 40000, transport: 20000 },
     ppa: 'Government MDAs, International NGOs, Law firms.',
-  },
-  'Rivers': {
-    camp: 'Nonwa Gbam Tai Orientation Camp',
-    cost: 'Moderate to High. Security conscious.',
-    costScale: 4,
-    ppa: 'Oil & Gas services, private schools, maritime agencies.',
   },
   'Oyo': {
     camp: 'Iseyin Orientation Camp',
     cost: 'Relatively low cost of living. Large state.',
     costScale: 2,
+    metrics: { rent: 120000, food: 25000, transport: 15000 },
     ppa: 'University of Ibadan research institutes, agribusiness, private colleges.',
+  },
+  'Rivers': {
+    camp: 'Nonwa Gbam Tai Orientation Camp',
+    cost: 'Moderate to High. Security conscious.',
+    costScale: 4,
+    metrics: { rent: 200000, food: 40000, transport: 25000 },
+    ppa: 'Oil & Gas services, private schools, maritime agencies.',
   },
   'Enugu': {
     camp: 'Awgu Orientation Camp',
     cost: 'Moderate. Friendly environment.',
     costScale: 3,
+    metrics: { rent: 150000, food: 30000, transport: 12000 },
     ppa: 'Hospitals, government secretariat, private tech startups.',
   },
   'Kano': {
     camp: 'Kusalla Dam Orientation Camp',
     cost: 'Low to Moderate. Commercial hub.',
     costScale: 2,
+    metrics: { rent: 100000, food: 20000, transport: 10000 },
     ppa: 'Manufacturing firms, trading companies, islamic studies centers.',
   }
 };

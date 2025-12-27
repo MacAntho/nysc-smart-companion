@@ -3,28 +3,30 @@ import { useAppStore } from '@/lib/store';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
-import { Calendar, CheckCircle, ChevronRight, MapPin, BookOpen, Clock, CloudCheck, Cloud } from 'lucide-react';
-import { JOURNEY_STAGES, DEADLINES } from '@/lib/mock-content';
+import { Calendar, CheckCircle, ChevronRight, MapPin, BookOpen, Clock, CloudCheck, LayoutList } from 'lucide-react';
+import { JOURNEY_STAGES, DEADLINES, KNOWLEDGE_ARTICLES } from '@/lib/mock-content';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow, differenceInDays, parseISO } from 'date-fns';
 export function DashboardPage() {
   const stageId = useAppStore(s => s.stage);
   const stateName = useAppStore(s => s.stateOfDeployment);
   const completedTasks = useAppStore(s => s.completedTasks);
+  const readArticles = useAppStore(s => s.readArticles);
   const toggleTask = useAppStore(s => s.toggleTask);
   const isSyncing = useAppStore(s => s.isSyncing);
   const lastSynced = useAppStore(s => s.lastSynced);
   const loadProfile = useAppStore(s => s.loadProfile);
   useEffect(() => {
     loadProfile();
-  }, []);
+  }, [loadProfile]);
   const currentStage = JOURNEY_STAGES.find(s => s.id === stageId);
   const stageTasks = currentStage?.tasks || [];
   const completedCount = stageTasks.filter(t => completedTasks.includes(t.id)).length;
   const progressPercent = stageTasks.length > 0 ? (completedCount / stageTasks.length) * 100 : 0;
+  const readPercent = (readArticles.length / KNOWLEDGE_ARTICLES.length) * 100;
   const relevantDeadlines = DEADLINES.filter(d => d.stage === stageId);
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-8">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div className="space-y-1">
           <h1 className="text-3xl font-display font-bold text-nysc-green-900">Corper Dashboard</h1>
@@ -46,8 +48,8 @@ export function DashboardPage() {
           )}
         </div>
       </header>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="md:col-span-2">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="lg:col-span-2">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <div className="space-y-1">
               <CardTitle className="text-lg">Current Stage: <span className="text-nysc-green-800 capitalize">{stageId}</span></CardTitle>
@@ -81,32 +83,45 @@ export function DashboardPage() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-nysc-green-900 text-white border-none shadow-xl">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white">
-              <MapPin className="w-5 h-5 text-nysc-gold" /> {stateName} Insights
-            </CardTitle>
-            <CardDescription className="text-nysc-green-100">Live from your deployment state.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-1">
-              <p className="text-xs uppercase tracking-wider text-nysc-green-200 font-semibold">Orientation Camp</p>
-              <p className="font-medium text-sm">Official State Camp</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-xs uppercase tracking-wider text-nysc-green-200 font-semibold">Cost of Living</p>
-              <div className="flex gap-1 py-1">
-                {[1,2,3,4,5].map(i => <div key={i} className={`h-1.5 w-4 rounded-full ${i <= 3 ? 'bg-nysc-gold' : 'bg-nysc-green-800'}`} />)}
+        <div className="space-y-6">
+          <Card className="bg-nysc-green-900 text-white border-none shadow-xl">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-white">
+                <MapPin className="w-5 h-5 text-nysc-gold" /> {stateName} Insights
+              </CardTitle>
+              <CardDescription className="text-nysc-green-100">Live from your deployment state.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-1">
+                <p className="text-xs uppercase tracking-wider text-nysc-green-200 font-semibold">Cost Profile</p>
+                <div className="flex gap-1 py-1">
+                  {[1,2,3,4,5].map(i => <div key={i} className={`h-1.5 w-4 rounded-full ${i <= 3 ? 'bg-nysc-gold' : 'bg-nysc-green-800'}`} />)}
+                </div>
               </div>
-              <p className="text-xs text-nysc-green-200">Moderate costs</p>
-            </div>
-            <Link to="/app/state-guide">
-              <Button className="w-full bg-nysc-gold hover:bg-amber-600 border-none text-white mt-4 transition-transform active:scale-95">
-                Full State Guide <ChevronRight className="ml-1 w-4 h-4" />
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
+              <Link to="/app/state-guide">
+                <Button className="w-full bg-nysc-gold hover:bg-amber-600 border-none text-white transition-transform active:scale-95">
+                  Full State Guide <ChevronRight className="ml-1 w-4 h-4" />
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm flex items-center gap-2">
+                <LayoutList className="w-4 h-4 text-nysc-green-800" /> Knowledge Progress
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="flex justify-between text-xs">
+                  <span>Articles Read</span>
+                  <span className="font-bold">{readArticles.length} / {KNOWLEDGE_ARTICLES.length}</span>
+                </div>
+                <Progress value={readPercent} className="h-1.5" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card>
@@ -119,7 +134,6 @@ export function DashboardPage() {
             {relevantDeadlines.length > 0 ? (
               relevantDeadlines.map(d => {
                 const daysLeft = differenceInDays(parseISO(d.date), new Date());
-                const isUrgent = daysLeft >= 0 && daysLeft <= 7;
                 return (
                   <div key={d.id} className="flex items-center justify-between p-3 border-b last:border-0 hover:bg-gray-50 transition-colors">
                     <div className="space-y-0.5">
@@ -131,7 +145,7 @@ export function DashboardPage() {
                         {daysLeft < 0 ? 'Past Due' : `${daysLeft} days left`}
                       </p>
                       <p className="text-[10px] text-muted-foreground flex items-center justify-end gap-1">
-                        <Clock className={`w-2.5 h-2.5 ${isUrgent ? 'text-amber-500' : ''}`} /> 
+                        <Clock className="w-2.5 h-2.5" />
                         {d.date}
                       </p>
                     </div>
@@ -142,7 +156,6 @@ export function DashboardPage() {
               <div className="text-center py-10 flex flex-col items-center gap-2">
                 <CloudCheck className="w-10 h-10 text-gray-200" />
                 <p className="text-sm text-muted-foreground font-medium">Clear Skies!</p>
-                <p className="text-xs text-muted-foreground max-w-[200px]">No immediate deadlines for the {stageId} stage. Keep up the good work!</p>
               </div>
             )}
           </CardContent>

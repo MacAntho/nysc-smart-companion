@@ -9,6 +9,8 @@ export interface NYSCProfile {
   stage: NYSCStage;
   stateOfDeployment: string;
   completedTasks: string[];
+  readArticles: string[];
+  activeProjectId: string | null;
   isOnboarded: boolean;
   updatedAt: number;
 }

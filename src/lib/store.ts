@@ -6,6 +6,8 @@ interface AppState {
   stage: NYSCStage;
   stateOfDeployment: string;
   completedTasks: string[];
+  readArticles: string[];
+  activeProjectId: string | null;
   isOnboarded: boolean;
   isSyncing: boolean;
   lastSynced: number | null;
@@ -13,6 +15,8 @@ interface AppState {
   setStage: (stage: NYSCStage) => void;
   setStateOfDeployment: (state: string) => void;
   toggleTask: (taskId: string) => void;
+  toggleReadArticle: (articleId: string) => void;
+  setActiveProject: (projectId: string | null) => void;
   completeOnboarding: () => void;
   syncProfile: () => Promise<void>;
   loadProfile: () => Promise<void>;
@@ -25,6 +29,8 @@ export const useAppStore = create<AppState>()(
       stage: 'prospective',
       stateOfDeployment: '',
       completedTasks: [],
+      readArticles: [],
+      activeProjectId: null,
       isOnboarded: false,
       isSyncing: false,
       lastSynced: null,
@@ -45,19 +51,31 @@ export const useAppStore = create<AppState>()(
         }));
         get().syncProfile();
       },
+      toggleReadArticle: (articleId) => {
+        set((state) => ({
+          readArticles: state.readArticles.includes(articleId)
+            ? state.readArticles.filter((id) => id !== articleId)
+            : [...state.readArticles, articleId],
+        }));
+        get().syncProfile();
+      },
+      setActiveProject: (activeProjectId) => {
+        set({ activeProjectId });
+        get().syncProfile();
+      },
       completeOnboarding: () => {
         set({ isOnboarded: true });
         get().syncProfile();
       },
       syncProfile: async () => {
-        const { userId, stage, stateOfDeployment, completedTasks, isOnboarded } = get();
+        const { userId, stage, stateOfDeployment, completedTasks, readArticles, activeProjectId, isOnboarded } = get();
         if (!userId) return;
         set({ isSyncing: true });
         try {
           const response = await fetch(`/api/profile/${userId}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ stage, stateOfDeployment, completedTasks, isOnboarded }),
+            body: JSON.stringify({ stage, stateOfDeployment, completedTasks, readArticles, activeProjectId, isOnboarded }),
           });
           if (response.ok) {
             set({ lastSynced: Date.now() });
@@ -80,7 +98,9 @@ export const useAppStore = create<AppState>()(
               set({
                 stage: p.stage,
                 stateOfDeployment: p.stateOfDeployment,
-                completedTasks: p.completedTasks,
+                completedTasks: p.completedTasks || [],
+                readArticles: p.readArticles || [],
+                activeProjectId: p.activeProjectId || null,
                 isOnboarded: p.isOnboarded,
                 lastSynced: p.updatedAt
               });
@@ -90,13 +110,15 @@ export const useAppStore = create<AppState>()(
           console.error('Failed to load profile:', error);
         }
       },
-      reset: () => set({ 
-        userId: null, 
-        stage: 'prospective', 
-        stateOfDeployment: '', 
-        completedTasks: [], 
+      reset: () => set({
+        userId: null,
+        stage: 'prospective',
+        stateOfDeployment: '',
+        completedTasks: [],
+        readArticles: [],
+        activeProjectId: null,
         isOnboarded: false,
-        lastSynced: null 
+        lastSynced: null
       }),
     }),
     {
@@ -106,6 +128,8 @@ export const useAppStore = create<AppState>()(
         stage: state.stage,
         stateOfDeployment: state.stateOfDeployment,
         completedTasks: state.completedTasks,
+        readArticles: state.readArticles,
+        activeProjectId: state.activeProjectId,
         isOnboarded: state.isOnboarded,
         lastSynced: state.lastSynced,
       }),

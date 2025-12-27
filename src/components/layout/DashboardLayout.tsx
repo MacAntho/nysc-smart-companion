@@ -4,6 +4,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { Link, useLocation } from "react-router-dom";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { motion, AnimatePresence } from "framer-motion";
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const pathParts = location.pathname.split('/').filter(Boolean);
@@ -34,10 +35,19 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           </div>
           <ThemeToggle className="static" />
         </header>
-        <main className="flex-1 overflow-y-auto">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            {children}
-          </div>
+        <main className="flex-1 overflow-x-hidden">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={location.pathname}
+              initial={{ opacity: 0, y: 10, scale: 0.99 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.99 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
+            >
+              {children}
+            </motion.div>
+          </AnimatePresence>
         </main>
       </SidebarInset>
     </SidebarProvider>
