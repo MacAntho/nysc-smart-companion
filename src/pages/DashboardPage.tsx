@@ -41,8 +41,8 @@ export function DashboardPage() {
         };
       case 'camp':
         return {
-          title: 'Camp Rules & Safety Protocols',
-          desc: 'Crucial survival guide: Understand the bye-laws to avoid service extensions or decamping.'
+          title: 'Surviving the 21-Day Orientation Camp',
+          desc: 'The definitive survival toolkit: Accommodation, food, health, and security tips for your orientation period.'
         };
       case 'ppa':
         return {

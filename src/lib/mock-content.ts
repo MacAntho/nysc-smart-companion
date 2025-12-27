@@ -62,28 +62,54 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-camp-survival',
+    category: 'Survival',
+    title: 'Surviving the 21-Day NYSC Orientation Camp',
+    summary: 'A comprehensive guide on accommodation, food, health, security, and social navigation within the camp.',
+    content: `Orientation camp is a marathon, not a sprint. To successfully navigate the 21-day regimented life, you need more than just your uniform; you need a strategy for comfort and safety.
+1. BUNK SELECTION & LOCKER SECURITY
+- The Top Bunk Advantage: While climbing can be tiring, the top bunk keeps you away from floor-level dust and prevents people from sitting on your bed throughout the day.
+- Double Padding: Camp mattresses are notoriously thin. If possible, bring a thin additional mattress padding or extra bedsheets to fold underneath you.
+- Locker Strategy: Use two high-quality padlocks. Never leave your locker open, even for a minute. Keep your waist bag (containing cash, phone, and documents) on your person even while sleeping or showering.
+2. THE KITCHEN VS. MAMI MARKET
+- Budgeting: The camp kitchen provides free meals (3 times daily), but the quality varies. Most corps members supplement with "Mami Market" food. Budget approximately ₦1,500 - ₦3,000 daily if you plan to eat at the market frequently.
+- Meal Tickets: Treat your meal ticket like gold; without it, you cannot access official rations.
+- Water: Hydration is critical. Always carry a water bottle. If buying "pure water" at the market, ensure the seal is intact.
+3. STAYING HEALTHY & FIT
+- Sunscreen & Hydration: You will spend hours on the parade ground. Use sunscreen and drink water at every break to avoid heat exhaustion.
+- The Camp Clinic: It is staffed by fellow corps member doctors and nurses. It is free. If you feel dizzy, feverish, or overly exhausted, report there immediately. Do not wait until it becomes an emergency.
+- Foot Care: Apply powder to your feet before wearing socks to prevent fungal infections and blisters from the jungle boots.
+4. SOCIAL INTEGRATION & NETWORKING
+- Avoiding 'Over-Sabi': While it is good to be active, don't try to dominate every conversation or activity. Respect the soldiers and officials; they control your "passing out" process.
+- Strategic Networking: Your platoon members and roommates are your first network. Be helpful and collaborative. The friends you make in these 21 days often become lifelong professional contacts.
+- Conflict Resolution: Tensions run high in crowded hostels. De-escalate conflicts quickly. If a situation becomes physical, report to your Platoon Officer immediately; fighting is a decampable offense.`,
+    metadata: {
+      stage: 'camp',
+      risk: 'medium',
+      source: 'NYSC Official/Experienced',
+      last_updated: '2025',
+      featured: true
+    }
+  },
+  {
     id: 'k-camp-rules',
     category: 'Survival',
     title: 'NYSC Orientation Camp Rules & Realities',
     summary: 'Critical guide on dress code, prohibited items, disciplinary penalties, and emergency protocols.',
     content: `Compliance with NYSC Bye-laws during the 21-day orientation is non-negotiable. Failure to adhere to these rules can lead to 'Decamping' (expulsion from camp) or an extension of service.
-
 1. THE 6/6 DRESS CODE MANDATE
 - You must be in your official uniform at all times.
 - 'Full 6/6' refers to: Cap, Crested Vest, Khaki Jacket/Trousers, Belt, Socks, and Jungle Boots.
 - 'White-on-White' refers to: White round-neck T-shirt, White shorts, White socks, and White sneakers.
 - Wearing mufti (civilian clothes) is strictly prohibited and can lead to immediate disciplinary action.
-
 2. PROHIBITED ITEMS & FIRE SAFETY
 - Boiling Rings & Irons: These are the #1 cause of hostel fires. If found, they will be confiscated, and the owner may face the camp court.
 - Sharp Objects: Knives, metal forks, and scissors are not allowed. Use plastic alternatives.
 - Alcohol & Narcotics: Bringing spirits or illegal substances into camp is a 'decampable' offense.
-
 3. ATTENDANCE & DISCIPLINE
 - The Bugle is Law: When the bugle sounds, you must move immediately to the designated area (Parade Ground or Lecture Hall).
 - Unauthorized Absence: Leaving the camp premises without a written exit permit from the State Coordinator is treated as absconding.
 - Lights Out: By 10:00 PM, all lights must be off and hostels silent.
-
 4. HEALTH & EMERGENCIES
 - The Camp Clinic: Open 24/7 for all corps members. Do not self-medicate in the hostel.
 - Report any symptoms of exhaustion or illness to your Platoon Commander or the medical team immediately.`,
