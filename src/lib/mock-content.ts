@@ -66,6 +66,36 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-foreign',
+    category: 'Official',
+    title: 'NYSC for Foreign-Trained Graduates',
+    summary: 'Essential roadmap for graduates from international institutions: evaluation protocols, document chains, and physical verification.',
+    content: `For graduates of international institutions, the NYSC mobilization process involves an additional layer of administrative scrutiny known as "Evaluation." 
+"Think of your foreign degree as an international passport; it is valid globally, but to participate in the National Service, it needs an 'Entry Visa' from the NYSC Evaluation Department."
+1. THE EVALUATION PROTOCOL:
+Unlike local graduates whose names are sent via a Senate List, foreign-trained graduates must personally upload and later physically present their credentials for evaluation. This process verifies the authenticity of the institution and the equivalence of the degree to Nigerian standards.
+2. MANDATORY DOCUMENT CHAIN:
+You must possess original copies and clear scans of the following:
+• DEGREE CERTIFICATE: The main certificate (or a certified true copy) issued by the institution.
+• ACADEMIC TRANSCRIPT: A complete breakdown of your grades for all years of study.
+• INTERNATIONAL PASSPORT: Specifically the data page and pages showing the entry and exit stamps for the duration of your study.
+• O-LEVEL/HIGH SCHOOL RESULTS: Original WAEC/NECO or equivalent results showing credit in at least 5 subjects.
+• RESIDENCE PERMIT: For countries where this is applicable (e.g., Northern Cyprus, Ukraine, Russia).
+3. PHYSICAL VERIFICATION PROCESS:
+After online registration, you will be assigned a date and center for physical verification.
+• YOU MUST APPEAR IN PERSON. Proxies are not allowed.
+• You must bring all the original documents uploaded during the online registration.
+• Centers are usually located in the 6 geopolitical zones. Ensure you select the center closest to you during registration.
+4. NON-ENGLISH SPEAKING COUNTRIES:
+If your certificates or transcripts are in a language other than English (e.g., French, Russian, Arabic):
+• You must obtain an official translation from a recognized body or the Embassy of the country of study.
+• Both the original and the translated version must be uploaded and presented at the verification center.
+5. PROFESSIONAL BODIES:
+For courses like Medicine, Pharmacy, or Nursing, you must also present your license or certificate of registration with the relevant professional body in Nigeria (e.g., MDCN, PCN).
+Failure to complete the evaluation and physical verification stages will result in your call-up letter being withheld, regardless of successful online registration.`,
+    metadata: { stage: 'prospective', risk: 'medium', source: 'NYSC Evaluation Dept', featured: true }
+  },
+  {
     id: 'k-redeployment',
     category: 'Official/Advisory',
     title: 'NYSC Redeployment & Relocation Guide',
@@ -73,7 +103,7 @@ export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
     content: `Relocation (commonly known as Redeployment) is the official process of moving your service from one state to another. It is not a right, but a privilege granted based on verifiable and compassionate grounds.
 1. VALID REASONS FOR RELOCATION:
 The NYSC management recognizes three primary grounds for relocation:
-• MARITAL (For Married Women): This is the most common ground. Married female corps members can apply to be moved to the state where their husband resides. 
+• MARITAL (For Married Women): This is the most common ground. Married female corps members can apply to be moved to the state where their husband resides.
 • MEDICAL: Corps members with chronic or life-threatening conditions (e.g., Asthma, Sickle Cell, Heart Disease, Kidney issues) that require specialized care not available in the current state of deployment.
 • SECURITY: Relocation may be granted if the current state or specific local government is experiencing extreme instability or direct threats to life that the NYSC cannot mitigate.
 2. THE OFFICIAL PROCESS:

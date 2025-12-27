@@ -40,6 +40,15 @@ export function DashboardPage() {
   const priorityContent = useMemo(() => {
     if (!isInitialized) return null;
     const readArticlesSet = new Set(readArticles ?? []);
+    // Priority: Foreign-Trained Graduate Intelligence
+    if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-foreign')) {
+      return {
+        title: 'NYSC for Foreign-Trained Graduates',
+        desc: 'Strategic Roadmap: International degrees require official evaluation and physical verification centers. View the entry requirements.',
+        risk: 'medium' as PriorityRisk,
+        searchLink: '/app/knowledge?search=foreign'
+      };
+    }
     // Logic for camp stage relocation visibility
     if ((stageId === 'mobilization' || stageId === 'camp') && !readArticlesSet.has('k-redeployment')) {
       return {
