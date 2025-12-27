@@ -26,7 +26,7 @@ export function StateGuidePage() {
     if (profileState && !selectedState) {
       setSelectedState(profileState);
     }
-  }, [profileState, selectedState]);
+  }, [profileState]);
   const data = useMemo(() => {
     if (!selectedState) return null;
     return STATE_DATA[selectedState] || STATE_DATA['DEFAULT'];
@@ -91,7 +91,7 @@ export function StateGuidePage() {
                 )}
               </CardHeader>
               <CardContent className="pt-8 px-6">
-                <div className="w-full aspect-video min-h-[300px]">
+                <div className="w-full h-[350px]">
                   <ChartContainer config={chartConfig} className="w-full h-full">
                     <BarChart data={chartData} margin={{ top: 20, right: 30, left: 10, bottom: 20 }}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
