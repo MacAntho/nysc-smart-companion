@@ -45,22 +45,24 @@ export const useAppStore = create<AppState>()(
         get().syncProfile();
       },
       toggleTask: (taskId) => {
-        const isRemoving = get().completedTasks.includes(taskId);
-        set((state) => ({
+        const currentTasks = get().completedTasks;
+        const isRemoving = currentTasks.includes(taskId);
+        set({
           completedTasks: isRemoving
-            ? state.completedTasks.filter((id) => id !== taskId)
-            : [...state.completedTasks, taskId],
-        }));
+            ? currentTasks.filter((id) => id !== taskId)
+            : [...currentTasks, taskId],
+        });
         toast.success(isRemoving ? 'Task marked as incomplete' : 'Task completed!');
         get().syncProfile();
       },
       toggleReadArticle: (articleId) => {
-        const isRead = get().readArticles.includes(articleId);
-        set((state) => ({
+        const currentArticles = get().readArticles;
+        const isRead = currentArticles.includes(articleId);
+        set({
           readArticles: isRead
-            ? state.readArticles.filter((id) => id !== articleId)
-            : [...state.readArticles, articleId],
-        }));
+            ? currentArticles.filter((id) => id !== articleId)
+            : [...currentArticles, articleId],
+        });
         toast.info(isRead ? 'Article marked as unread' : 'Knowledge shared! Article read.');
         get().syncProfile();
       },
@@ -78,21 +80,33 @@ export const useAppStore = create<AppState>()(
         get().syncProfile();
       },
       syncProfile: async () => {
-        const { userId, stage, stateOfDeployment, completedTasks, readArticles, activeProjectId, isOnboarded } = get();
-        if (!userId) return;
+        const { userId, stage, stateOfDeployment, completedTasks, readArticles, activeProjectId, isOnboarded, isSyncing } = get();
+        // Prevent sync if already syncing, or if no user ID exists
+        if (!userId || isSyncing) return;
         set({ isSyncing: true });
         try {
           const response = await fetch(`/api/profile/${userId}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ stage, stateOfDeployment, completedTasks, readArticles, activeProjectId, isOnboarded }),
+            body: JSON.stringify({ 
+              stage, 
+              stateOfDeployment, 
+              completedTasks, 
+              readArticles, 
+              activeProjectId, 
+              isOnboarded 
+            }),
           });
           if (response.ok) {
             set({ lastSynced: Date.now() });
+          } else {
+            const errorData = await response.json().catch(() => ({ error: 'Unknown server error' }));
+            console.error('Sync failed:', errorData.error);
           }
         } catch (error) {
           console.error('Failed to sync profile:', error);
-          toast.error('Cloud sync failed. Will retry later.');
+          // Silent failure for background sync to avoid UX disruption, 
+          // but we log it for diagnostics.
         } finally {
           set({ isSyncing: false });
         }
@@ -107,30 +121,33 @@ export const useAppStore = create<AppState>()(
             if (result.success && result.data) {
               const p = result.data as NYSCProfile;
               set({
-                stage: p.stage,
-                stateOfDeployment: p.stateOfDeployment,
+                stage: p.stage || 'prospective',
+                stateOfDeployment: p.stateOfDeployment || '',
                 completedTasks: p.completedTasks || [],
                 readArticles: p.readArticles || [],
                 activeProjectId: p.activeProjectId || null,
-                isOnboarded: p.isOnboarded,
-                lastSynced: p.updatedAt
+                isOnboarded: p.isOnboarded ?? false,
+                lastSynced: p.updatedAt || null
               });
             }
           }
         } catch (error) {
-          console.error('Failed to load profile:', error);
+          console.error('Failed to load profile from cloud:', error);
         }
       },
-      reset: () => set({
-        userId: null,
-        stage: 'prospective',
-        stateOfDeployment: '',
-        completedTasks: [],
-        readArticles: [],
-        activeProjectId: null,
-        isOnboarded: false,
-        lastSynced: null
-      }),
+      reset: () => {
+        set({
+          userId: null,
+          stage: 'prospective',
+          stateOfDeployment: '',
+          completedTasks: [],
+          readArticles: [],
+          activeProjectId: null,
+          isOnboarded: false,
+          lastSynced: null,
+          isSyncing: false
+        });
+      },
     }),
     {
       name: 'nysc-companion-storage',
