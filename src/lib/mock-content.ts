@@ -51,11 +51,41 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-callup',
+    category: 'Official',
+    title: 'NYSC Call-up Letter: Verification, Corrections, and Reprint Procedures',
+    summary: 'Authenticity checks, print specs, error fixes, and lost letter process.',
+    content: `The Call-up Letter is your official deployment document. Follow these strict procedures to ensure its validity:
+1. VERIFICATION:
+- Every authentic Call-up Letter contains a unique QR code.
+- Scan the code using the NYSC portal scanner to verify your deployment details.
+- Ensure the name and state on the portal match the physical document.
+2. PRINT SPECIFICATIONS:
+- High-quality COLOR printing is mandatory. Black and white prints may be rejected at camp.
+- DO NOT LAMINATE your Call-up Letter. Lamination makes it impossible to stamp and sign during registration.
+- Print at least 3 photocopies for file documentation.
+3. CORRECTIONS (Name/DOB Mismatch):
+- If you notice a name error, login to your dashboard and click "Apply for Correction of Name".
+- For Date of Birth (DOB) issues, use the "Link with JAMB" feature to pull correct data.
+- Corrections must be initiated before reporting to camp.
+4. LOST LETTER PROTOCOL:
+- If lost, obtain a Police Report immediately.
+- Swear an Affidavit of loss at a High Court.
+- Contact your State Coordinator or ICT unit for a reprint authorization.`,
+    metadata: {
+      stage: 'mobilization',
+      risk: 'low',
+      source: 'NYSC Official',
+      last_updated: '2025',
+      featured: true
+    }
+  },
+  {
     id: 'k-registration',
     category: 'Official',
     title: 'Complete Guide to NYSC Online Registration Process',
     summary: 'Step-by-step from prerequisites to printing call-up letter, errors, and deadlines.',
-    content: `Online registration is the most critical phase of your service journey. 
+    content: `Online registration is the most critical phase of your service journey.
 1. PREREQUISITES:
 - Ensure your name is on the Senate List of your institution.
 - Ensure you have a valid JAMB registration number.
