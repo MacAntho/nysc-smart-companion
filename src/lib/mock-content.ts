@@ -77,6 +77,45 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-medical-redeploy',
+    category: 'Official',
+    title: 'Medical Redeployment (Health Relocation) Guide',
+    summary: 'Qualifying conditions, documentation requirements from government hospitals, and the official board review process for health-based relocations.',
+    content: `Medical Redeployment is an official provision for corps members with chronic or life-threatening health conditions that require specialized monitoring or treatment available only in specific geographical locations.
+1. QUALIFYING CHRONIC CONDITIONS
+NYSC typically considers applications for conditions such as:
+- Sickle Cell Anemia (HB SS/SC)
+- Chronic Kidney Disease (CKD)
+- Severe Cardiovascular/Heart Diseases
+- HIV/AIDS (Requiring specific antiretroviral therapy)
+- Epilepsy/Severe Neurological Disorders
+- Post-Major Surgical Recovery (within 6 months)
+2. MANDATORY DOCUMENTATION
+Documentation is the most scrutinized part of the process. Reports must be:
+- From a Government, Military, or University Teaching Hospital.
+- Signed by a Consultant in the relevant field.
+- Stamped by the Hospital Medical Director or CMD.
+- IMPORTANT: Reports from private clinics, diagnostic centers, or pharmacies are STRICTLY PROHIBITED and will result in immediate rejection.
+3. THE MEDICAL BOARD REVIEW
+Applications are not automatically granted.
+- Verification: The NYSC Medical Board will verify the authenticity of the hospital report.
+- Interview: You may be summoned for a physical interview or assessment by the camp medical team or state secretariat health officers.
+- Decision: Relocation is granted based on the availability of the required medical facilities in the destination state.
+4. APPLICATION WINDOWS
+- Camp Window: Apply within the first 10 days of the orientation camp.
+- In-Service Window: Apply through your dashboard or State Secretariat after the 3rd month of service if the condition develops or worsens during PPA.
+5. WARNINGS
+- Forgery: Presenting a forged medical report is a criminal offense under the NYSC Act and leads to immediate decamping and prosecution.
+- Self-Relocation: Never leave your post without the official Relocation Letter, even if you have submitted a medical report.`,
+    metadata: {
+      stage: 'mobilization/camp',
+      risk: 'medium',
+      source: 'NYSC',
+      last_updated: '2025',
+      featured: true
+    }
+  },
+  {
     id: 'k-redeployment',
     category: 'Official',
     title: 'Guide to NYSC Redeployment (Relocation)',

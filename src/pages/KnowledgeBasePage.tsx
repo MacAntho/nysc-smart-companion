@@ -31,7 +31,7 @@ export function KnowledgeBasePage() {
     if (queryParam && queryParam !== search) {
       setSearch(queryParam);
     }
-  }, [queryParam]);
+  }, [queryParam, search]);
   const filtered = KNOWLEDGE_ARTICLES.filter(a => {
     const searchLower = search.toLowerCase();
     const matchesSearch =

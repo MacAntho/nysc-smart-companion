@@ -31,6 +31,7 @@ export function DashboardPage() {
   const relevantDeadlines = DEADLINES.filter(d => d.stage === stageId);
   const getPriorityContent = (): { title: string; desc: string; risk: PriorityRisk; searchLink: string } => {
     const hasReadRedeployment = readArticles.includes('k-redeployment');
+    const hasReadMedicalRedeploy = readArticles.includes('k-medical-redeploy');
     switch(stageId) {
       case 'prospective':
         return {
@@ -40,12 +41,19 @@ export function DashboardPage() {
           searchLink: '/app/knowledge?q=exemption'
         };
       case 'mobilization':
-        return !hasReadRedeployment ? {
+        if (!hasReadMedicalRedeploy) return {
+          title: 'Medical Redeployment Guide',
+          desc: 'Essential for corps members with chronic health conditions (Sickle Cell, CKD, etc.). Learn the official board review process.',
+          risk: 'medium',
+          searchLink: '/app/knowledge?q=medical'
+        };
+        if (!hasReadRedeployment) return {
           title: 'Redeployment & Relocation Protocol',
           desc: 'Crucial: Learn the health, marital, and security grounds for relocating to a different state.',
           risk: 'medium',
           searchLink: '/app/knowledge?q=redeployment'
-        } : {
+        };
+        return {
           title: 'Official Registration Guide',
           desc: 'Critical step-by-step instructions for your current registration stage.',
           risk: 'medium',
@@ -59,12 +67,19 @@ export function DashboardPage() {
           searchLink: '/app/knowledge?q=survival'
         };
       case 'ppa':
-        return !hasReadRedeployment ? {
+        if (!hasReadMedicalRedeploy) return {
+          title: 'Health-Based Relocation Protocol',
+          desc: 'The Post-Camp medical window is open. Verify your government hospital reports for specialized care needs.',
+          risk: 'medium',
+          searchLink: '/app/knowledge?q=medical'
+        };
+        if (!hasReadRedeployment) return {
           title: 'Post-Camp Relocation Window',
           desc: 'The 3-month relocation portal opens soon. Verify your documentation for marital or health grounds.',
           risk: 'medium',
           searchLink: '/app/knowledge?q=redeployment'
-        } : {
+        };
+        return {
           title: 'Monthly Clearance & PPA Protocol',
           desc: 'Essential: Your guide to monthly signatures, registers, and handling PPA rejection.',
           risk: 'high',
