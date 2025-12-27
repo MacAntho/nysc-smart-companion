@@ -131,19 +131,19 @@ export const useAppStore = create<AppState>()(
             set({
               lastSynced: Date.now(),
               lastSyncedPayload: currentPayload,
-              isSyncing: false
+              isSyncing: false,
+              lastSyncError: null
             });
-            // Consistency check for rapid updates
             const finalPayload = generatePayload();
             if (finalPayload !== currentPayload) {
               setTimeout(() => get().syncProfile(), 500);
             }
           } else {
-            set({ isSyncing: false, lastSyncError: 'Sync refused' });
+            set({ isSyncing: false, lastSyncError: 'Sync refused by server' });
           }
         } catch (error) {
           console.error('[SYNC ERROR]', error);
-          set({ isSyncing: false, lastSyncError: 'Connection issue' });
+          set({ isSyncing: false, lastSyncError: 'Network connection issue' });
         }
       },
       loadProfile: async (force = false) => {
@@ -152,7 +152,6 @@ export const useAppStore = create<AppState>()(
           set({ isInitialized: true });
           return;
         }
-        // Prevent concurrent loads unless forced
         if (state.isSyncing && !force) return;
         if (state.isInitialized && !force) return;
         set({ isSyncing: true, lastSyncError: null });
@@ -180,17 +179,13 @@ export const useAppStore = create<AppState>()(
                 lastSynced: p.updatedAt || Date.now(),
                 isPro: p.isPro ?? state.isPro,
                 lastSyncedPayload: remotePayload,
-                isInitialized: true
+                lastSyncError: null
               });
-            } else {
-              set({ isInitialized: true });
             }
-          } else {
-            set({ isInitialized: true });
           }
         } catch (error) {
           console.error('[LOAD ERROR]', error);
-          set({ lastSyncError: 'Network failure during hydration', isInitialized: true });
+          set({ lastSyncError: 'Hydration failure' });
         } finally {
           set({ isSyncing: false, isInitialized: true });
         }

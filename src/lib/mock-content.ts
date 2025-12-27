@@ -74,72 +74,105 @@ export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
 I. LEGAL MANDATE & JOB MARKET RECOGNITION
 1. MANDATORY PRESENTATION (Section 12): By law, every employer in Nigeria (Public or Private) is required to demand your NYSC Discharge Certificate or Exemption/Exclusion Certificate before offering permanent employment.
 2. PROFESSIONAL BODIES: Membership in many professional bodies (ICAN, COREN, NBA, etc.) and post-graduate university admissions in Nigeria require proof of national service.
-3. PUBLIC OFFICE: Eligibility for many elective or appointive public offices is contingent upon having served or being legally exempted.
-II. SAFEGUARDING YOUR CERTIFICATE
-1. SCANNED BACKUP: Immediately upon collection, create a high-resolution digital scan. Save it to a secure cloud vault (Google Drive, iCloud) and email a copy to yourself.
-2. LAMINATION: While common, some agencies advise against heavy lamination that might interfere with verifying security features (holograms/watermarks). Consider a high-quality protective sleeve instead.
-III. PROCEDURE FOR LOST OR DAMAGED CERTIFICATES
-NYSC Policy is strict: THE DISCHARGE CERTIFICATE IS NEVER RE-ISSUED IF LOST. However, the legal alternative is the "Confirmation of Service" letter.
+II. PROCEDURE FOR LOST OR DAMAGED CERTIFICATES
+NYSC Policy is strict: THE DISCHARGE CERTIFICATE IS NEVER RE-ISSUED IF LOST.
 1. IMMEDIATE ACTION:
    a. Police Report: File a report at the nearest station to the location of loss.
-   b. Sworn Affidavit: Obtain a court affidavit stating the circumstances of the loss and the certificate number (if known).
-2. FORMAL APPLICATION:
-   - Write a formal letter addressed to the Director-General of NYSC.
-   - Route the letter through your State Coordinator (the state where you served).
-   - Attach the Police Report and Sworn Affidavit.
-3. CONFIRMATION OF SERVICE:
-   - If approved, the Directorate Headquarters will issue a "Letter of Confirmation of Service." This letter is legally equivalent to the original certificate for all official purposes.
-IV. CORRECTION OF DATA ON CERTIFICATE
-If you notice an error in your name or date of birth on the day of collection:
-1. DO NOT ACCEPT: Point out the error to the distribution official immediately.
-2. CORRECTION WINDOW: Errors reported after the POP date are significantly harder to fix and often require a trip to the National Headquarters in Abuja with supporting documents (WAEC/Degree/Birth Certificate).`,
+   b. Sworn Affidavit: Obtain a court affidavit stating the circumstances of the loss.
+2. CONFIRMATION OF SERVICE:
+   - If approved, the Directorate Headquarters will issue a "Letter of Confirmation of Service." This letter is legally equivalent to the original certificate.`,
     metadata: { stage: 'pop', risk: 'low', source: 'NYSC Act / Directorate Headquarters', featured: true, last_updated: '2024-12-01' }
+  },
+  {
+    id: 'k-insider-tips',
+    category: 'Survival',
+    title: '100 Practical NYSC Survival Tips',
+    summary: 'Expert Intelligence: Battle-tested advice for orientation camp, financial management, and PPA survival derived from 20+ batches of experience.',
+    content: `Mastering the service year requires more than just following the rules; it requires understanding the "unwritten" code of survival.
+I. ORIENTATION CAMP SURVIVAL
+1. THE 4AM RULE: To avoid long bathroom queues, wake up at 3:30 AM. Soldiers start whistling by 4:00 AM.
+2. DOCUMENT COPIES: Carry at least 10 photocopies of every document. You will need them for opening accounts, file registrations, and kit collection.
+3. WHITE GEAR: Buy extra white shorts and socks. The camp-issued ones are often poor quality and transparent.
+II. PPA & COMMUNITY INTEGRATION
+1. LOCAL LANGUAGE: Learn basic greetings in the local dialect. It drastically improves your safety and bargaining power at markets.
+2. THE LGI FACTOR: Your Local Government Inspector is the most important person in your service year. Be respectful, be punctual, and never argue with them in public.
+3. ALLOWANCE BUFFERS: Always assume your allowance will be 3-5 days late. Never spend your last ���5,000 before the alert drops.`,
+    metadata: { stage: 'all', risk: 'low', source: 'NYSC Smart Companion Alumni', featured: true, last_updated: '2025-01-10' }
+  },
+  {
+    id: 'k-relocation',
+    category: 'Official',
+    title: 'NYSC Redeployment & Relocation Guide',
+    summary: 'Official Protocol: Understanding the valid grounds for relocation (Marital, Medical, Security) and the portal-based application process.',
+    content: `Relocation is a privilege, not a right. It is granted based on specific, verifiable grounds.
+I. VALID GROUNDS FOR RELOCATION
+1. MARITAL STATUS (Female Corps Members Only): Requires Marriage Certificate, Change of Name in a national newspaper, and a letter from the husband's employer.
+2. MEDICAL GROUNDS: Requires a comprehensive medical report from a Federal or State Government Hospital. Reports from private clinics are strictly rejected.
+3. SECURITY: Granted in cases of active communal crisis or direct threats in the state of deployment, as determined by the NYSC security unit.
+II. APPLICATION TIMELINE
+1. CAMP RELOCATION: Applied for during the first week of orientation via the camp officials.
+2. POST-CAMP RELOCATION: Done through the online dashboard during specific windows.
+III. CAUTION: PORTAL SCAMS
+- Do not pay anyone for "relocation slots." NYSC relocation is handled electronically through the headquarters in Abuja based on the quota of the destination state.`,
+    metadata: { stage: 'camp', risk: 'medium', source: 'NYSC Handbook', featured: false, last_updated: '2024-11-15' }
+  },
+  {
+    id: 'k-clearance',
+    category: 'Official',
+    title: 'Monthly & Final Clearance Protocol',
+    summary: 'Operational Requirement: Mastering the LGI signature chain and biometric verification process for consistent allowance payment.',
+    content: `Clearance is the mechanism by which NYSC verifies you are still at your post.
+I. THE MONTHLY CHAIN
+1. PPA SIGNATURE: Your employer must sign and stamp your monthly clearance letter, confirming your performance.
+2. LGI SUBMISSION: You must physically present this letter at the Local Government Secretariat during the "Clearance Week" (usually the first week of the month).
+3. BIOMETRIC CAPTURE: Your thumbprint must be captured on the NYSC digital device. No fingerprint = No allowance.
+II. FINAL CLEARANCE (POP)
+- Final clearance involves returning all kit items (except boots and vest) and obtaining signatures from the Employer, LGI, ZI, and finally the State Coordinator.`,
+    metadata: { stage: 'ppa', risk: 'medium', source: 'NYSC Operations Manual', featured: true, last_updated: '2024-12-05' }
+  },
+  {
+    id: 'k-camp-packing',
+    category: 'Survival',
+    title: 'Orientation Camp Packing List',
+    summary: 'Strategic Preparation: Essential documents and survival gear for the 21-day induction phase.',
+    content: `Success at camp starts with your bag. If you forget critical documents, you may be sent home.
+I. MANDATORY DOCUMENTS (The "Do or Die" Folder)
+1. Call-up Letter (Original + 5 copies). Do not laminate the original.
+2. Statement of Result / Degree Certificate.
+3. Medical Fitness Certificate (From Govt Hospital).
+4. Institutional ID Card.
+5. Passport Photographs (at least 20 copies with white background).
+II. GEAR & SURVIVAL
+- 2 pairs of white sneakers (Camp-issued ones are often uncomfortable).
+- 3-5 pairs of white socks and shorts.
+- Mosquito net and disinfectant.
+- Power bank (charging ports in camp are scarce and paid).
+- Enough cash in small denominations for the "Mammy Market."`,
+    metadata: { stage: 'mobilization', risk: 'high', source: 'NYSC Protocols', featured: true, last_updated: '2025-01-05' }
   },
   {
     id: 'k-financial-survival',
     category: 'Survival/Financial',
     title: 'NYSC Financial Survival Guide: Allowance, Budgets & Side Hustles',
-    summary: 'Strategic Financial Roadmap: Mastering the updated ₦77k allowance, PPA perks, SAED business development, and avoiding common scams.',
-    content: `Effective October 2024, the federal allowance (allowee) has been updated to ₦77,000. While a significant increase, the current economic climate requires disciplined management.
+    summary: 'Strategic Financial Roadmap: Mastering the updated ₦77k allowance, PPA perks, and SAED business development.',
+    content: `Effective October 2024, the federal allowance is ₦77,000.
 I. THE ₦77,000 ALLOWANCE STRUCTURE
-1. PAYMENT CYCLE: The federal allowance usually arrives between the 25th and 30th of each month. Note that your first "double" payment (Camp + 1st Month) often faces processing delays.
-2. DEDUCTIONS: Aside from minor bank maintenance fees, no official deductions should be made from your federal allowance by any NYSC official.
-3. STATE ALLOWEE: Some states (e.g., Lagos, Anambra, Rivers) provide an additional stipend. Verify your registration status with the State Secretariat to ensure you are on the payroll.
+1. PAYMENT CYCLE: Usually arrives between the 25th and 30th of each month.
+2. STATE ALLOWEE: Some states provide an additional stipend.
 II. THE 50/30/20 BUDGETING MATRIX
-1. NEEDS (50% - ₦38,500): Prioritize food staples, essential transport to your PPA, and basic data/communication.
-2. SAVINGS & TRANSITION (30% - ₦23,100): Start building your 'Post-NYSC Buffer'. Saving ₦20k monthly results in ₦240k by the end of service—a critical safety net for job hunting.
-3. PERSONAL/CDS (20% - ₦15,400): Use this for personal hygiene, occasional social activities, and minor CDS project expenses.
-III. MAXIMIZING PPA PERKS
-1. ACCOMMODATION: If your PPA provides housing, you save approximately 35% of your total living costs. If not, legally request "Housing Allowance in Lieu."
-2. FEEDING/TRANSPORT: Many schools and government agencies provide lunch or staff bus access. Utilize these religiously to preserve your allowance.
-3. RETENTION PROSPECTS: View your PPA work as an investment. Corps members who show exceptional value are often retained with salaries far exceeding the allowance.
-IV. SAED & SIDE HUSTLES (MONETIZING DOWNTIME)
-1. SKILL ACQUISITION: Use your weekly CDS days and PPA afternoons to master high-income skills (Data Analysis, Graphic Design, Content Writing).
-2. LOCAL ARBITRAGE: Identify items cheaper in your state of deployment (e.g., Agricultural products in the North) and connect with buyers in urban centers.
-3. TUTORING: If posted to a school, private home lessons for students in your community can double your monthly income.
-V. EMERGENCY BUFFERS & SCAMS
-1. EMERGENCY FUND: Always keep at least ₦20,000 in a separate, high-interest savings app (like PiggyVest or Cowrywise) for medical or travel emergencies.
-2. PORTAL SCAMS: Never pay anyone to "fast-track" your allowance or change your PPA. All official financial updates happen through your dashboard.
-3. DEBT TRAPS: Avoid taking "quick loans" from apps that charge high interest. If your allowance is delayed, report to the LGI for official status rather than borrowing.`,
+1. NEEDS (50% - ₦38,500): Prioritize food and transport.
+2. SAVINGS (30% - ₦23,100): Start building your 'Post-NYSC Buffer'.
+3. PERSONAL (20% - ₦15,400): Hygiene and social activities.`,
     metadata: { stage: 'all', risk: 'medium', source: 'NYSC/SAED', featured: true, last_updated: '2024-10-25' }
   },
   {
     id: 'k-emergency',
     category: 'Advisory/Safety',
     title: 'NYSC Emergency Response Guide',
-    summary: 'Strategic Safety Roadmap: Official protocols for medical, security, document loss, and PPA-related emergencies.',
-    content: `This guide outlines the mandatory steps to take during critical emergencies during your service year.
-I. MEDICAL EMERGENCIES
-1. ORIENTATION CAMP: Report immediately to the Camp Clinic. In severe cases, the NYSC medical team will coordinate a referral to a Military or Specialist hospital.
-2. POST-CAMP (PPA): Visit the nearest Government/General hospital. Inform your Local Government Inspector (LGI) and Zonal Inspector (ZI) within 24 hours.
-II. SECURITY & PERSONAL THREATS
-1. DISTRESS CALLS: Save the numbers of your LGI, ZI, and the State NYSC Security Officer.
-2. HARASSMENT: Reporting sexual or physical harassment at your PPA is mandatory. NYSC has a zero-tolerance policy.
-3. TRAVEL SAFETY: Never travel outside your state of deployment without written permission from the State Coordinator. Unauthorized travel voids your security coverage.
-III. DOCUMENT EMERGENCIES
-1. LOST ID CARD: Obtain a Police Report and Sworn Affidavit. Apply for replacement via dashboard.
-IV. PPA & CDS CONFLICTS
-1. ACCOMMODATION ISSUES: If PPA housing becomes uninhabitable, report to the LGI. You are entitled to housing allowance in lieu.`,
+    summary: 'Strategic Safety Roadmap: Official protocols for medical, security, and document loss emergencies.',
+    content: `I. MEDICAL EMERGENCIES: Visit the nearest Government hospital. Inform your LGI and ZI within 24 hours.
+II. SECURITY THREATS: Save the numbers of your LGI and the State NYSC Security Officer.
+III. TRAVEL SAFETY: Never travel outside your state of deployment without written permission from the State Coordinator.`,
     metadata: { stage: 'all', risk: 'high', source: 'NYSC Protocols', featured: true, last_updated: '2024-11-01' }
   },
   {
@@ -148,21 +181,20 @@ IV. PPA & CDS CONFLICTS
     title: 'Disqualification & Remobilization Protocol',
     summary: 'Critical Risk: Understand the grounds for service cancellation and the legal implications of disciplinary disqualification.',
     content: `Disqualification is the ultimate administrative penalty.
-1. ABSCONDMENT: Missing more than 3 months of service without approval results in remobilization (restarting from scratch).
-2. FORGED DOCUMENTS: Discovery of forged degrees leads to immediate handover to security agencies.
-3. DESERTION: Leaving camp without permission can lead to "Remobilization with half-pay" or total cancellation.`,
+1. ABSCONDMENT: Missing more than 3 months results in remobilization (restarting).
+2. FORGED DOCUMENTS: Discovery of forged degrees leads to immediate handover to security.
+3. DESERTION: Leaving camp without permission can lead to "Remobilization with half-pay".`,
     metadata: { stage: 'camp', risk: 'high', source: 'NYSC Legal Unit', featured: true, last_updated: '2024-09-15' }
   },
   {
     id: 'k-career-leverage',
     category: 'Career/POP',
     title: 'Leveraging NYSC for Career Transition',
-    summary: 'Strategic Roadmap: Mastering your transition from service to the labor market through skills, networking, and digital presence.',
+    summary: 'Strategic Roadmap: Mastering your transition from service to the labor market.',
     content: `National service is a strategic launchpad.
-I. SKILL MONETIZATION: Collect your SAED certificates. They are recognized for start-up loans.
-II. NETWORKING: Your PPA is your first professional network. Get a "Recommendation Letter".
-III. DIGITAL BRANDING: Update LinkedIn profile. Change headline from "Serving Corps Member" to "Graduate [Your Major]".
-IV. TRANSITION FUND: Save 20% of final 3 months' allowance as a "Job Hunt Fund".`,
+I. SKILL MONETIZATION: Collect your SAED certificates.
+II. NETWORKING: Your PPA is your first professional network.
+III. DIGITAL BRANDING: Update LinkedIn profile.`,
     metadata: { stage: 'pop', risk: 'low', source: 'NYSC Smart Companion', featured: true, last_updated: '2024-10-20' }
   }
 ];
@@ -203,8 +235,6 @@ export const DEADLINES = [
   { id: 'd4', title: 'Monthly Biometric Window', date: '2025-05-30', stage: 'ppa', importance: 'high' },
   { id: 'd5', title: 'Project Proposal Deadline', date: '2025-07-15', stage: 'cds', importance: 'medium' },
   { id: 'd6', title: 'Final Clearance Phase', date: '2025-11-01', stage: 'pop', importance: 'high' },
-  { id: 'd7', title: 'Senate List Verification', date: '2025-01-15', stage: 'prospective', importance: 'high' },
-  { id: 'd8', title: 'Call-up Printing Window', date: '2025-02-25', stage: 'mobilization', importance: 'high' },
 ];
 export const CDS_RESOURCES = {
   categories: [

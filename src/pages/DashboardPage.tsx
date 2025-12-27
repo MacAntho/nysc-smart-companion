@@ -4,8 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, CheckCircle, ChevronRight, Sparkles, ArrowRight, ShieldAlert, Briefcase, Info, CheckCircle2 } from 'lucide-react';
-import { JOURNEY_STAGES, DEADLINES } from '@/lib/mock-content';
+import { Calendar, CheckCircle, ChevronRight, ArrowRight, ShieldAlert, Briefcase, Info, CheckCircle2 } from 'lucide-react';
+import { JOURNEY_STAGES, DEADLINES, KNOWLEDGE_ARTICLES } from '@/lib/mock-content';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow, differenceInDays, parseISO, isPast } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -48,40 +48,37 @@ export function DashboardPage() {
   const priorityContent = useMemo(() => {
     if (!isInitialized || !isOnboarded) return null;
     const readArticlesSet = new Set(readArticles ?? []);
-    // 1. Critical Emergency Check
-    if (!readArticlesSet.has('k-emergency')) {
-      return { title: 'Emergency Response Guide', desc: 'Process Critical: Mandatory safety protocols for medical emergencies and security incidents.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=emergency' };
+    const exists = (id: string) => KNOWLEDGE_ARTICLES.some(a => a.id === id);
+    // 1. Final Milestone: Certificate Intelligence (Highest Priority for POP)
+    if (stageId === 'pop' && !readArticlesSet.has('k-pop-certificate') && exists('k-pop-certificate')) {
+      return { title: 'Mandatory Certificate Guide', desc: 'Process Critical: Essential requirements for certificate collection, recognition, and the official protocol for handling loss.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=certificate' };
     }
-    // 2. Critical Disqualification Check
-    if (!readArticlesSet.has('k-disqualification')) {
-      return { title: 'Disqualification Protocol', desc: 'Critical Risk: Understand the grounds for service cancellation and legal implications.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=disqualification' };
+    // 2. Critical Emergency Check (Global)
+    if (!readArticlesSet.has('k-emergency') && exists('k-emergency')) {
+      return { title: 'Emergency Protocols', desc: 'Safety Mandate: Follow these exact steps for medical or security emergencies. Failure to follow protocol voids official insurance.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=emergency' };
     }
-    // 3. Final Milestone: Certificate Intelligence (Priority for POP)
-    if (stageId === 'pop' && !readArticlesSet.has('k-pop-certificate')) {
-      return { title: 'Certificate: Jobs & Loss Protocol', desc: 'Operational Requirement: Mandatory guidelines for certificate recognition, job market usage, and official replacement procedure.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=certificate' };
+    // 3. Critical Disqualification Check (Global)
+    if (!readArticlesSet.has('k-disqualification') && exists('k-disqualification')) {
+      return { title: 'Disqualification Risk', desc: 'Critical Advisory: Understand the specific bye-laws that lead to service extension or total remobilization.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=disqualification' };
     }
     // 4. Financial Intelligence (For PPA/CDS)
-    if ((stageId === 'ppa' || stageId === 'cds') && !readArticlesSet.has('k-financial-survival')) {
-      return { title: '₦77k Financial Survival Guide', desc: 'Strategy Active: Budgeting the new federal allowance, maximizing PPA perks, and SAED monetization.', risk: 'medium' as PriorityRisk, link: '/app/knowledge?search=financial' };
+    if ((stageId === 'ppa' || stageId === 'cds') && !readArticlesSet.has('k-financial-survival') && exists('k-financial-survival')) {
+      return { title: 'Financial Survival Active', desc: 'Strategy Required: Mastery of the ₦77k allowance, PPA perks, and avoiding high-interest debt traps.', risk: 'medium' as PriorityRisk, link: '/app/knowledge?search=financial' };
     }
-    // 5. Career Leverage (For POP)
-    if (stageId === 'pop' && !readArticlesSet.has('k-career-leverage')) {
-      return { title: 'Career Transition Roadmap', desc: 'Strategy Active: Leverage your NYSC experience, certificates, and PPA network for the labor market.', risk: 'medium' as PriorityRisk, link: '/app/knowledge?search=career' };
+    // 5. Practical Insider Tips (Global)
+    if (!readArticlesSet.has('k-insider-tips') && exists('k-insider-tips')) {
+      return { title: '100 Insider Survival Tips', desc: 'Expert Intelligence: Battle-tested practical tips for camp, finance, and PPA survival.', risk: 'medium' as PriorityRisk, link: '/app/knowledge?search=tips' };
     }
-    // 6. General Survival Tips
-    if (!readArticlesSet.has('k-insider-tips')) {
-      return { title: '100 Practical Survival Tips', desc: 'Expert Intelligence: Battle-tested tips for camp, finance, and PPA survival.', risk: 'medium' as PriorityRisk, link: '/app/knowledge?search=tips' };
-    }
-    return { title: 'Operational Readiness Active', desc: 'System status stable. Review your current milestones to ensure 100% compliance with NYSC Bye-laws.', risk: 'low' as PriorityRisk, link: '/app/journey' };
+    return { title: 'Operational Status: Ready', desc: 'System status stable. All priority intelligence modules have been mastered for your current phase.', risk: 'low' as PriorityRisk, link: '/app/journey' };
   }, [readArticles, isInitialized, isOnboarded, stageId]);
   const syncStatus = useMemo(() => {
-    if (isSyncing) return { text: 'Syncing Intelligence...', color: 'bg-amber-500', pulse: true };
-    if (lastSyncError) return { text: 'Offline Mode Active', color: 'bg-red-500', pulse: false };
-    if (!lastSynced) return { text: 'Local Session', color: 'bg-nysc-green-800', pulse: false };
+    if (isSyncing) return { text: 'Syncing...', color: 'bg-amber-500', pulse: true };
+    if (lastSyncError) return { text: 'Offline', color: 'bg-red-500', pulse: false };
+    if (!lastSynced) return { text: 'Local Only', color: 'bg-nysc-green-800', pulse: false };
     try {
       return { text: `Synced ${formatDistanceToNow(lastSynced, { addSuffix: true })}`, color: 'bg-nysc-green-800', pulse: false };
     } catch (e) {
-      return { text: 'Cloud Verified', color: 'bg-nysc-green-800', pulse: false };
+      return { text: 'Verified', color: 'bg-nysc-green-800', pulse: false };
     }
   }, [isSyncing, lastSynced, lastSyncError]);
   return (
@@ -111,7 +108,7 @@ export function DashboardPage() {
           <CardContent className="pb-6">
             <Link to={priorityContent.link}>
               <Button className={cn("font-bold rounded-xl h-11", priorityContent.risk === 'high' ? "bg-destructive hover:bg-red-700 shadow-red-100 shadow-lg" : "bg-nysc-gold hover:bg-amber-700 shadow-amber-100 shadow-lg")}>
-                View Guide <ArrowRight className="ml-2 w-4 h-4" />
+                Access Guide <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </Link>
           </CardContent>
