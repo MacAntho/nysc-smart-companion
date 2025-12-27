@@ -1,50 +1,42 @@
 import { Hono } from "hono";
 import type { Env } from './core-utils';
-import { UserEntity, ContentEntity, OtpEntity } from "./entities";
-import { ok, bad, notFound, isStr } from './core-utils';
+import { UserEntity } from "./entities";
+import { ok, bad, notFound } from './core-utils';
 import type { NYSCProfile } from "@shared/types";
-import type { OtpState } from './entities';
 export function userRoutes(app: Hono<{ Bindings: Env }>) {
+  /**
+   * AUTH: SIMPLIFIED OTP SEND (Always returns success)
+   */
   app.post('/api/auth/send-otp', async (c) => {
     const body = await c.req.json<{ email?: string }>();
     const email = body.email;
     if (!email?.trim() || !email.includes('@')) return bad(c, 'Valid email required');
-    const emailKey = email.toLowerCase().trim();
-    const otpEntity = new OtpEntity(c.env, emailKey);
-    const otp = (100000 + Math.floor(Math.random() * 900000)).toString();
-    const expires = Date.now() + 300000;
-    await otpEntity.save({ otp, expires });
-    return ok(c, { sent: true });
+    // For testing: we skip generating/storing an OTP.
+    // Any 6-digit code will work for any email in the login route.
+    return ok(c, { sent: true, note: 'Frictionless testing enabled: Use any 6 digits' });
   });
-
   /**
-   * AUTH: SIMULATED LOGIN
+   * AUTH: SIMPLIFIED LOGIN (Bypasses state check, uses email heuristics)
    */
   app.post('/api/auth/login', async (c) => {
     const body = await c.req.json<{ email?: string; otp?: string }>();
     const { email, otp } = body;
     if (!email || !otp) return bad(c, 'Email and OTP required');
-    // Demo logic: any 6 digit OTP works
-    if (otp.length !== 6) return bad(c, 'Invalid OTP format');
-
-    const emailKey = email.toLowerCase().trim();
-    const otpEntity = new OtpEntity(c.env, emailKey);
-    if (!await otpEntity.exists()) {
-      return bad(c, 'Invalid or expired OTP');
+    // Validate format only: exactly 6 digits
+    if (!/^\d{6}$/.test(otp)) {
+      return bad(c, 'Invalid OTP format. Must be 6 digits.');
     }
-    const state = await otpEntity.getState();
-    if (state.expires < Date.now() || state.otp !== otp) {
-      return bad(c, 'Invalid or expired OTP');
-    }
-    await otpEntity.delete();
-
-    // Mock admin check
-    const role = email.endsWith('@nysc.gov.ng') ? 'admin' : 'user';
-    const isPro = email.includes('pro');
-    const userId = crypto.randomUUID().split('-')[0]; // Simple mock ID
-    // Ensure profile exists or create one
+    const emailLower = email.toLowerCase().trim();
+    // HEURISTICS: Assign Role and Pro Tier based on email strings
+    const role = emailLower.endsWith('@admin.nysc.gov.ng') ? 'admin' : 'user';
+    const isPro = emailLower.includes('pro');
+    // GENERATE STABLE USER ID FROM EMAIL
+    // Using a simple base64-like encoding of the email to ensure the same user gets the same ID
+    const userId = btoa(emailLower).replace(/[^a-zA-Z0-9]/g, '').slice(0, 12);
+    // Ensure profile exists or update it (Sync Pro status from email pattern)
     const profileEntity = new UserEntity(c.env, userId);
-    if (!await profileEntity.exists()) {
+    const existing = await profileEntity.exists();
+    if (!existing) {
       await profileEntity.save({
         id: userId,
         stage: 'prospective',
@@ -56,8 +48,14 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
         isPro: isPro,
         updatedAt: Date.now()
       });
+    } else {
+      // Always sync isPro status from current login pattern to persistent profile
+      await profileEntity.mutate(curr => ({
+        ...curr,
+        isPro: isPro
+      }));
     }
-    return ok(c, { id: userId, email, role, isPro });
+    return ok(c, { id: userId, email: emailLower, role, isPro });
   });
   /**
    * PROFILE: CRUD
@@ -84,17 +82,11 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
    * ADMIN: CONTENT MANAGEMENT (Simulated)
    */
   app.get('/api/admin/stats', async (c) => {
-    // Mock dashboard stats
     return ok(c, {
       totalUsers: 1402,
       activeToday: 488,
       proUsers: 124,
       systemHealth: 'Optimal'
     });
-  });
-  app.get('/api/content/seed', async (c) => {
-    // Allows force-reseeding content for demo
-    await ContentEntity.ensureSeed(c.env);
-    return ok(c, 'Content seeded');
   });
 }

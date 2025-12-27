@@ -47,15 +47,16 @@ export const useAppStore = create<AppState>()(
       isOnboarded: false,
       isSyncing: false,
       lastSynced: null,
-      setAuth: (data) => set({ 
-        userId: data.userId, 
-        userEmail: data.email, 
-        userRole: data.role, 
+      setAuth: (data) => set({
+        userId: data.userId,
+        userEmail: data.email,
+        userRole: data.role,
         isAuthenticated: true,
-        isPro: data.isPro 
+        isPro: data.isPro
       }),
       logout: () => {
         get().reset();
+        localStorage.removeItem('nysc-companion-storage');
         window.location.href = '/';
       },
       setUserId: (userId) => set({ userId }),
