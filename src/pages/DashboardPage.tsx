@@ -15,7 +15,6 @@ export function DashboardPage() {
   const stateName = useAppStore(s => s.stateOfDeployment);
   const completedTasks = useAppStore(s => s.completedTasks);
   const readArticles = useAppStore(s => s.readArticles);
-  const isPro = useAppStore(s => s.isPro);
   const toggleTask = useAppStore(s => s.toggleTask);
   const isSyncing = useAppStore(s => s.isSyncing);
   const lastSynced = useAppStore(s => s.lastSynced);
@@ -32,111 +31,42 @@ export function DashboardPage() {
   const priorityContent = useMemo(() => {
     if (!isInitialized) return null;
     const readArticlesSet = new Set(readArticles);
+    let content: { title: string; desc: string; risk: PriorityRisk; searchLink: string } | null = null;
     switch (stageId) {
       case 'prospective':
-        if (!readArticlesSet.has('k-registration')) return {
-          title: 'Official Registration Roadmap',
-          desc: 'Mandatory: Ensure your senate list details are verified before portal registration starts.',
-          risk: 'high' as PriorityRisk,
-          searchLink: '/app/knowledge?search=registration'
-        };
-        return {
-          title: 'Clearance Preparation',
-          desc: 'Learn about the final clearance process before you transition to mobilization.',
-          risk: 'low' as PriorityRisk,
-          searchLink: '/app/knowledge'
-        };
+        content = !readArticlesSet.has('k-registration') 
+          ? { title: 'Official Registration Roadmap', desc: 'Mandatory: Ensure your senate list details are verified.', risk: 'high', searchLink: '/app/knowledge?search=registration' }
+          : { title: 'Clearance Preparation', desc: 'Learn about the final clearance process.', risk: 'low', searchLink: '/app/knowledge' };
+        break;
       case 'mobilization':
-        if (!readArticlesSet.has('k-registration')) return {
-          title: 'Portal Registration Critical Step',
-          desc: 'Ensure your bio-data and senate list verification are correct before the portal closes.',
-          risk: 'high' as PriorityRisk,
-          searchLink: '/app/knowledge?q=registration'
-        };
-        return {
-          title: 'Redeployment Guide',
-          desc: 'Thinking of relocating? Review official grounds for medical or marital redeployment.',
-          risk: 'medium' as PriorityRisk,
-          searchLink: '/app/knowledge?q=redeployment'
-        };
+        content = !readArticlesSet.has('k-registration')
+          ? { title: 'Portal Registration Critical Step', desc: 'Ensure bio-data verification is correct.', risk: 'high', searchLink: '/app/knowledge?q=registration' }
+          : { title: 'Redeployment Guide', desc: 'Review official relocation grounds.', risk: 'medium', searchLink: '/app/knowledge?q=redeployment' };
+        break;
       case 'camp':
-        if (!readArticlesSet.has('k-camp-packing')) return {
-          title: 'Camp Packing Essentials',
-          desc: 'The 21-day orientation requires specific documentation. Don’t be caught unprepared.',
-          risk: 'high' as PriorityRisk,
-          searchLink: '/app/knowledge?q=packing'
-        };
-        return {
-          title: 'Orientation survival',
-          desc: 'Learn about camp registration and swearing-in protocols.',
-          risk: 'low' as PriorityRisk,
-          searchLink: '/app/knowledge'
-        };
+        content = !readArticlesSet.has('k-camp-packing')
+          ? { title: 'Camp Packing Essentials', desc: 'Documentation is mandatory for registration.', risk: 'high', searchLink: '/app/knowledge?q=packing' }
+          : { title: 'Orientation survival', desc: 'Swearing-in protocols guide.', risk: 'low', searchLink: '/app/knowledge' };
+        break;
       case 'ppa':
-        if (!readArticlesSet.has('k-clearance-issues')) return {
-          title: 'Official Troubleshooting Guide',
-          desc: 'PPA sign refusal, lost ID cards, or biometric failures? Know the official LGI reporting chain.',
-          risk: 'high' as PriorityRisk,
-          searchLink: '/app/knowledge?q=clearance-issues'
-        };
-        if (!readArticlesSet.has('k-clearance')) return {
-          title: 'Monthly Clearance Protocol',
-          desc: 'Mandatory: Secure your monthly allowance through LGI biometric verification and PPA clearance.',
-          risk: 'high' as PriorityRisk,
-          searchLink: '/app/knowledge?q=clearance'
-        };
-        return {
-          title: 'Legacy Project Brainstorming',
-          desc: 'Your PPA is stable. It is the perfect time to identify a community need for your CDS project.',
-          risk: 'medium' as PriorityRisk,
-          searchLink: '/app/cds'
-        };
+        content = !readArticlesSet.has('k-clearance-issues')
+          ? { title: 'Official Troubleshooting Guide', desc: 'Know the official LGI reporting chain.', risk: 'high', searchLink: '/app/knowledge?q=clearance-issues' }
+          : { title: 'Monthly Clearance Protocol', desc: 'Secure your monthly allowance.', risk: 'high', searchLink: '/app/knowledge?q=clearance' };
+        break;
       case 'cds':
-        if (!readArticlesSet.has('k-clearance-issues')) return {
-          title: 'Operational Resilience',
-          desc: 'CDS absences or documentation loss? Review official protocols to avoid service extensions.',
-          risk: 'high' as PriorityRisk,
-          searchLink: '/app/knowledge?q=clearance-issues'
-        };
-        if (!readArticlesSet.has('k-cds-execution')) return {
-          title: 'CDS Execution Protocol',
-          desc: 'Mandatory Procedural Warning: You MUST secure a "Letter of Approval" from the LGI before starting any implementation.',
-          risk: 'high' as PriorityRisk,
-          searchLink: '/app/knowledge?search=execution'
-        };
-        return {
-          title: 'Legacy Hub Blueprints',
-          desc: 'Review verified project blueprints with budget benchmarks for your community.',
-          risk: 'low' as PriorityRisk,
-          searchLink: '/app/cds'
-        };
+        content = !readArticlesSet.has('k-cds-execution')
+          ? { title: 'CDS Execution Protocol', desc: 'Mandatory: Get LGI approval before starting.', risk: 'high', searchLink: '/app/knowledge?search=execution' }
+          : { title: 'Legacy Hub Blueprints', desc: 'Review verified project blueprints.', risk: 'low', searchLink: '/app/cds' };
+        break;
       case 'pop':
-        if (!readArticlesSet.has('k-clearance-issues')) return {
-          title: 'Final Winding-Up Resilience',
-          desc: 'Don’t let lost documents or kit return issues delay your certificate. Review the troubleshooting guide.',
-          risk: 'high' as PriorityRisk,
-          searchLink: '/app/knowledge?q=clearance-issues'
-        };
-        if (!readArticlesSet.has('k-pop')) return {
-          title: 'Passing Out Parade (POP) & Certificate Guide',
-          desc: 'Critical: Verify your CNS name details and complete the LGI/ZI signature chain for discharge.',
-          risk: 'high' as PriorityRisk,
-          searchLink: '/app/knowledge?q=pop'
-        };
-        return {
-          title: 'Career Next Steps',
-          desc: 'Update your CV with your service achievements using our templates.',
-          risk: 'low' as PriorityRisk,
-          searchLink: '/app/knowledge'
-        };
+        content = !readArticlesSet.has('k-pop')
+          ? { title: 'POP & Certificate Guide', desc: 'Verify your CNS name details.', risk: 'high', searchLink: '/app/knowledge?q=pop' }
+          : { title: 'Career Next Steps', desc: 'Update your CV with achievements.', risk: 'low', searchLink: '/app/knowledge' };
+        break;
       default:
-        return {
-          title: 'Welcome to Command',
-          desc: 'Your 365 days of service start with verified intelligence.',
-          risk: 'low' as PriorityRisk,
-          searchLink: '/app/knowledge'
-        };
+        content = { title: 'Welcome to Command', desc: 'Your 365 days start with verified intelligence.', risk: 'low', searchLink: '/app/knowledge' };
     }
+    return content;
   }, [stageId, readArticles, isInitialized]);
   if (!isInitialized) {
     return (
@@ -147,9 +77,9 @@ export function DashboardPage() {
     );
   }
   const riskStyles: Record<PriorityRisk, string> = {
-    high: "border-destructive/30 bg-red-50/50",
-    medium: "border-nysc-gold/30 bg-amber-50/50",
-    low: "border-nysc-green-100 bg-nysc-green-50/20"
+    high: "border-destructive/30 bg-red-50/50 shadow-destructive/5",
+    medium: "border-nysc-gold/30 bg-amber-50/50 shadow-nysc-gold/5",
+    low: "border-nysc-green-100 bg-nysc-green-50/20 shadow-nysc-green-800/5"
   };
   return (
     <div className="max-w-7xl mx-auto px-4 space-y-8 animate-fade-in py-8 md:py-10">
@@ -174,13 +104,13 @@ export function DashboardPage() {
           )}
         </div>
       </header>
-      {priorityContent && (
-        <Card className={cn("border shadow-lg overflow-hidden relative group transition-all duration-300", riskStyles[priorityContent.risk])}>
+      {priorityContent && priorityContent.title && (
+        <Card className={cn("border shadow-lg overflow-hidden relative group transition-all duration-300", riskStyles[priorityContent.risk || 'low'])}>
           <div className="absolute top-0 right-0 p-4 opacity-10">
             {priorityContent.risk === 'high' ? <ShieldAlert className="w-16 h-16 text-destructive" /> : <Sparkles className="w-16 h-16 text-nysc-gold" />}
           </div>
           <CardHeader className="pb-2">
-            <Badge className={cn("w-fit mb-2 uppercase text-[9px] font-black tracking-widest", priorityContent.risk === 'high' ? "bg-destructive" : "bg-nysc-green-800")}>
+            <Badge className={cn("w-fit mb-2 uppercase text-[9px] font-black tracking-widest border-none", priorityContent.risk === 'high' ? "bg-destructive text-white" : "bg-nysc-green-800 text-white")}>
               {priorityContent.risk === 'high' ? 'Process Critical' : 'Priority Resource'}
             </Badge>
             <CardTitle className="text-xl font-display">{priorityContent.title}</CardTitle>

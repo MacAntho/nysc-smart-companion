@@ -3,9 +3,8 @@ import { useAppStore } from '@/lib/store';
 import { STATE_DATA } from '@/lib/mock-content';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
-import { MapPin, Tent, CreditCard, Bus, Info, ShieldAlert, TrendingUp, Sparkles, AlertCircle, ArrowRight, Lightbulb, Briefcase } from 'lucide-react';
+import { MapPin, Tent, CreditCard, Info, ShieldAlert, TrendingUp, Sparkles, AlertCircle, ArrowRight, Lightbulb, Briefcase } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Link } from 'react-router-dom';
 export function StateGuidePage() {
@@ -31,9 +30,10 @@ export function StateGuidePage() {
     );
   }
   const data = STATE_DATA[stateOfDeployment] || STATE_DATA['DEFAULT'];
-  const rentMetric = data.metrics?.rent ?? 120000;
-  const foodMetric = data.metrics?.food ?? 25000;
-  const transportMetric = data.metrics?.transport ?? 15000;
+  // Safe metric calculation to prevent NaN
+  const rentMetric = Number(data.metrics?.rent) || 0;
+  const foodMetric = Number(data.metrics?.food) || 0;
+  const transportMetric = Number(data.metrics?.transport) || 0;
   const chartData = [
     { name: 'Rent', amount: rentMetric, avg: 180000 },
     { name: 'Food', amount: foodMetric, avg: 35000 },
@@ -60,33 +60,54 @@ export function StateGuidePage() {
                 <TrendingUp className="w-4 h-4" /> Monthly Expense Benchmark (Estimated)
               </CardTitle>
             </CardHeader>
-            <CardContent className="pt-8 px-6 min-h-[400px]">
-              <div className="w-full h-[350px] min-h-[350px] min-w-0 relative">
-                <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={350}>
-                  <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+            <CardContent className="pt-8 px-6">
+              <div className="w-full aspect-video min-h-[300px] max-h-[400px] relative overflow-hidden">
+                <ResponsiveContainer width="100%" height="100%" minHeight={300}>
+                  <BarChart data={chartData} margin={{ top: 20, right: 30, left: 10, bottom: 20 }}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                    <XAxis dataKey="name" fontSize={11} fontWeight={700} tickLine={false} axisLine={false} />
+                    <XAxis 
+                      dataKey="name" 
+                      fontSize={11} 
+                      fontWeight={700} 
+                      tickLine={false} 
+                      axisLine={false} 
+                      dy={10}
+                    />
                     <YAxis hide />
                     <Tooltip
-                      cursor={{fill: '#f8fafc'}}
-                      contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', fontWeight: 600 }}
+                      cursor={{ fill: '#f8fafc', opacity: 0.4 }}
+                      contentStyle={{ 
+                        borderRadius: '12px', 
+                        border: 'none', 
+                        boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', 
+                        fontWeight: 600,
+                        fontSize: '12px'
+                      }}
+                      formatter={(value: number) => [`₦${value.toLocaleString()}`, 'Monthly Estimate']}
                     />
-                    <Bar dataKey="amount" radius={[6, 6, 0, 0]} barSize={50}>
+                    <Bar dataKey="amount" radius={[6, 6, 0, 0]} barSize={50} animationDuration={1000}>
                       {chartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.amount > entry.avg ? '#D97706' : '#00843D'} />
+                        <Cell 
+                          key={`cell-${index}`} 
+                          fill={entry.amount > entry.avg ? '#D97706' : '#00843D'} 
+                        />
                       ))}
                     </Bar>
                   </BarChart>
                 </ResponsiveContainer>
               </div>
-              <div className="flex justify-center gap-8 mt-6 text-[10px] font-black uppercase tracking-widest">
-                <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-nysc-green-800" /> Below National Avg</div>
-                <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-sm bg-nysc-gold" /> Above National Avg</div>
+              <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 mt-6 text-[10px] font-black uppercase tracking-widest">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-sm bg-nysc-green-800" /> Below National Avg
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-sm bg-nysc-gold" /> Above National Avg
+                </div>
               </div>
             </CardContent>
           </Card>
           <Tabs defaultValue="camp" className="w-full">
-            <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent gap-8">
+            <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent gap-8 overflow-x-auto no-scrollbar">
               <TabsTrigger value="camp" className="rounded-none border-b-2 border-transparent data-[state=active]:border-nysc-green-800 data-[state=active]:text-nysc-green-800 data-[state=active]:bg-transparent pb-4 text-xs font-bold uppercase tracking-widest">Orientation</TabsTrigger>
               <TabsTrigger value="ppa" className="rounded-none border-b-2 border-transparent data-[state=active]:border-nysc-green-800 data-[state=active]:text-nysc-green-800 data-[state=active]:bg-transparent pb-4 text-xs font-bold uppercase tracking-widest">PPA Terrain</TabsTrigger>
               <TabsTrigger value="living" className="rounded-none border-b-2 border-transparent data-[state=active]:border-nysc-green-800 data-[state=active]:text-nysc-green-800 data-[state=active]:bg-transparent pb-4 text-xs font-bold uppercase tracking-widest">Living Guide</TabsTrigger>

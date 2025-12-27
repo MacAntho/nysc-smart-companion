@@ -57,7 +57,7 @@ export const useAppStore = create<AppState>()(
         userRole: data.role,
         isAuthenticated: true,
         isPro: data.isPro,
-        isInitialized: false // Reset on new auth to trigger fresh hydration
+        isInitialized: false
       }),
       logout: () => {
         localStorage.removeItem('nysc-companion-storage');
@@ -106,8 +106,8 @@ export const useAppStore = create<AppState>()(
       syncProfile: async () => {
         const state = get();
         const { userId, isAuthenticated, isSyncing, lastSyncedPayload } = state;
-        if (!userId || !isAuthenticated || isSyncing) return;
-        const payload = {
+        if (!userId || !isAuthenticated) return;
+        const currentPayload = {
           stage: state.stage,
           stateOfDeployment: state.stateOfDeployment,
           completedTasks: state.completedTasks,
@@ -115,8 +115,11 @@ export const useAppStore = create<AppState>()(
           activeProjectId: state.activeProjectId,
           isOnboarded: state.isOnboarded
         };
-        const payloadString = JSON.stringify(payload);
+        const payloadString = JSON.stringify(currentPayload);
+        // Avoid redundant syncs if data hasn't changed
         if (payloadString === lastSyncedPayload) return;
+        // If already syncing, wait for next cycle (skip this one as the next trigger will catch latest state)
+        if (isSyncing) return;
         set({ isSyncing: true });
         try {
           const response = await fetch(`/api/profile/${userId}`, {
@@ -125,19 +128,39 @@ export const useAppStore = create<AppState>()(
             body: payloadString,
           });
           if (response.ok) {
-            set({ lastSynced: Date.now(), lastSyncedPayload: payloadString });
+            set({ 
+              lastSynced: Date.now(), 
+              lastSyncedPayload: payloadString 
+            });
           }
         } catch (error) {
           console.error('[SYNC FAILURE]', error);
         } finally {
           set({ isSyncing: false });
+          // Recursive check: If local state changed while we were syncing, trigger one more time
+          const latestState = get();
+          const latestPayload = JSON.stringify({
+            stage: latestState.stage,
+            stateOfDeployment: latestState.stateOfDeployment,
+            completedTasks: latestState.completedTasks,
+            readArticles: latestState.readArticles,
+            activeProjectId: latestState.activeProjectId,
+            isOnboarded: latestState.isOnboarded
+          });
+          if (latestPayload !== payloadString) {
+            get().syncProfile();
+          }
         }
       },
       loadProfile: async (force = false) => {
         const state = get();
         const { userId, isAuthenticated, isSyncing, isInitialized } = state;
-        // Critical: Don't load if already initializing or if we're not logged in
-        if (!userId || !isAuthenticated || isSyncing || (isInitialized && !force)) return;
+        if (!userId || !isAuthenticated || (isSyncing && !force) || (isInitialized && !force)) {
+          if (!isInitialized && userId && isAuthenticated) {
+             set({ isInitialized: true });
+          }
+          return;
+        }
         set({ isSyncing: true });
         try {
           const response = await fetch(`/api/profile/${userId}`);
@@ -169,7 +192,6 @@ export const useAppStore = create<AppState>()(
         } catch (error) {
           console.error('[LOAD PROFILE FAILURE]', error);
         } finally {
-          // Always mark as initialized to allow UI transition even on 404/failure
           set({ isSyncing: false, isInitialized: true });
         }
       },
@@ -197,7 +219,6 @@ export const useAppStore = create<AppState>()(
       name: 'nysc-companion-storage',
       onRehydrateStorage: () => (state) => {
         if (state) {
-          // Keep initialized false so loadProfile runs on page refresh
           state.isInitialized = false;
           state.isSyncing = false;
         }
