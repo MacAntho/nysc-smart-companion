@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useAppStore } from '@/lib/store';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, CheckCircle, ChevronRight, Sparkles, ArrowRight, ShieldAlert, Briefcase, Info, Loader2, Search, HelpCircle } from 'lucide-react';
+import { Calendar, CheckCircle, ChevronRight, Sparkles, ArrowRight, ShieldAlert, Briefcase, Info, Search } from 'lucide-react';
 import { JOURNEY_STAGES, DEADLINES } from '@/lib/mock-content';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow, differenceInDays, parseISO, isPast } from 'date-fns';
@@ -18,11 +18,7 @@ export function DashboardPage() {
   const toggleTask = useAppStore(s => s.toggleTask);
   const isSyncing = useAppStore(s => s.isSyncing);
   const lastSynced = useAppStore(s => s.lastSynced);
-  const loadProfile = useAppStore(s => s.loadProfile);
   const isInitialized = useAppStore(s => s.isInitialized);
-  useEffect(() => {
-    loadProfile();
-  }, [loadProfile]);
   const currentStage = useMemo(() => JOURNEY_STAGES.find(s => s.id === stageId), [stageId]);
   const stageTasks = useMemo(() => currentStage?.tasks || [], [currentStage]);
   const completedCount = useMemo(() => stageTasks.filter(t => completedTasks.includes(t.id)).length, [stageTasks, completedTasks]);
@@ -40,94 +36,89 @@ export function DashboardPage() {
   const priorityContent = useMemo(() => {
     if (!isInitialized) return null;
     const readArticlesSet = new Set(readArticles ?? []);
-    // Priority: Foreign-Trained Graduate Intelligence
-    if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-foreign')) {
-      return {
-        title: 'NYSC for Foreign-Trained Graduates',
-        desc: 'Strategic Roadmap: International degrees require official evaluation and physical verification centers. View the entry requirements.',
-        risk: 'medium' as PriorityRisk,
-        searchLink: '/app/knowledge?search=foreign'
-      };
-    }
-    // New Priority: Maternity Provisions Intelligence
-    if ((stageId === 'prospective' || stageId === 'mobilization' || stageId === 'camp') && !readArticlesSet.has('k-pregnancy')) {
-      return {
-        title: 'Maternity Provisions Guide',
-        desc: 'Official Advisory: Learn about concessionary posting, camp exemptions, and the mandatory 12-week maternity leave protocol.',
-        risk: 'low' as PriorityRisk,
-        searchLink: '/app/knowledge?search=pregnancy'
-      };
-    }
-    // Logic for camp stage relocation visibility
-    if ((stageId === 'mobilization' || stageId === 'camp') && !readArticlesSet.has('k-redeployment')) {
-      return {
-        title: 'Redeployment & Relocation Guide',
-        desc: 'Relocation Intelligence: Understand valid grounds (Marital/Medical) and the mandatory digital application chain.',
-        risk: 'high' as PriorityRisk,
-        searchLink: '/app/knowledge?search=redeployment'
-      };
-    }
-    // Critical disciplinary guides
+    // 1. Critical Disciplinary Guides (Risk High)
     if (!readArticlesSet.has('k-disqualification')) {
       return {
-        title: 'Disqualification & Remobilization Protocol',
-        desc: 'Critical Risk: Understand the grounds for service cancellation and the legal implications of disciplinary disqualification.',
+        title: 'Disqualification Protocol',
+        desc: 'Critical Risk: Understand the grounds for service cancellation and legal implications of abscondment.',
         risk: 'high' as PriorityRisk,
         searchLink: '/app/knowledge?search=disqualification'
       };
     }
     if (!readArticlesSet.has('k-sanctions')) {
       return {
-        title: 'NYSC Violations & Penalties Guide',
-        desc: 'Critical Advisory: Learn how to avoid Service Extensions and administrative sanctions through compliance.',
+        title: 'Violations & Penalties Guide',
+        desc: 'Official Advisory: Learn how to avoid Service Extensions and administrative sanctions.',
         risk: 'high' as PriorityRisk,
         searchLink: '/app/knowledge?search=sanctions'
       };
     }
-    // Stage specific fallbacks
+    // 2. Stage-Specific Critical Intelligence
+    if (stageId === 'prospective' && !readArticlesSet.has('k-registration')) {
+      return {
+        title: 'Online Registration Roadmap',
+        desc: 'Mandatory: Ensure your senate list details are verified before portal closure to avoid missing the batch.',
+        risk: 'high' as PriorityRisk,
+        searchLink: '/app/knowledge?search=registration'
+      };
+    }
+    if (stageId === 'ppa' && !readArticlesSet.has('k-ppa-rejection')) {
+      return {
+        title: 'Handling PPA Rejection',
+        desc: 'Strategic Advisory: If your PPA refuses to accept you, you must report to the LGI within 48 hours with a stamped letter.',
+        risk: 'medium' as PriorityRisk,
+        searchLink: '/app/knowledge?search=rejection'
+      };
+    }
     if (stageId === 'ppa' && !readArticlesSet.has('k-clearance-issues')) {
       return {
         title: 'Clearance Troubleshooting',
         desc: 'Official Protocol: Know the LGI reporting chain for sign-off refusals and biometric failures.',
         risk: 'high' as PriorityRisk,
-        searchLink: '/app/knowledge?search=clearance-issues'
+        searchLink: '/app/knowledge?search=clearance'
       };
     }
+    if (stageId === 'pop' && !readArticlesSet.has('k-pop')) {
+      return {
+        title: 'Passing Out Parade Protocol',
+        desc: 'Winding Up: Ensure your final release letter and kit return slip are verified to receive your certificate.',
+        risk: 'high' as PriorityRisk,
+        searchLink: '/app/knowledge?search=pop'
+      };
+    }
+    // 3. Featured Guides based on user profile
+    if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-foreign')) {
+      return {
+        title: 'Foreign-Trained Graduates',
+        desc: 'Strategic Roadmap: International degrees require official evaluation and physical verification.',
+        risk: 'medium' as PriorityRisk,
+        searchLink: '/app/knowledge?search=foreign'
+      };
+    }
+    if (!readArticlesSet.has('k-pregnancy')) {
+      return {
+        title: 'Maternity Provisions Guide',
+        desc: 'Official Advisory: Learn about concessionary posting and the mandatory 12-week maternity leave protocol.',
+        risk: 'low' as PriorityRisk,
+        searchLink: '/app/knowledge?search=pregnancy'
+      };
+    }
+    // 4. Milestone Achievement Fallback
     if (progressPercent === 100) {
       return {
         title: 'Phase Milestone Achieved',
-        desc: 'You have completed all milestones for this stage. Review the State Guide for local cost benchmarks and PPA terrain.',
+        desc: 'You have completed all milestones for this stage. Prepare for the next phase by checking the State Guide.',
         risk: 'low' as PriorityRisk,
         searchLink: '/app/state-guide'
       };
     }
-    // General stage defaults
-    switch (stageId) {
-      case 'prospective':
-        return !readArticlesSet.has('k-registration')
-          ? { title: 'Official Registration Roadmap', desc: 'Mandatory: Ensure your senate list details are verified before portal closure.', risk: 'high' as PriorityRisk, searchLink: '/app/knowledge?search=registration' }
-          : { title: 'Clearance Preparation', desc: 'Learn about the final clearance chain for university graduates.', risk: 'low' as PriorityRisk, searchLink: '/app/knowledge' };
-      case 'pop':
-        return !readArticlesSet.has('k-pop')
-          ? { title: 'Passing Out Parade Protocol', desc: 'Winding Up: Ensure your final release letter and kit return slip are verified.', risk: 'high' as PriorityRisk, searchLink: '/app/knowledge?search=pop' }
-          : { title: 'Career Transition Briefing', desc: 'Congratulations! You have completed your service. Prepare for your career.', risk: 'low' as PriorityRisk, searchLink: '/app/profile' };
-      default:
-        return {
-          title: 'Welcome to Command',
-          desc: 'Your 365 days start with verified intelligence. Review current milestones and stay informed.',
-          risk: 'low' as PriorityRisk,
-          searchLink: '/app/knowledge'
-        };
-    }
+    return {
+      title: 'Command Center Ready',
+      desc: 'Your service year is tracked with verified intelligence. Review your current milestones to stay compliant.',
+      risk: 'low' as PriorityRisk,
+      searchLink: '/app/journey'
+    };
   }, [stageId, readArticles, isInitialized, progressPercent]);
-  if (!isInitialized) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-        <Loader2 className="w-10 h-10 text-nysc-green-800 animate-spin" />
-        <p className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground animate-pulse">Initializing Command Center...</p>
-      </div>
-    );
-  }
   const riskStyles: Record<PriorityRisk, string> = {
     high: "border-destructive/40 bg-red-50/40 shadow-xl shadow-destructive/10 ring-1 ring-destructive/20",
     medium: "border-nysc-gold/30 bg-amber-50/40 shadow-lg shadow-nysc-gold/5",

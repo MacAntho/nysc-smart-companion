@@ -66,21 +66,26 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-registration',
+    category: 'Official',
+    title: 'Online Registration Roadmap',
+    summary: 'Step-by-step guide to the NYSC portal registration: biometrics, Senate list verification, and payment protocols.',
+    content: `Online registration is the first critical step in your service year.
+1. SENATE LIST VERIFICATION: Your name must be uploaded by your institution. Check the portal using your Matric Number.
+2. BIOMETRIC CAPTURE: Use the official NYSC desktop scanner tool. Ensure your background is plain white.
+3. PAYMENTS: Pay for your call-up letter online to receive it via SMS/Dashboard. Do not pay to individuals.
+4. DOCUMENT UPLOAD: Scan original documents for medical certificates and school IDs.`,
+    metadata: { stage: 'prospective', risk: 'medium', source: 'NYSC ICT Dept', featured: true }
+  },
+  {
     id: 'k-foreign',
     category: 'Official',
     title: 'NYSC for Foreign-Trained Graduates',
     summary: 'Essential roadmap for graduates from international institutions: evaluation protocols, document chains, and physical verification.',
-    content: `For graduates of international institutions, the NYSC mobilization process involves an additional layer of administrative scrutiny known as "Evaluation."
-1. THE EVALUATION PROTOCOL:
-Unlike local graduates whose names are sent via a Senate List, foreign-trained graduates must personally upload and later physically present their credentials for evaluation.
-2. MANDATORY DOCUMENT CHAIN:
-You must possess original copies and clear scans of the following:
-• DEGREE CERTIFICATE: Issued by the institution.
-• ACADEMIC TRANSCRIPT: Complete breakdown of grades.
-• INTERNATIONAL PASSPORT: Data page and entry/exit stamps.
-• O-LEVEL/HIGH SCHOOL RESULTS: Original WAEC/NECO or equivalent.
-3. PHYSICAL VERIFICATION PROCESS:
-You will be assigned a date and center for physical verification. You MUST appear in person with all original documents.`,
+    content: `For graduates of international institutions, the NYSC mobilization process involves evaluation.
+1. THE EVALUATION PROTOCOL: Personally upload and later physically present your credentials.
+2. MANDATORY DOCUMENT CHAIN: Degree Certificate, Academic Transcript, Int. Passport (with entry/exit stamps), O-Level results.
+3. PHYSICAL VERIFICATION: You MUST appear in person at your assigned center with all original documents.`,
     metadata: { stage: 'prospective', risk: 'medium', source: 'NYSC Evaluation Dept', featured: true }
   },
   {
@@ -88,13 +93,10 @@ You will be assigned a date and center for physical verification. You MUST appea
     category: 'Official/Advisory',
     title: 'NYSC Redeployment & Relocation Guide',
     summary: 'Comprehensive guide on valid relocation grounds (Marital, Medical, Security), the digital application process, and mandatory documentation.',
-    content: `Relocation is a privilege granted based on verifiable and compassionate grounds.
-1. VALID REASONS:
-• MARITAL: For married female corps members to join their husbands.
-• MEDICAL: For chronic conditions requiring specialized care.
-• SECURITY: In cases of extreme instability in the deployment area.
-2. THE PROCESS:
-Applications are strictly digital via the NYSC portal. Ensure all documents are scanned as high-quality PDFs.`,
+    content: `Relocation is a privilege granted based on verifiable grounds.
+1. MARITAL: Married females must provide marriage cert, change of name (newspaper), and husband's utility bill in the target state.
+2. MEDICAL: Chronic conditions requiring specialized care. Must provide a report from a Govt hospital.
+3. THE PROCESS: Apply via the dashboard immediately after camp opens. Check status daily.`,
     metadata: { stage: 'camp', risk: 'high', source: 'NYSC Bye-laws', featured: true }
   },
   {
@@ -102,21 +104,78 @@ Applications are strictly digital via the NYSC portal. Ensure all documents are 
     category: 'Advisory/Health',
     title: 'NYSC Provisions for Pregnant Corps Members',
     summary: 'Official roadmap for maternity rights: Concessionary posting, camp exemptions, and the 12-week maternity leave protocol.',
-    content: `NYSC policy provides specific concessions to ensure the health and safety of pregnant corps members and nursing mothers.
-1. CONCESSIONARY POSTING:
-Pregnant corps members and nursing mothers are eligible for "Concessionary Posting." This means you can request to be deployed to a state where your spouse or family resides to ensure adequate medical and emotional support.
-• DOCUMENTATION: You must provide a valid marriage certificate and a medical report from a government-owned hospital.
-2. ORIENTATION CAMP EXEMPTIONS:
-While attendance at the orientation camp is generally mandatory, pregnant corps members are exempted from strenuous physical activities.
-• DRILLS & PARADES: You are not expected to participate in early morning drills, long-distance treks, or intensive parades.
-• INDUCTION: You will still complete the registration and swearing-in but may be permitted to reside off-camp if your condition requires specialized care.
-3. MATERNITY LEAVE PROTOCOL:
-Official NYSC bye-laws provide for a 12-week (3 months) maternity leave.
-• NOTIFICATION: You must formally apply through your Place of Primary Assignment (PPA) and the Local Government Inspector (LGI).
-• ALLOWANCE: Your monthly allowance (Alawee) is typically sustained during this period, provided the leave is officially approved and documented.
-4. PPA & CDS ADJUSTMENTS:
-Upon return from maternity leave, nursing mothers are often granted "closing time concessions" (typically 1:00 PM or 2:00 PM) to allow for breastfeeding and child care. Weekly CDS attendance remains mandatory unless specific health waivers are obtained.`,
+    content: `NYSC policy provides specific concessions for pregnant members and nursing mothers.
+1. CONCESSIONARY POSTING: Eligible for deployment to state of spouse/family residence.
+2. CAMP EXEMPTIONS: Exempted from strenuous drills. May be allowed to reside off-camp.
+3. MATERNITY LEAVE: 12-week (3 months) leave. Apply via PPA and LGI. Allowance is usually sustained.`,
     metadata: { stage: 'mobilization', risk: 'low', source: 'NYSC Policy Handbook', featured: true }
+  },
+  {
+    id: 'k-disqualification',
+    category: 'Official',
+    title: 'Disqualification & Remobilization Protocol',
+    summary: 'Critical Risk: Understand the grounds for service cancellation and the legal implications of disciplinary disqualification.',
+    content: `Disqualification is the ultimate administrative penalty.
+1. ABSCONDMENT: Missing more than 3 months of service without approval results in remobilization (restarting from scratch).
+2. FORGED DOCUMENTS: Discovery of forged degrees leads to immediate handover to security agencies.
+3. DESERTION: Leaving camp without permission can lead to "Remobilization with half-pay" or total cancellation.`,
+    metadata: { stage: 'camp', risk: 'high', source: 'NYSC Legal Unit', featured: true }
+  },
+  {
+    id: 'k-sanctions',
+    category: 'Official',
+    title: 'NYSC Violations & Penalties Guide',
+    summary: 'Critical Advisory: Learn how to avoid Service Extensions and administrative sanctions through compliance.',
+    content: `The NYSC Bye-laws specify clear penalties for infractions.
+1. EXTENSION OF SERVICE: Usually for 1 month to 4 months based on the gravity of the absence from CDS or PPA.
+2. LOSS OF ALLOWANCE: Failure to sign monthly clearance results in forfeiture of that month's payment.
+3. REPRIMAND: Issued for minor misconduct. Three reprimands can lead to a formal Extension.`,
+    metadata: { stage: 'ppa', risk: 'high', source: 'NYSC Discipline Dept', featured: true }
+  },
+  {
+    id: 'k-clearance-issues',
+    category: 'Advisory/Official',
+    title: 'Clearance Troubleshooting',
+    summary: 'Official Protocol: Know the LGI reporting chain for sign-off refusals and biometric failures.',
+    content: `Clearance is your ticket to monthly payment.
+1. BIOMETRIC FAILURE: If the thumbprint scanner fails, report to the Zonal Inspector (ZI) for manual capture.
+2. PPA REJECTION: If your PPA refuses to sign your clearance, obtain a "Letter of Rejection" and report to the LGI within 24 hours.
+3. PORTAL ERRORS: If your clearance status doesn't update, visit the state secretariat ICT office.`,
+    metadata: { stage: 'ppa', risk: 'high', source: 'NYSC Finance Unit', featured: true }
+  },
+  {
+    id: 'k-pop',
+    category: 'Official',
+    title: 'Passing Out Parade (POP) Protocol',
+    summary: 'Winding Up: Ensure your final release letter and kit return slip are verified for discharge.',
+    content: `The POP is the final phase of your service.
+1. FINAL CLEARANCE: Get signatures from LGI, ZI, and State Coordinator.
+2. KIT RETURN: Some states require the return of specific kit items. Get a slip.
+3. DISCHARGE CERTIFICATE: Issued only after successful final clearance and 12 monthly clearances.`,
+    metadata: { stage: 'pop', risk: 'high', source: 'NYSC Operations', featured: true }
+  },
+  {
+    id: 'k-execution',
+    category: 'CDS',
+    title: 'CDS Project Execution Blueprint',
+    summary: 'Procedural integrity: From identification to commissioning your community project.',
+    content: `Executing a Personal CDS project requires strict adherence to protocol.
+1. NEEDS ASSESSMENT: Conduct a survey. Document the gap you want to fill.
+2. PROPOSAL: Submit to LGI. Must include budget, timeline, and location.
+3. APPROVAL: Wait for the formal letter from the State Coordinator before starting.
+4. COMMISSIONING: Invite NYSC officials for the official opening.`,
+    metadata: { stage: 'cds', risk: 'medium', source: 'NYSC CDS Dept', featured: true }
+  },
+  {
+    id: 'k-ppa-rejection',
+    category: 'Advisory',
+    title: 'Handling PPA Rejection',
+    summary: 'Strategic response when a PPA refuses to accept you: Letters, reporting timelines, and reposting protocols.',
+    content: `Getting rejected by a PPA is not a disaster; it's a common occurrence.
+1. THE LETTER: Ensure the PPA writes "Rejected" on your posting letter with a reason and official stamp.
+2. THE CLOCK: You have 48 hours to report this rejection to your LGI.
+3. REPOSTING: The LGI will issue you a new posting letter. Do not wander about or go home.`,
+    metadata: { stage: 'ppa', risk: 'medium', source: 'NYSC Admin', featured: true }
   }
 ];
 export const STATE_DATA: Record<string, any> = {
@@ -126,6 +185,27 @@ export const STATE_DATA: Record<string, any> = {
     metrics: { rent: 280000, food: 45000, transport: 35000 },
     ppa: 'Strong opportunities in Tech, Finance, and Media.',
     pro_tip: 'Apply for PPA in Ikorodu if you want a lower cost of living while staying in Lagos.'
+  },
+  'Abuja': {
+    camp: 'Kubwa Orientation Camp. Modern facilities, good water supply, very competitive.',
+    cost: 'Very High. Abuja rent is steep. Average ₦350k+ in satellite towns, millions in city center.',
+    metrics: { rent: 350000, food: 50000, transport: 40000 },
+    ppa: 'Govt Agencies, NGOs, and Professional Firms.',
+    pro_tip: 'Look for accommodation in Kubwa or Lugbe to save on housing costs.'
+  },
+  'Rivers': {
+    camp: 'Nonwa Gbam Tai Camp. Large grounds, hot weather. Security is tight.',
+    cost: 'High. Port Harcourt is an oil city. Rent is around ₦200k-₦300k.',
+    metrics: { rent: 250000, food: 40000, transport: 30000 },
+    ppa: 'Engineering firms, Schools, and Civil Service.',
+    pro_tip: 'Always stay within well-lit areas in PH and avoid late night solo movements.'
+  },
+  'Oyo': {
+    camp: 'Iseyin Orientation Camp. Known for its cool weather and hills. Relaxed atmosphere.',
+    cost: 'Low. Ibadan is very affordable. Rent ₦80k-₦150k. Food is cheap.',
+    metrics: { rent: 100000, food: 20000, transport: 10000 },
+    ppa: 'Educational institutions, Agriculture, and Research.',
+    pro_tip: 'Ibadan is vast; choose a PPA close to your residence to avoid long commutes.'
   },
   'DEFAULT': {
     camp: 'Standard NYSC Orientation facilities. Registration usually starts at 4:00 AM.',

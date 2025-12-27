@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Link, useLocation } from "react-router-dom";
@@ -15,6 +15,12 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathParts = location.pathname.split('/').filter(Boolean);
   const isPro = useAppStore(s => s.isPro);
   const userRole = useAppStore(s => s.userRole);
+  const loadProfile = useAppStore(s => s.loadProfile);
+  const isInitialized = useAppStore(s => s.isInitialized);
+  // Global Profile Hydration: Ensure cloud data is synced regardless of entry route
+  useEffect(() => {
+    loadProfile();
+  }, [loadProfile]);
   return (
     <SidebarProvider defaultOpen={true}>
       <AppSidebar />
@@ -68,19 +74,25 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         </header>
         <main className="flex-1 pb-24 md:pb-12 overflow-x-hidden">
           <AnimatePresence mode="wait">
-            <motion.div
-              key={location.pathname}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{
-                duration: 0.3,
-                ease: [0.25, 0.1, 0.25, 1],
-              }}
-              className="py-6 md:py-10"
-            >
-              {children}
-            </motion.div>
+            {!isInitialized ? (
+              <div className="flex items-center justify-center min-h-[60vh]">
+                <ShieldCheck className="w-12 h-12 text-nysc-green-800 animate-pulse" />
+              </div>
+            ) : (
+              <motion.div
+                key={location.pathname}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{
+                  duration: 0.3,
+                  ease: [0.25, 0.1, 0.25, 1],
+                }}
+                className="py-6 md:py-10"
+              >
+                {children}
+              </motion.div>
+            )}
           </AnimatePresence>
         </main>
         <MobileNav />

@@ -61,7 +61,7 @@ export const useAppStore = create<AppState>()(
         isPro: data.isPro,
         isSyncing: false,
         lastSyncError: null,
-        isInitialized: false 
+        isInitialized: false
       }),
       logout: () => {
         localStorage.removeItem('nysc-companion-storage');
@@ -133,7 +133,7 @@ export const useAppStore = create<AppState>()(
               lastSyncedPayload: currentPayload,
               isSyncing: false
             });
-            // Check for consistency after update
+            // Re-check for consistency
             const finalPayload = generatePayload();
             if (finalPayload !== currentPayload) {
               setTimeout(() => get().syncProfile(), 200);
@@ -142,6 +142,7 @@ export const useAppStore = create<AppState>()(
             set({ isSyncing: false, lastSyncError: 'Sync refused by server' });
           }
         } catch (error) {
+          console.error('[SYNC ERROR]', error);
           set({ isSyncing: false, lastSyncError: 'Connection issue' });
         }
       },
@@ -187,6 +188,7 @@ export const useAppStore = create<AppState>()(
             set({ isInitialized: true });
           }
         } catch (error) {
+          console.error('[LOAD ERROR]', error);
           set({ lastSyncError: 'Failed to fetch cloud profile', isInitialized: true });
         } finally {
           set({ isSyncing: false });
