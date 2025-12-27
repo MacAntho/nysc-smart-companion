@@ -22,7 +22,7 @@ import { ProfilePage } from '@/pages/ProfilePage'
 import { AdminPage } from '@/pages/AdminPage'
 import { AuthPage } from '@/pages/AuthPage'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
-import { ProtectedRoute, AdminRoute } from '@/components/ProtectedRoute'
+import { ProtectedRoute, AdminRoute, AuthGuard } from '@/components/ProtectedRoute'
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
@@ -37,7 +37,8 @@ const router = createBrowserRouter([
   },
   {
     path: "/onboarding",
-    element: <ProtectedRoute><OnboardingPage /></ProtectedRoute>,
+    // Only AuthGuard here to allow access to onboarding without triggering the OnboardingGuard redirect
+    element: <AuthGuard><OnboardingPage /></AuthGuard>,
     errorElement: <RouteErrorBoundary />,
   },
   {

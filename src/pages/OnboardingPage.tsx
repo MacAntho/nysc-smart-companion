@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import type { NYSCStage } from '@shared/types';
-import { ArrowRight, ArrowLeft, CheckCircle2, Loader2, Sparkles, ShieldCheck } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Loader2, Sparkles, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 const STAGES: { value: NYSCStage; label: string }[] = [
   { value: 'prospective', label: 'Prospective Corper (Finalist/Graduate)' },
@@ -23,11 +23,10 @@ export function OnboardingPage() {
   const stateOfDeployment = useAppStore(s => s.stateOfDeployment);
   const setStateOfDeployment = useAppStore(s => s.setStateOfDeployment);
   const completeOnboarding = useAppStore(s => s.completeOnboarding);
-  const setUserId = useAppStore(s => s.setUserId);
   const isSyncing = useAppStore(s => s.isSyncing);
   const handleFinish = async () => {
-    const newId = crypto.randomUUID();
-    setUserId(newId);
+    // We do NOT generate a new ID here. 
+    // We rely on the userId set during the login phase to maintain profile consistency.
     completeOnboarding();
     navigate('/app');
   };

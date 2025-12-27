@@ -4,23 +4,45 @@ import { STATE_DATA } from '@/lib/mock-content';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
-import { MapPin, Tent, CreditCard, Bus, Info, ShieldAlert, TrendingUp, Sparkles } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { MapPin, Tent, CreditCard, Bus, Info, ShieldAlert, TrendingUp, Sparkles, AlertCircle, ArrowRight } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { Link } from 'react-router-dom';
 export function StateGuidePage() {
   const stateName = useAppStore(s => s.stateOfDeployment);
-  const data = STATE_DATA[stateName] || { 
-    camp: 'Information pending for this state.', 
-    cost: 'Moderate', 
+  if (!stateName) {
+    return (
+      <div className="max-w-4xl mx-auto py-20 px-4 text-center space-y-6">
+        <div className="w-20 h-20 bg-nysc-green-50 rounded-full flex items-center justify-center mx-auto border border-nysc-green-100">
+          <AlertCircle className="w-10 h-10 text-nysc-green-800" />
+        </div>
+        <div className="space-y-2">
+          <h1 className="text-3xl font-display font-bold text-gray-900">State Not Selected</h1>
+          <p className="text-muted-foreground max-w-sm mx-auto font-medium">
+            We need to know your deployment state to provide localized intelligence and cost benchmarks.
+          </p>
+        </div>
+        <Link to="/app/profile">
+          <Button className="bg-nysc-green-800 hover:bg-nysc-green-900 px-8 py-6 rounded-2xl font-bold shadow-lg shadow-nysc-green-800/20 group">
+            Go to Profile <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </Button>
+        </Link>
+      </div>
+    );
+  }
+  const data = STATE_DATA[stateName] || {
+    camp: 'Information pending for this state.',
+    cost: 'Moderate',
     metrics: { rent: 0, food: 0, transport: 0 },
     ppa: 'Standard PPA opportunities.'
   };
   const chartData = [
-    { name: 'Rent', amount: data.metrics.rent, avg: 180000 },
-    { name: 'Food', amount: data.metrics.food, avg: 35000 },
-    { name: 'Transport', amount: data.metrics.transport, avg: 20000 },
+    { name: 'Rent', amount: data.metrics.rent || 0, avg: 180000 },
+    { name: 'Food', amount: data.metrics.food || 0, avg: 35000 },
+    { name: 'Transport', amount: data.metrics.transport || 0, avg: 20000 },
   ];
   return (
-    <div className="max-w-7xl mx-auto space-y-8 animate-fade-in">
+    <div className="max-w-7xl mx-auto space-y-8 animate-fade-in px-4">
       <div className="flex flex-col sm:flex-row sm:items-center gap-6 p-6 bg-white border-b rounded-2xl shadow-sm">
         <div className="w-16 h-16 rounded-2xl bg-nysc-green-800 flex items-center justify-center text-white shadow-lg shrink-0">
           <MapPin className="w-8 h-8" />
@@ -119,7 +141,7 @@ export function StateGuidePage() {
                   <p>Reliability of transport depends on proximity to major city centers. Budget carefully for high-traffic days.</p>
                   <div className="mt-6 p-4 border rounded-xl bg-gray-50 flex justify-between items-center">
                     <span className="font-bold text-muted-foreground uppercase tracking-widest text-[10px]">Avg Monthly Cost</span>
-                    <span className="font-black text-nysc-green-800 text-lg">₦{data.metrics.transport.toLocaleString()}</span>
+                    <span className="font-black text-nysc-green-800 text-lg">₦{(data.metrics.transport || 0).toLocaleString()}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -149,9 +171,9 @@ export function StateGuidePage() {
             <CardContent className="space-y-5">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-muted-foreground">Est. Base Expenses</span>
-                <span className="font-black text-nysc-green-800">₦{(Math.round(data.metrics.rent/12 + data.metrics.food + data.metrics.transport)).toLocaleString()}</span>
+                <span className="font-black text-nysc-green-800">₦{(Math.round((data.metrics.rent || 0)/12 + (data.metrics.food || 0) + (data.metrics.transport || 0))).toLocaleString()}</span>
               </div>
-              <Progress value={Math.min(100, (data.metrics.food / 50000) * 100)} className="h-2 bg-gray-50" />
+              <Progress value={Math.min(100, ((data.metrics.food || 0) / 50000) * 100)} className="h-2 bg-gray-50" />
               <p className="text-[10px] text-muted-foreground font-medium italic leading-tight">
                 Benchmark based on single-occupancy housing and local transport rates.
               </p>
