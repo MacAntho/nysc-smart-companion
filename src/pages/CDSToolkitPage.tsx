@@ -42,6 +42,7 @@ import { CDSProject } from '@shared/types';
 export function CDSToolkitPage() {
   const activeProjectId = useAppStore(s => s.activeProjectId);
   const setActiveProject = useAppStore(s => s.setActiveProject);
+  const [tabValue, setTabValue] = useState<string>(activeProjectId ? "diary" : "ideas");
   const [search, setSearch] = useState('');
   const [activeFilter, setActiveFilter] = useState<'all' | 'low-budget' | 'short-term'>('all');
   const [dialogProject, setDialogProject] = useState<CDSProject | null>(null);
@@ -78,6 +79,7 @@ export function CDSToolkitPage() {
     if (dialogProject) {
       setActiveProject(dialogProject.id);
       setDialogProject(null);
+      setTabValue("diary");
     }
   };
   return (
@@ -95,7 +97,7 @@ export function CDSToolkitPage() {
             From discovering a community need to your final commissioning. This is your operational command for personal and group projects.
           </p>
         </header>
-        <Tabs defaultValue={activeProjectId ? "diary" : "ideas"} className="space-y-6">
+        <Tabs value={tabValue} onValueChange={setTabValue} className="space-y-6">
           <TabsList className="bg-white border w-full sm:w-fit justify-start h-auto p-1.5 gap-2 shadow-sm rounded-xl">
             <TabsTrigger value="ideas" className="gap-2 px-6 py-2.5 font-bold uppercase tracking-widest text-[10px] rounded-lg data-[state=active]:bg-nysc-green-800 data-[state=active]:text-white">
               <Lightbulb className="w-4 h-4" /> Discover Ideas
@@ -108,7 +110,6 @@ export function CDSToolkitPage() {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="ideas" className="space-y-8">
-            {/* Operational Roadmap Section */}
             <Card className="border-nysc-green-100 bg-nysc-green-50/20 overflow-hidden shadow-sm">
               <div className="p-6 md:p-8 space-y-8">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -187,7 +188,10 @@ export function CDSToolkitPage() {
                       <div className="flex gap-2">
                         <Button variant="outline" className="flex-1 font-bold border-gray-200" onClick={() => setDialogProject(project)}>View Details</Button>
                         <Button
-                          onClick={() => setActiveProject(project.id)}
+                          onClick={() => {
+                            setActiveProject(project.id);
+                            setTabValue("diary");
+                          }}
                           variant={activeProjectId === project.id ? "secondary" : "default"}
                           className={cn("flex-1 font-bold", activeProjectId === project.id ? 'bg-gray-100' : 'bg-nysc-green-800 hover:bg-nysc-green-900')}
                           disabled={activeProjectId === project.id}
@@ -281,7 +285,7 @@ export function CDSToolkitPage() {
                   <h3 className="font-display font-bold text-2xl text-gray-900">Build Your Legacy</h3>
                   <p className="text-sm text-muted-foreground max-w-sm mx-auto font-medium">Select an active project to begin tracking your impact.</p>
                 </div>
-                <Button onClick={() => (document.querySelector('[value="ideas"]') as HTMLElement)?.click()} className="bg-nysc-green-800 hover:bg-nysc-green-900 px-8 py-6 font-bold shadow-lg">Discover Ideas <ArrowRight className="ml-2 w-5 h-5" /></Button>
+                <Button onClick={() => setTabValue("ideas")} className="bg-nysc-green-800 hover:bg-nysc-green-900 px-8 py-6 font-bold shadow-lg">Discover Ideas <ArrowRight className="ml-2 w-5 h-5" /></Button>
               </div>
             )}
           </TabsContent>

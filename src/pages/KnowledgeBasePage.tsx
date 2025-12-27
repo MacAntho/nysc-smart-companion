@@ -22,22 +22,24 @@ import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 export function KnowledgeBasePage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const queryParam = searchParams.get('q') || searchParams.get('search') || '';
+  const queryParam = searchParams.get('search') || searchParams.get('q') || '';
   const [search, setSearch] = useState(queryParam);
   const [category, setCategory] = useState('All');
   const readArticles = useAppStore(s => s.readArticles);
   const toggleReadArticle = useAppStore(s => s.toggleReadArticle);
   const isTyping = useRef(false);
+  // Synchronize local search state with URL parameters
   useEffect(() => {
     if (!isTyping.current && queryParam !== search) {
       setSearch(queryParam);
     }
-  }, [queryParam, search]);
+  }, [queryParam]);
+  // Debounced URL update
   useEffect(() => {
     const handler = setTimeout(() => {
-      if (search) {
-        setSearchParams({ q: search }, { replace: true });
-      } else if (queryParam) {
+      if (search && search !== queryParam) {
+        setSearchParams({ search }, { replace: true });
+      } else if (!search && queryParam) {
         setSearchParams({}, { replace: true });
       }
       isTyping.current = false;
@@ -115,12 +117,11 @@ export function KnowledgeBasePage() {
                 const isRead = readArticles.includes(article.id);
                 const isFeatured = article.metadata?.featured;
                 const isHighRisk = article.metadata?.risk === 'high';
-                const isMediumRisk = article.metadata?.risk === 'medium';
                 return (
                   <Card
                     key={article.id}
                     className={cn(
-                      "hover:shadow-2xl transition-all duration-300 group border-gray-100 flex flex-col h-full relative rounded-3xl overflow-hidden min-h-[220px] transition-colors",
+                      "hover:shadow-2xl transition-all duration-300 group border-gray-100 flex flex-col h-full relative rounded-3xl overflow-hidden min-h-[220px]",
                       isHighRisk
                         ? "ring-2 ring-destructive bg-red-50/30 shadow-lg shadow-red-100/50 animate-pulse-subtle"
                         : isFeatured
