@@ -49,6 +49,15 @@ export function DashboardPage() {
         searchLink: '/app/knowledge?search=foreign'
       };
     }
+    // New Priority: Maternity Provisions Intelligence
+    if ((stageId === 'prospective' || stageId === 'mobilization' || stageId === 'camp') && !readArticlesSet.has('k-pregnancy')) {
+      return {
+        title: 'Maternity Provisions Guide',
+        desc: 'Official Advisory: Learn about concessionary posting, camp exemptions, and the mandatory 12-week maternity leave protocol.',
+        risk: 'low' as PriorityRisk,
+        searchLink: '/app/knowledge?search=pregnancy'
+      };
+    }
     // Logic for camp stage relocation visibility
     if ((stageId === 'mobilization' || stageId === 'camp') && !readArticlesSet.has('k-redeployment')) {
       return {
@@ -103,11 +112,11 @@ export function DashboardPage() {
           ? { title: 'Passing Out Parade Protocol', desc: 'Winding Up: Ensure your final release letter and kit return slip are verified.', risk: 'high' as PriorityRisk, searchLink: '/app/knowledge?search=pop' }
           : { title: 'Career Transition Briefing', desc: 'Congratulations! You have completed your service. Prepare for your career.', risk: 'low' as PriorityRisk, searchLink: '/app/profile' };
       default:
-        return { 
-          title: 'Welcome to Command', 
-          desc: 'Your 365 days start with verified intelligence. Review current milestones and stay informed.', 
-          risk: 'low' as PriorityRisk, 
-          searchLink: '/app/knowledge' 
+        return {
+          title: 'Welcome to Command',
+          desc: 'Your 365 days start with verified intelligence. Review current milestones and stay informed.',
+          risk: 'low' as PriorityRisk,
+          searchLink: '/app/knowledge'
         };
     }
   }, [stageId, readArticles, isInitialized, progressPercent]);

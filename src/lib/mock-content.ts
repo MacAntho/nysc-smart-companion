@@ -96,6 +96,27 @@ You will be assigned a date and center for physical verification. You MUST appea
 2. THE PROCESS:
 Applications are strictly digital via the NYSC portal. Ensure all documents are scanned as high-quality PDFs.`,
     metadata: { stage: 'camp', risk: 'high', source: 'NYSC Bye-laws', featured: true }
+  },
+  {
+    id: 'k-pregnancy',
+    category: 'Advisory/Health',
+    title: 'NYSC Provisions for Pregnant Corps Members',
+    summary: 'Official roadmap for maternity rights: Concessionary posting, camp exemptions, and the 12-week maternity leave protocol.',
+    content: `NYSC policy provides specific concessions to ensure the health and safety of pregnant corps members and nursing mothers.
+1. CONCESSIONARY POSTING:
+Pregnant corps members and nursing mothers are eligible for "Concessionary Posting." This means you can request to be deployed to a state where your spouse or family resides to ensure adequate medical and emotional support.
+• DOCUMENTATION: You must provide a valid marriage certificate and a medical report from a government-owned hospital.
+2. ORIENTATION CAMP EXEMPTIONS:
+While attendance at the orientation camp is generally mandatory, pregnant corps members are exempted from strenuous physical activities.
+• DRILLS & PARADES: You are not expected to participate in early morning drills, long-distance treks, or intensive parades.
+• INDUCTION: You will still complete the registration and swearing-in but may be permitted to reside off-camp if your condition requires specialized care.
+3. MATERNITY LEAVE PROTOCOL:
+Official NYSC bye-laws provide for a 12-week (3 months) maternity leave.
+• NOTIFICATION: You must formally apply through your Place of Primary Assignment (PPA) and the Local Government Inspector (LGI).
+• ALLOWANCE: Your monthly allowance (Alawee) is typically sustained during this period, provided the leave is officially approved and documented.
+4. PPA & CDS ADJUSTMENTS:
+Upon return from maternity leave, nursing mothers are often granted "closing time concessions" (typically 1:00 PM or 2:00 PM) to allow for breastfeeding and child care. Weekly CDS attendance remains mandatory unless specific health waivers are obtained.`,
+    metadata: { stage: 'mobilization', risk: 'low', source: 'NYSC Policy Handbook', featured: true }
   }
 ];
 export const STATE_DATA: Record<string, any> = {
