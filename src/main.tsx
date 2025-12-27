@@ -6,7 +6,6 @@ import { createRoot, Root } from 'react-dom/client'
 import {
   createBrowserRouter,
   RouterProvider,
-  Navigate
 } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -23,16 +22,8 @@ import { ProfilePage } from '@/pages/ProfilePage'
 import { AdminPage } from '@/pages/AdminPage'
 import { AuthPage } from '@/pages/AuthPage'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
-import { ProtectedRoute } from '@/components/ProtectedRoute'
-import { useAppStore } from '@/lib/store';
+import { ProtectedRoute, AdminRoute } from '@/components/ProtectedRoute'
 const queryClient = new QueryClient();
-// Admin Route Guard
-function AdminRoute({ children }: { children: React.ReactNode }) {
-  const userRole = useAppStore(s => s.userRole);
-  const isAuthenticated = useAppStore(s => s.isAuthenticated);
-  if (!isAuthenticated || userRole !== 'admin') return <Navigate to="/app" replace />;
-  return <>{children}</>;
-}
 const router = createBrowserRouter([
   {
     path: "/",

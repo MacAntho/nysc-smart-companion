@@ -12,6 +12,7 @@ export interface NYSCProfile {
   readArticles: string[];
   activeProjectId: string | null;
   isOnboarded: boolean;
+  isPro: boolean;
   updatedAt: number;
 }
 export interface User {
