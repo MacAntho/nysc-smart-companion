@@ -179,9 +179,10 @@ Relocation is not guaranteed. Do not vacate your current PPA until you have the 
     title: 'NYSC for Foreign-Trained Graduates',
     summary: 'Essential roadmap for graduates from international institutions: evaluation protocols, document chains, and physical verification.',
     content: `For graduates of international institutions, the NYSC mobilization process involves evaluation.
-1. THE EVALUATION PROTOCOL: Personally upload and later physically present your credentials.
+1. THE EVALUATION PROTOCOL: Personally upload and later physically present your credentials at the NYSC Headquarters, Abuja, or designated regional verification centers.
 2. MANDATORY DOCUMENT CHAIN: Degree Certificate, Academic Transcript, Int. Passport (with entry/exit stamps), O-Level results.
-3. PHYSICAL VERIFICATION: You MUST appear in person at your assigned center with all original documents.`,
+3. PHYSICAL VERIFICATION: You MUST appear in person at your assigned center with all original documents.
+4. EQUIVALENCE EVALUATION: NYSC coordinates with the Federal Ministry of Education to verify the accreditation and equivalence of your foreign degree.`,
     metadata: { stage: 'prospective', risk: 'medium', source: 'NYSC Evaluation Dept', featured: true }
   },
   {
@@ -295,46 +296,50 @@ II. ORIENTATION CAMP SURVIVAL
 12. Are laptops allowed in camp? Generally discouraged for security reasons.
 13. Can I leave camp before 21 days? Only on official permission for health or marital emergencies.
 14. What is 'Double bunking'? The standard sleeping arrangement in NYSC hostels.
-15. Is food provided in camp? Yes, three meals daily at the kitchen (Mami market is an alternative).
-16. Do I get paid in camp? Yes, your first month's allowance and transport allowance (bicycle allowance) are paid in camp.
-17. What is the 'White' uniform? White shorts, white T-shirts, and white canvas. The official daily wear.
-18. Can I wear mufti? Only during specific social events or on Sunday mornings for religious services.
-19. What if I lose my ID card in camp? Report to the camp commandant/secretariat immediately.
-20. Are phones allowed during drills? No. Phones are for use during break times and in hostels.
+15. Is food provided in camp? Yes, three meals daily at the kitchen.
+16. Do I get paid in camp? Yes, your first month's allowance and transport allowance are paid.
+17. What is the 'White' uniform? White shorts, white T-shirts, and white canvas.
+18. Can I wear mufti? Only during social events or religious services.
+19. What if I lose my ID card in camp? Report to the camp commandant immediately.
+20. Are phones allowed during drills? No. Only during break times and in hostels.
 III. PPA & ALLOWANCES
 21. What is a PPA? Place of Primary Assignment (where you work for 11 months).
 22. Can I reject my posting? No. Only the PPA can reject you.
 23. What is 'Allowee'? The monthly federal allowance (currently ₦33,000).
-24. Does the state pay allowance? Some states pay an additional monthly stipend; others do not.
+24. Does the state pay allowance? Some states pay an additional stipend.
 25. Can I travel without permission? No. You must obtain written permission from the State Coordinator.
-26. What is the 'Monthly Clearance'? A form signed by your PPA and LGI to prove you worked that month.
-27. What if my PPA refuses to pay me? Report to your Local Government Inspector (LGI).
-28. Can I change my PPA? Only on grounds of security, health, or extreme lack of vacancy/accommodation.
+26. What is the 'Monthly Clearance'? A form signed by your PPA and LGI to prove you worked.
+27. What if my PPA refuses to pay me? Report to your LGI.
+28. Can I change my PPA? Only on grounds of security or health.
 29. What is an 'Abscondment'? Missing service for more than 3 months without leave.
 30. Can I work two jobs? No. National service is a full-time commitment.
 IV. CDS & PROJECTS
 31. What is CDS? Community Development Service.
-32. Is weekly CDS attendance mandatory? Yes. 10% absence can lead to service extension.
+32. Is weekly CDS attendance mandatory? Yes. 10% absence can lead to extension.
 33. Can I start a project without approval? No. You must receive an official approval letter first.
-34. How do I fund my CDS project? Through community donations and corporate sponsorship. Out-of-pocket funding is discouraged.
-35. What is a 'Personal CDS'? A project initiated and executed by an individual corps member.
-36. Can groups do CDS? Yes. These are called 'Group CDS' projects (e.g., HIV/AIDS, SDGs).
-37. What is a completion report? The final document submitted to the LGI after a project is finished.
-38. Do I get an award for CDS? Exceptional projects are nominated for State and Presidential honors.
+34. How do I fund my CDS project? Through community donations and corporate sponsorship.
+35. What is a 'Personal CDS'? A project initiated by an individual corps member.
+36. Can groups do CDS? Yes (e.g., HIV/AIDS, SDGs).
+37. What is a completion report? The final document submitted after a project is finished.
+38. Do I get an award for CDS? Exceptional projects are nominated for State/Presidential honors.
 39. Can I do CDS in my home state? Only if you are legally deployed there.
 40. What is a 'Milestone'? A specific phase of project completion verified by the LGI.
 V. RELOCATION, POP & CERTIFICATION
-41. When can I apply for relocation? During camp (on the portal) or 3 months post-camp.
+41. When can I apply for relocation? During camp or 3 months post-camp.
 42. What are the grounds for relocation? Marital, Health, or Security.
-43. How long does relocation take? Results are usually out within 2-4 weeks of application.
-44. What is 'Winding Up'? The final week of activities before the Passing Out Parade.
-45. When do I get my Discharge Certificate? On the day of the Passing Out Parade (POP).
+43. How long does relocation take? Results are out within 2-4 weeks.
+44. What is 'Winding Up'? The final week before the Passing Out Parade.
+45. When do I get my Discharge Certificate? On the day of the POP.
 46. What if I lose my Discharge Certificate? It is never replaced. NYSC only issues a 'Letter of Confirmation'.
-47. Can I collect my certificate by proxy? No. You must be physically present and cleared.
+47. Can I collect my certificate by proxy? No. You must be physically present.
 48. What is an 'Extension'? A penalty where you serve extra months for misconduct.
 49. Is the certificate required for jobs? Yes, it is a legal requirement for employment in Nigeria for graduates.
-50. What if I am pregnant? Pregnant and nursing mothers get concessionary postings and maternity leave.
-51. Can I serve twice? No. It is illegal to enroll for NYSC more than once.`,
+50. What if I am pregnant? Pregnant members get maternity leave and concessionary postings.
+51. What is NHIS? National Health Insurance Scheme. Registered corps members are covered for medical care at govt hospitals.
+52. Can I verify my certificate online? Yes, employers can use the NYSC portal to verify discharge certificates.
+53. What if my biometrics fail at PPA? Report to the Zonal Office immediately for manual capture.
+54. Are foreign graduates verified in camp? No, physical verification happens at designated centers before camp deployment.
+55. Can I call an emergency line? Yes, call 112 for national emergencies or your ZI's office line.`,
     metadata: { stage: 'all', risk: 'low', source: 'NYSC Portal / Official Policy Handbook', featured: true }
   }
 ];

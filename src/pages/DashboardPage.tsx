@@ -48,6 +48,7 @@ export function DashboardPage() {
       };
     }
     const readArticlesSet = new Set(readArticles ?? []);
+    // EMERGENCY GUIDE IS ALWAYS TOP PRIORITY UNLESS READ
     if (!readArticlesSet.has('k-emergency')) {
       return {
         title: 'Emergency Response Guide',
@@ -56,31 +57,7 @@ export function DashboardPage() {
         searchLink: '/app/knowledge?search=emergency'
       };
     }
-    if ((stageId === 'prospective' || stageId === 'mobilization') &&
-        readArticlesSet.has('k-eligibility') && readArticlesSet.has('k-batches') && !readArticlesSet.has('k-faqs')) {
-      return {
-        title: 'NYSC FAQs: 50+ Verified Answers',
-        desc: 'Operational Intelligence: Master the entire service cycle with answers to 50+ common questions on camp, PPA, and relocation protocols.',
-        risk: 'low' as PriorityRisk,
-        searchLink: '/app/knowledge?search=faqs'
-      };
-    }
-    if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-eligibility')) {
-      return {
-        title: 'NYSC Eligibility Guide',
-        desc: 'Strategic Roadmap: Detailed legal clarity on the 30-year age exemption rule and academic prerequisites before you finalize registration.',
-        risk: 'low' as PriorityRisk,
-        searchLink: '/app/knowledge?search=eligibility'
-      };
-    }
-    if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-batches')) {
-      return {
-        title: 'Batch System Intelligence',
-        desc: 'Logistics Roadmap: Understand the A/B/C batch cycles, stream assignments, and how to revalidate your mobilization if you miss your window.',
-        risk: 'low' as PriorityRisk,
-        searchLink: '/app/knowledge?search=batches'
-      };
-    }
+    // DISQUALIFICATION RISK IS SECOND HIGHEST
     if (!readArticlesSet.has('k-disqualification')) {
       return {
         title: 'Disqualification Protocol',
@@ -89,54 +66,50 @@ export function DashboardPage() {
         searchLink: '/app/knowledge?search=disqualification'
       };
     }
+    // SANCTIONS GUIDE
     if (!readArticlesSet.has('k-sanctions')) {
       return {
         title: 'Violations & Penalties Guide',
-        desc: 'Official Advisory: Learn how to avoid Service Extensions and administrative sanctions.',
+        desc: 'Official Advisory: Learn how to avoid Service Extensions and administrative sanctions through compliance.',
         risk: 'high' as PriorityRisk,
         searchLink: '/app/knowledge?search=sanctions'
+      };
+    }
+    // STAGE SPECIFIC UNREAD GUIDES
+    if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-eligibility')) {
+      return {
+        title: 'NYSC Eligibility Guide',
+        desc: 'Strategic Roadmap: Detailed legal clarity on the 30-year age exemption rule and academic prerequisites.',
+        risk: 'low' as PriorityRisk,
+        searchLink: '/app/knowledge?search=eligibility'
+      };
+    }
+    if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-batches')) {
+      return {
+        title: 'Batch System Intelligence',
+        desc: 'Logistics Roadmap: Understand the A/B/C batch cycles, stream assignments, and revalidation protocol.',
+        risk: 'low' as PriorityRisk,
+        searchLink: '/app/knowledge?search=batches'
       };
     }
     if ((stageId === 'camp' || stageId === 'ppa') && !readArticlesSet.has('k-relocation')) {
       return {
         title: 'NYSC Relocation Intelligence',
-        desc: 'Strategic Roadmap: Understand valid grounds (Marital/Medical) and the 3-month post-camp application window before deadlines close.',
+        desc: 'Strategic Roadmap: Understand valid grounds (Marital/Medical) and the application windows.',
         risk: 'medium' as PriorityRisk,
         searchLink: '/app/knowledge?search=relocation'
       };
     }
-    if (stageId === 'prospective' && !readArticlesSet.has('k-registration')) {
+    // MASTER FAQ FALLBACK
+    if (!readArticlesSet.has('k-faqs')) {
       return {
-        title: 'Online Registration Roadmap',
-        desc: 'Mandatory: Ensure your senate list details are verified before portal closure to avoid missing the batch.',
-        risk: 'high' as PriorityRisk,
-        searchLink: '/app/knowledge?search=registration'
+        title: 'NYSC FAQs: 50+ Verified Answers',
+        desc: 'Operational Intelligence: Master the entire service cycle with answers to 50+ common questions.',
+        risk: 'low' as PriorityRisk,
+        searchLink: '/app/knowledge?search=faqs'
       };
     }
-    if (stageId === 'ppa' && !readArticlesSet.has('k-ppa-rejection')) {
-      return {
-        title: 'Handling PPA Rejection',
-        desc: 'Strategic Advisory: If your PPA refuses to accept you, you must report to the LGI within 48 hours with a stamped letter.',
-        risk: 'medium' as PriorityRisk,
-        searchLink: '/app/knowledge?search=rejection'
-      };
-    }
-    if (stageId === 'ppa' && !readArticlesSet.has('k-clearance-issues')) {
-      return {
-        title: 'Clearance Troubleshooting',
-        desc: 'Official Protocol: Know the LGI reporting chain for sign-off refusals and biometric failures.',
-        risk: 'high' as PriorityRisk,
-        searchLink: '/app/knowledge?search=clearance'
-      };
-    }
-    if (stageId === 'pop' && !readArticlesSet.has('k-pop')) {
-      return {
-        title: 'Passing Out Parade Protocol',
-        desc: 'Winding Up: Ensure your final release letter and kit return slip are verified to receive your certificate.',
-        risk: 'high' as PriorityRisk,
-        searchLink: '/app/knowledge?search=pop'
-      };
-    }
+    // IF ALL PRIORITY CONTENT IS READ AND MILESTONES DONE
     if (progressPercent === 100) {
       return {
         title: 'Phase Milestone Achieved',
