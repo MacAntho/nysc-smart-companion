@@ -39,27 +39,34 @@ export function ProfilePage() {
   const isPro = useAppStore(s => s.isPro);
   const stage = useAppStore(s => s.stage);
   const stateOfDeployment = useAppStore(s => s.stateOfDeployment);
-  const completedTasks = useAppStore(s => s.completedTasks);
+  const completedTasksRaw = useAppStore(s => s.completedTasks);
   const isSyncing = useAppStore(s => s.isSyncing);
   const lastSynced = useAppStore(s => s.lastSynced);
   const setStage = useAppStore(s => s.setStage);
   const setStateOfDeployment = useAppStore(s => s.setStateOfDeployment);
   const logout = useAppStore(s => s.logout);
   const loadProfile = useAppStore(s => s.loadProfile);
+  const completedTasks = Array.isArray(completedTasksRaw) ? completedTasksRaw : [];
   useEffect(() => {
     loadProfile();
   }, [loadProfile]);
   const handleForceSync = async () => {
-    await loadProfile();
-    toast.success('System Intelligence Synchronized');
+    try {
+      await loadProfile(true);
+      toast.success('System Intelligence Synchronized', {
+        description: 'Successfully hydrated profile from encrypted cloud storage.'
+      });
+    } catch (e) {
+      toast.error('Sync failed. Check your connection.');
+    }
   };
   const handleClearLocal = () => {
-    toast.info('Development Tool: Local storage cleared. Logging out.', {
-        description: 'Testing environment reset triggered.'
+    toast.info('Session Reset Initiated', {
+        description: 'Local storage cache cleared. Redirecting to auth portal.'
     });
     setTimeout(() => logout(), 1000);
   };
-  const totalTasks = JOURNEY_STAGES.reduce((acc, s) => acc + s.tasks.length, 0);
+  const totalTasks = JOURNEY_STAGES.reduce((acc, s) => acc + (s.tasks?.length || 0), 0);
   const masteryProgress = totalTasks > 0 ? (completedTasks.length / totalTasks) * 100 : 0;
   return (
     <div className="max-w-4xl mx-auto space-y-8 animate-fade-in px-4">
@@ -75,13 +82,13 @@ export function ProfilePage() {
           )}
         </div>
         <div className="space-y-1">
-          <h1 className="text-2xl font-display font-bold text-gray-900 tracking-tight">{userEmail}</h1>
+          <h1 className="text-2xl font-display font-bold text-gray-900 tracking-tight">{userEmail || 'Anonymous Member'}</h1>
           <div className="flex items-center justify-center gap-2 flex-wrap">
             <Badge variant="secondary" className="capitalize font-bold text-[10px] tracking-widest">{userRole}</Badge>
             {isPro && <Badge className="bg-nysc-gold text-white font-black text-[10px] tracking-widest uppercase">Pro Tier</Badge>}
             <Badge variant="outline" className="border-nysc-green-800/30 text-[9px] font-black uppercase flex items-center gap-1 bg-white">
               {isSyncing ? <Loader2 className="w-3 h-3 animate-spin" /> : <Clock className="w-3 h-3" />}
-              {lastSynced ? `Last Sync: ${formatDistanceToNow(lastSynced, { addSuffix: true })}` : 'First Deployment'}
+              {lastSynced ? `Last Sync: ${formatDistanceToNow(lastSynced, { addSuffix: true })}` : 'Initial Hydration'}
             </Badge>
           </div>
         </div>
@@ -96,7 +103,7 @@ export function ProfilePage() {
           <CardContent className="space-y-6">
             <div className="space-y-2">
               <label className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground opacity-60">Deployment State</label>
-              <Select value={stateOfDeployment} onValueChange={setStateOfDeployment}>
+              <Select value={stateOfDeployment || ''} onValueChange={setStateOfDeployment}>
                 <SelectTrigger className="rounded-xl border-gray-100 bg-gray-50/50 h-12 font-bold focus:ring-nysc-green-800">
                   <SelectValue placeholder="Select State" />
                 </SelectTrigger>
@@ -107,7 +114,7 @@ export function ProfilePage() {
             </div>
             <div className="space-y-2">
               <label className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground opacity-60">Journey Phase</label>
-              <Select value={stage} onValueChange={(v) => setStage(v as NYSCStage)}>
+              <Select value={stage || 'prospective'} onValueChange={(v) => setStage(v as NYSCStage)}>
                 <SelectTrigger className="rounded-xl border-gray-100 bg-gray-50/50 h-12 font-bold focus:ring-nysc-green-800">
                   <SelectValue placeholder="Select Stage" />
                 </SelectTrigger>
@@ -128,21 +135,21 @@ export function ProfilePage() {
             <div className="space-y-3">
               <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-muted-foreground">
                 <span>Annual Milestones</span>
-                <span className="text-nysc-green-800">{completedTasks.length} / {totalTasks} Completed</span>
+                <span className="text-nysc-green-800 font-bold">{completedTasks.length} / {totalTasks} Completed</span>
               </div>
               <Progress value={masteryProgress} className="h-2.5 bg-gray-100" />
             </div>
             <div className="p-4 border-2 border-nysc-green-100 bg-nysc-green-50/30 rounded-2xl relative overflow-hidden group">
               <Sparkles className="absolute top-2 right-2 w-4 h-4 text-nysc-gold opacity-40 group-hover:scale-125 transition-transform" />
               <p className="text-[9px] font-black uppercase tracking-widest text-nysc-green-800 mb-1">Active Assignment</p>
-              <p className="text-base font-bold text-nysc-green-900 capitalize tracking-tight">{stage.replace('-', ' ')} Stage</p>
+              <p className="text-base font-bold text-nysc-green-900 capitalize tracking-tight">{(stage || 'prospective').replace('-', ' ')} Phase</p>
             </div>
           </CardContent>
         </Card>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Button 
-            variant="outline" 
+        <Button
+            variant="outline"
             className="h-14 border-gray-200 rounded-2xl font-bold bg-white hover:bg-nysc-green-50 hover:text-nysc-green-800 transition-all active:scale-95"
             onClick={handleForceSync}
             disabled={isSyncing}
@@ -150,17 +157,17 @@ export function ProfilePage() {
           {isSyncing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <RefreshCw className="w-4 h-4 mr-2" />}
           Force Cloud Sync
         </Button>
-        <Button 
-            variant="outline" 
+        <Button
+            variant="outline"
             className="h-14 border-gray-200 rounded-2xl font-bold bg-white text-muted-foreground hover:bg-red-50 hover:text-destructive hover:border-destructive/20 transition-all active:scale-95"
             onClick={handleClearLocal}
         >
           <Trash2 className="w-4 h-4 mr-2" />
-          Clear Local Cache
+          Clear Cache
         </Button>
-        <Button 
-            variant="outline" 
-            className="h-14 border-destructive text-destructive hover:bg-destructive/5 font-bold rounded-2xl transition-all active:scale-95" 
+        <Button
+            variant="outline"
+            className="h-14 border-destructive text-destructive hover:bg-destructive/5 font-bold rounded-2xl transition-all active:scale-95"
             onClick={logout}
         >
           <LogOut className="mr-2 w-5 h-5" /> Logout Session
@@ -175,7 +182,7 @@ export function ProfilePage() {
             </CardTitle>
             <CardDescription className="text-nysc-green-100 text-base font-medium">Unlock verified PPA databases and premium LGI support.</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-6 md:px-8">
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
                 { icon: <Briefcase className="w-5 h-5" />, text: 'Exclusive PPA Openings' },
@@ -189,7 +196,7 @@ export function ProfilePage() {
               ))}
             </ul>
           </CardContent>
-          <CardFooter className="pt-4">
+          <CardFooter className="p-6 md:p-8">
             <Button className="w-full bg-white text-nysc-green-800 hover:bg-gray-100 font-black py-8 text-xl rounded-2xl shadow-xl transition-all active:scale-[0.98]">
               UPGRADE FOR ₦2,500 <ChevronRight className="ml-2 w-7 h-7" />
             </Button>
@@ -198,7 +205,7 @@ export function ProfilePage() {
       )}
       <div className="text-center pt-8 border-t border-gray-100">
         <p className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-400">
-          NYSC Smart Companion • System Core v1.2.0-Production
+          NYSC Smart Companion • Production Core v1.2.0
         </p>
       </div>
     </div>

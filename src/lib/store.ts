@@ -110,6 +110,8 @@ export const useAppStore = create<AppState>()(
       syncProfile: async () => {
         const state = get();
         if (!state.userId || !state.isAuthenticated || state.isSyncing) return;
+        // Final sanity check for malformed userId
+        if (state.userId.length < 5) return;
         const generatePayload = () => JSON.stringify({
           stage: get().stage,
           stateOfDeployment: get().stateOfDeployment,
@@ -134,20 +136,16 @@ export const useAppStore = create<AppState>()(
               isSyncing: false,
               lastSyncError: null
             });
-            const finalPayload = generatePayload();
-            if (finalPayload !== currentPayload) {
-              setTimeout(() => get().syncProfile(), 500);
-            }
           } else {
-            set({ isSyncing: false, lastSyncError: 'Sync refused by server' });
+            set({ isSyncing: false, lastSyncError: 'Sync refused by cloud' });
           }
         } catch (error) {
-          console.error('[SYNC ERROR]', error);
-          set({ isSyncing: false, lastSyncError: 'Network connection issue' });
+          set({ isSyncing: false, lastSyncError: 'Network contention' });
         }
       },
       loadProfile: async (force = false) => {
         const state = get();
+        // Crucial: Always set initialized to true even if unauth to unlock UI loaders
         if (!state.userId || !state.isAuthenticated) {
           set({ isInitialized: true });
           return;
@@ -172,8 +170,8 @@ export const useAppStore = create<AppState>()(
               set({
                 stage: p.stage || state.stage,
                 stateOfDeployment: p.stateOfDeployment || state.stateOfDeployment,
-                completedTasks: Array.isArray(p.completedTasks) ? p.completedTasks : (state.completedTasks || []),
-                readArticles: Array.isArray(p.readArticles) ? p.readArticles : (state.readArticles || []),
+                completedTasks: Array.isArray(p.completedTasks) ? p.completedTasks : [],
+                readArticles: Array.isArray(p.readArticles) ? p.readArticles : [],
                 activeProjectId: p.activeProjectId || state.activeProjectId,
                 isOnboarded: p.isOnboarded ?? state.isOnboarded,
                 lastSynced: p.updatedAt || Date.now(),
@@ -184,8 +182,7 @@ export const useAppStore = create<AppState>()(
             }
           }
         } catch (error) {
-          console.error('[LOAD ERROR]', error);
-          set({ lastSyncError: 'Hydration failure' });
+          set({ lastSyncError: 'Hydration fault' });
         } finally {
           set({ isSyncing: false, isInitialized: true });
         }

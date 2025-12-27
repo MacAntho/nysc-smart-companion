@@ -7,15 +7,17 @@ import { CheckCircle2, Circle, Info } from 'lucide-react';
 import { motion } from 'framer-motion';
 export function JourneyMapPage() {
   const currentStage = useAppStore(s => s.stage);
-  const completedTasks = useAppStore(s => s.completedTasks);
+  const completedTasksRaw = useAppStore(s => s.completedTasks);
   const toggleTask = useAppStore(s => s.toggleTask);
+  // Defensive check for tasks array from persistence
+  const completedTasks = Array.isArray(completedTasksRaw) ? completedTasksRaw : [];
   const stageIndex = JOURNEY_STAGES.findIndex(s => s.id === currentStage);
   const safeStageIndex = stageIndex === -1 ? 0 : stageIndex;
   return (
     <div className="max-w-4xl mx-auto space-y-8 animate-fade-in px-4">
       <header className="text-center space-y-2">
         <h1 className="text-3xl font-display font-bold text-nysc-green-900">Your Journey Map</h1>
-        <p className="text-muted-foreground">A verified roadmap for your 365 days of service.</p>
+        <p className="text-muted-foreground font-medium">A verified roadmap for your 365 days of service.</p>
       </header>
       <div className="relative border-l-2 border-nysc-green-100 ml-4 md:ml-6 pl-8 space-y-12 py-4">
         {JOURNEY_STAGES.map((stage, index) => {
@@ -40,7 +42,9 @@ export function JourneyMapPage() {
                     </Badge>
                   )}
                 </div>
-                <p className="text-muted-foreground text-sm max-w-xl font-medium">{stage.description}</p>
+                <p className="text-muted-foreground text-sm max-w-xl font-medium leading-relaxed">
+                  {stage.description || 'Phase details pending official update.'}
+                </p>
                 <Card className={`transition-all duration-300 ${isActive ? 'border-nysc-green-200 shadow-md ring-1 ring-nysc-green-100 bg-white' : 'border-gray-100 bg-gray-50/30'}`}>
                   <CardHeader className="py-3 px-4 bg-gray-50/50 border-b">
                     <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground flex items-center gap-2">
@@ -49,7 +53,7 @@ export function JourneyMapPage() {
                   </CardHeader>
                   <CardContent className="p-0">
                     <div className="divide-y divide-gray-100">
-                      {stage.tasks.map(task => {
+                      {(stage.tasks || []).map(task => {
                         const isDone = completedTasks.includes(task.id);
                         return (
                           <motion.div
@@ -66,7 +70,7 @@ export function JourneyMapPage() {
                               )}
                             </div>
                             <div className="flex-1 space-y-1">
-                              <p className={`text-sm font-bold ${isDone ? 'line-through text-muted-foreground opacity-60' : 'text-gray-900'}`}>
+                              <p className={`text-sm font-bold transition-all ${isDone ? 'line-through text-muted-foreground opacity-60' : 'text-gray-900'}`}>
                                 {task.title}
                               </p>
                               <p className="text-xs text-muted-foreground leading-relaxed font-medium">{task.description}</p>

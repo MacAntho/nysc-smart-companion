@@ -25,22 +25,25 @@ export function KnowledgeBasePage() {
   const queryParam = searchParams.get('search') || searchParams.get('q') || '';
   const [search, setSearch] = useState(queryParam);
   const [category, setCategory] = useState('All');
-  const readArticles = useAppStore(s => s.readArticles);
+  const readArticlesRaw = useAppStore(s => s.readArticles);
   const toggleReadArticle = useAppStore(s => s.toggleReadArticle);
+  const readArticles = Array.isArray(readArticlesRaw) ? readArticlesRaw : [];
   const isTyping = useRef(false);
   // Synchronize local search state with URL parameters (direct navigation or back/forward)
   useEffect(() => {
     if (!isTyping.current && queryParam !== search) {
       setSearch(queryParam);
     }
-  }, [queryParam, search]);
+  }, [queryParam]);
   // Debounced URL update for clean address bar
   useEffect(() => {
     const handler = setTimeout(() => {
-      if (search && search !== queryParam) {
-        setSearchParams({ search }, { replace: true });
-      } else if (!search && queryParam) {
-        setSearchParams({}, { replace: true });
+      if (search !== queryParam) {
+        if (search) {
+          setSearchParams({ search }, { replace: true });
+        } else {
+          setSearchParams({}, { replace: true });
+        }
       }
       isTyping.current = false;
     }, 400);
@@ -62,9 +65,9 @@ export function KnowledgeBasePage() {
       a.title.toLowerCase().includes(searchLower) ||
       a.content.toLowerCase().includes(searchLower) ||
       a.summary.toLowerCase().includes(searchLower) ||
-      (a.metadata?.source?.toLowerCase() || '').includes(searchLower) ||
-      (a.metadata?.stage?.toLowerCase() || '').includes(searchLower);
-    const matchesCategory = category === 'All' || a.category.toLowerCase().includes(category.toLowerCase());
+      (a.metadata?.source?.toLowerCase() || '').includes(searchLower);
+    const matchesCategory = category === 'All' || 
+      a.category.toLowerCase().includes(category.toLowerCase());
     return matchesSearch && matchesCategory;
   });
   return (
@@ -78,7 +81,7 @@ export function KnowledgeBasePage() {
             <div className="relative group">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 transition-colors group-focus-within:text-nysc-gold" />
               <Input
-                placeholder="Search allowance, budgeting, redeployment, sanctions, packing, POP..."
+                placeholder="Search allowance, budgeting, redeployment..."
                 className="pl-10 h-14 bg-white text-gray-900 border-none focus-visible:ring-2 focus-visible:ring-nysc-gold shadow-lg rounded-2xl"
                 value={search}
                 onChange={handleSearchChange}
@@ -192,10 +195,10 @@ export function KnowledgeBasePage() {
                                 </div>
                               </div>
                             </ScrollArea>
-                            <DialogFooter className="p-6 bg-white border-t flex flex-row items-center justify-between sm:justify-between">
+                            <DialogFooter className="p-6 bg-white border-t flex flex-row items-center justify-between sm:justify-between gap-4">
                               <div className="flex flex-col">
                                 <span className="text-[10px] text-muted-foreground font-black uppercase tracking-widest">Official Source</span>
-                                <span className="text-xs font-bold">{article.metadata?.source || 'Verified NYSC Guidelines'}</span>
+                                <span className="text-xs font-bold truncate max-w-[150px]">{article.metadata?.source || 'Verified NYSC Guidelines'}</span>
                               </div>
                               <Button
                                 onClick={() => toggleReadArticle(article.id)}
@@ -232,17 +235,6 @@ export function KnowledgeBasePage() {
             </Button>
           </div>
         )}
-        <footer className="mt-12 p-10 border-2 border-dashed rounded-3xl bg-gray-50/50 flex flex-col md:flex-row items-center gap-8 shadow-inner">
-          <div className="w-16 h-16 bg-white rounded-2xl shadow-sm border-2 border-nysc-green-100 flex items-center justify-center text-nysc-green-800 shrink-0">
-            <Info className="w-8 h-8" />
-          </div>
-          <div className="space-y-2 text-center md:text-left">
-            <h4 className="font-display font-bold text-lg text-gray-900">Official Operational Disclaimer</h4>
-            <p className="text-xs text-muted-foreground max-w-4xl font-medium leading-relaxed">
-              NYSC Smart Companion provides independent operational support. This platform is NOT an official NYSC portal. Always verify critical dates directly via the <a href="https://portal.nysc.org.ng" className="text-nysc-green-800 underline font-black" target="_blank" rel="noreferrer">Official NYSC Portal</a>.
-            </p>
-          </div>
-        </footer>
       </div>
     </div>
   );
