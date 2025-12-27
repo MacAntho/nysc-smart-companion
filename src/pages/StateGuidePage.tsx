@@ -15,7 +15,7 @@ export function StateGuidePage() {
     if (profileState && !selectedState) {
       setSelectedState(profileState);
     }
-  }, [profileState]);
+  }, [profileState, selectedState]);
   const data = useMemo(() => {
     if (!selectedState) return null;
     return STATE_DATA[selectedState] || STATE_DATA['DEFAULT'];

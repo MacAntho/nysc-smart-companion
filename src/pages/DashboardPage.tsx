@@ -61,7 +61,16 @@ export function DashboardPage() {
         title: '₦77k Allawee Intelligence', 
         desc: 'Payment Security: Authority breakdown of the new allowance schedule, state-specific stipends, and protocols to avoid payment rejection.', 
         risk: 'high' as PriorityRisk, 
-        link: '/app/knowledge?search=allawee' 
+        link: '/app/knowledge?search=allawee'
+      };
+    }
+    // 2.1 Statistical Intelligence (New Priority)
+    if ((stageId === 'prospective' || stageId === 'pop') && !readArticlesSet.has('k-stats') && exists('k-stats')) {
+      return {
+        title: 'Key Service Statistics',
+        desc: 'Strategic Insight: Authoritative breakdown of mobilization volumes, exemption ratios, and national deployment trends.',
+        risk: 'low' as PriorityRisk,
+        link: '/app/knowledge?search=stats'
       };
     }
     // 3. Final Milestone: Certificate Intelligence (Highest Priority for POP)

@@ -66,11 +66,32 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-stats',
+    category: 'Official/Stats',
+    title: 'NYSC Key Statistics: Mobilization, Deployment & Outcomes',
+    summary: 'Annual mobilization numbers, age exemption ratios, and post-service employment metrics for recent batches.',
+    content: `Understanding the scale of the NYSC program helps Corps Members contextualize their service within the national framework.
+I. MOBILIZATION VOLUMES
+1. ANNUAL INTAKE: Approximately 350,000 to 400,000 graduates are mobilized annually across Batches A, B, and C.
+2. BATCH DISTRIBUTION: Batch B typically sees the highest volume of mobilization (approx. 40%), followed by Batch A (35%) and Batch C (25%).
+II. THE 30-YEAR AGE RULE
+1. EXEMPTION RATIO: Statistics show that roughly 12-15% of eligible graduates receive Certificates of Exemption because they graduated over the age of 30 or served in the armed forces/police for over nine months.
+2. ELIGIBILITY: Eligibility is determined by the age at the time of graduation, not the age at the time of mobilization.
+III. PPA SECTOR DISTRIBUTION
+1. EDUCATION (65%): The majority of Corps Members are deployed to primary and secondary schools to support the national education system.
+2. RURAL HEALTH (15%): Medical and health-related graduates are prioritized for rural health centers.
+3. PRIVATE SECTOR & GOVT (20%): Distributed among MDAs and verified private firms.
+IV. POST-SERVICE OUTCOMES
+1. EMPLOYMENT RATE: Survey data indicates that 25% of Corps Members are retained by their PPA post-service.
+2. ENTREPRENEURSHIP: Through the SAED program, approximately 10% of participants launch registered micro-businesses within 6 months of POP.`,
+    metadata: { stage: 'all', risk: 'low', source: 'NYSC Annual Reports', featured: true, last_updated: '2025-02-10' }
+  },
+  {
     id: 'k-allawee',
     category: 'Financial/Official',
     title: 'NYSC Allawee Guide: ₦77k Payments & State Stipends',
     summary: 'Comprehensive operational breakdown: Understanding the ₦77k federal allowance, payment windows, state stipends, and protocols for the final POP payment.',
-    content: `Effective October 2024, the Federal Government of Nigeria officially increased the monthly allowance for Corps Members to ₦77,000. 
+    content: `Effective October 2024, the Federal Government of Nigeria officially increased the monthly allowance for Corps Members to ₦77,000.
 I. THE FEDERAL ALLOWANCE (ALLAWEE)
 1. PAYMENT AMOUNT: ₦77,000 per month.
 2. PAYMENT WINDOW: Alerts typically drop between the 25th of the current month and the 5th of the following month.

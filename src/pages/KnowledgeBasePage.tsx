@@ -34,7 +34,7 @@ export function KnowledgeBasePage() {
     if (!isTyping.current && queryParam !== search) {
       setSearch(queryParam);
     }
-  }, [queryParam]);
+  }, [queryParam, search]);
   // Debounced URL update for clean address bar
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -67,7 +67,7 @@ export function KnowledgeBasePage() {
       a.summary.toLowerCase().includes(searchLower) ||
       (a.metadata?.source?.toLowerCase() || '').includes(searchLower);
     const matchesCategory = category === 'All' || 
-      a.category.toLowerCase().includes(category.toLowerCase());
+      a.category.split('/')[0].toLowerCase() === category.toLowerCase();
     return matchesSearch && matchesCategory;
   });
   return (
