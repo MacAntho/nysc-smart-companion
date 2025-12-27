@@ -92,6 +92,119 @@ IV. PPA & CDS CONFLICTS
     metadata: { stage: 'all', risk: 'high', source: 'NYSC Protocols', featured: true }
   },
   {
+    id: 'k-insider-tips',
+    category: 'Survival/Advisory',
+    title: '100 Practical NYSC Survival Tips',
+    summary: 'Battle-Tested Intelligence: 100 essential tips covering Camp, PPA terrain, CDS projects, financial mastery, and personal safety.',
+    content: `Mastering the service year requires more than just reading the bye-laws; it requires insider intelligence. Here are 100 practical tips divided into five strategic sections.
+I. ORIENTATION CAMP (Tips 1-25)
+1. Bunk Positioning: Choose a top bunk near a window for better ventilation, or a bottom bunk for easier access.
+2. Early Bird Registration: Arrive at the camp gate as early as 4:00 AM on Day 1 to avoid long queues.
+3. The 'White' Stock: Buy at least 4 pairs of white T-shirts and shorts; the 2 issued by NYSC are rarely enough.
+4. Canvas Quality: Invest in comfortable white sneakers; the issued ones often have hard soles that cause blisters.
+5. Waist Pouch: Keep your phone, money, and ID card in a waist pouch at all times—even when sleeping.
+6. Power Bank: Electricity in hostels is unreliable; a high-capacity power bank is non-negotiable.
+7. Mami Market Budget: Set a daily limit for Mami Market spending to avoid depleting your allowance in 3 weeks.
+8. Bucket Cover: Always cover your water bucket to prevent dust and insects.
+9. Laundry Hack: Use the camp laundry services if you can afford it; hand-washing white clothes is exhausting.
+10. Parade Stamina: Do not skip breakfast before morning drills; fainting on the parade ground is preventable.
+11. Water Intake: Drink plenty of water to stay hydrated under the sun.
+12. Sunscreen: Apply sunscreen if you have sensitive skin to avoid sunburn during long parade rehearsals.
+13. Documents: Carry 10-15 photocopies of every document and 20 passport photos.
+14. Medical Fitness: Ensure your medical certificate is from a government hospital; private ones are often rejected.
+15. Kit Sizing: Check your kit sizes immediately after collection; swap with others on the spot if they don't fit.
+16. Toiletries: Bring extra toilet paper, soap, and disinfectant.
+17. Sleeping Earplugs: Hostels are loud; earplugs help if you are a light sleeper.
+18. Mosquito Net: Hostels can be infested; a treated net is a health essential.
+19. Socializing: Join a camp group (OBS, Band, Kitchen) to network and potentially get better postings.
+20. Discipline: Respect the soldiers; "obey before complain" is the camp mantra.
+21. Charging Spots: Identify reliable charging spots in the Mami Market early.
+22. First Aid: Pack basic meds (paracetamol, vitamins, anti-diarrhea, balm).
+23. Small Denominations: Carry 'change' (N100, N200) for small purchases.
+24. Padlocks: Buy high-quality padlocks for your boxes.
+25. Exit Strategy: Start planning your transport out of camp by Day 15.
+II. PRIMARY ASSIGNMENT (PPA) (Tips 26-50)
+26. The 48-Hour Window: Report to your PPA within 48 hours of leaving camp.
+27. Rejection Protocol: If rejected, ensure the rejection letter is stamped and dated.
+28. Accommodation Check: Inspect provided housing for security and basic amenities before moving in.
+29. Commute Mapping: Calculate your transport cost from residence to PPA before accepting posting.
+30. Professionalism: Treat your PPA like a real job; punctuality counts.
+31. Local Relationship: Introduce yourself to the community leader or nearest police station.
+32. Monthly Clearance: Never delay your monthly clearance signature; it controls your pay.
+33. State Stipend: Check if your state pays an additional allowance (State Allowee) and register for it.
+34. Leave of Absence: Always get written permission from the LGI before traveling out of state.
+35. Private Practice: If your PPA pay is low, explore remote freelance work or tutoring.
+36. Networking: Connect with ex-corpers who served at your PPA for tips on the bosses.
+37. Security Awareness: Avoid late nights in unfamiliar terrains.
+38. Dress Code: Wear your full uniform (6/7) on CDS days and for official clearance.
+39. ID Visibility: Always carry your NYSC ID card; it is your legal shield.
+40. Office Politics: Stay neutral in PPA internal conflicts.
+41. Skill Acquisition: Use the extra time at your PPA to learn a digital skill.
+42. Documentation: Keep a personal file of every clearance form you have signed.
+43. Accommodation Allowance: If your PPA doesn't provide a room, ask for "housing allowance in lieu."
+44. Biometric Punctuality: Show up early for biometric clearance to avoid system timeouts.
+45. Employer Relations: Maintain a good relationship with your principal for a good final clearance.
+46. Local Language: Learn basic greetings in the local language; it opens doors.
+47. Market Prices: Ask locals for the real price of food items before buying.
+48. NHIS Registration: Ensure your PPA health center recognizes your NHIS status.
+49. Record Keeping: Document your contributions at the PPA for your CV.
+50. Savings: Save a percentage of your federal allowance immediately it arrives.
+III. CDS & COMMUNITY IMPACT (Tips 51-65)
+51. Milestone 1: Identify a community need through observation, not just guessing.
+52. LGI Approval: Never spend a kobo on a project before getting an official approval letter.
+53. Fundraising: Approach local businesses for sponsorship instead of using your allowance.
+54. Sustainability: Choose projects that the community can maintain after you leave.
+55. Group Dynamics: If in a group CDS, take a leadership role for your CV.
+56. Project Publicity: Document your project with photos and videos for your portfolio.
+57. Commissioning: Invite the ZI or State Coordinator for the project opening to get noticed.
+58. Award Nominations: Aim for State or Presidential Honors through exceptional impact.
+59. Community Leaders: Involve the local chiefs; they provide security for your project.
+60. Digital Tools: Use social media to raise awareness for your community project.
+61. Proposal Writing: Keep your project proposal concise and benefit-focused.
+62. Verification: Ensure the LGI visits your project site during implementation.
+63. Completion Report: Submit your final report with receipts and photos immediately after finishing.
+64. Legacy Focus: Ask yourself: "Will this project still be useful in 5 years?"
+65. Teamwork: Support other corpers' projects; they will support yours.
+IV. FINANCIAL SURVIVAL (Tips 66-80)
+66. Payday Alert: The 'Allowee' usually arrives between the 25th and 30th of the month.
+67. The 50/30/20 Rule: 50% for needs, 30% for survival/wants, 20% for savings/investment.
+68. Emergency Fund: Set aside one month's allowance as an emergency backup.
+69. Avoid Debt: Never borrow money based on "expected" allowance; payments can be delayed.
+70. Bulk Buying: Buy non-perishable food (rice, beans, oil) in bulk at the start of the month.
+71. Transport Sharing: Join other corpers in 'charter' cars to save on travel costs.
+72. State Allowee Search: Some states pay once a year; keep track of the registration windows.
+73. High-Interest Savings: Use apps like PiggyVest or Cowrywise to save your allowance.
+74. Skill Monetization: If you can bake, design, or write, start a small side-hustle.
+75. Discount Hunting: Use your ID card to ask for 'corper discount' in markets and parks.
+76. Cooking vs. Eating Out: Cooking your meals saves up to 60% of your food budget.
+77. Bank Alerts: Enable SMS alerts to monitor your account for any unauthorized charges.
+78. Avoid "Fast Money": Stay away from PPA-based Ponzi schemes or "quick" investments.
+79. Financial Literacy: Read books on personal finance during your PPA downtime.
+80. Transition Fund: Start saving for life after NYSC by the 6th month of service.
+V. SECURITY & HEALTH (Tips 81-100)
+81. Travel Permission: Traveling without a pass is a disciplinary offense and voids insurance.
+82. Night Movements: Avoid arriving in a new town after 6:00 PM.
+83. Emergency Contacts: Program the LGI and ZI numbers as 'Emergency' on your phone.
+84. Social Media Safety: Do not post your exact PPA location or home address online.
+85. Health Insurance: Use the NHIS-designated hospitals for free or subsidized care.
+86. Water Safety: Boil or filter water if you are unsure of the source quality.
+87. Food Hygiene: Be careful with 'street food' in the first few weeks of deployment.
+88. Mental Health: Connect with other corpers; isolation can lead to depression.
+89. Conflict Avoidance: Do not get involved in local political or religious arguments.
+90. Fire Safety: Unplug all appliances before leaving your room.
+91. Road Safety: Use registered transport parks, not 'one-chance' roadside buses.
+92. Self-Defense: Be aware of your surroundings; your intuition is a powerful tool.
+93. Document Security: Keep original credentials in a waterproof bag in a secure location.
+94. Local Laws: Respect the traditional laws of your host community.
+95. First Aid Replenishment: Restock your first aid kit every 3 months.
+96. Fitness: Keep active; use the weekly CDS morning for personal exercise.
+97. Allergic Reactions: Know the nearest pharmacy that stocks anti-histamines.
+98. Routine Checks: Get a general checkup at the General Hospital every 6 months.
+99. Security Briefings: Attend all security meetings organized by the NYSC State Office.
+100. The Golden Rule: Your life is more important than the service certificate. Stay safe.`,
+    metadata: { stage: 'all', risk: 'medium', source: 'Verified Insider', featured: true }
+  },
+  {
     id: 'k-eligibility',
     category: 'Official',
     title: 'NYSC Eligibility: Who Serves, Exemptions & Special Cases',
@@ -143,7 +256,7 @@ Streams are assigned randomly based on the order of registration and state capac
     summary: 'Comprehensive roadmap for state transfers: Marital, health, and security grounds, plus post-camp application protocols.',
     content: `Relocation is a procedural privilege granted to corps members under specific conditions. Understanding the timeline and documentation is critical.
 1. VALID GROUNDS FOR RELOCATION:
-A. MARITAL: Exclusively for married female corps members who wish to serve in the state where their husband resides.
+A. MARITAL: Exclusively for married female corps members who wish to wish to serve in the state where their husband resides.
 B. MEDICAL: For members with chronic health conditions (Asthma, Sickle Cell, Kidney issues, etc.) that require specialized care or proximity to specific hospitals.
 C. SECURITY: Applicable in cases of verifiable personal threats or documented security volatility in the current deployment zone.
 2. THE TWO APPLICATION WINDOWS:

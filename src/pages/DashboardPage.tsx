@@ -75,6 +75,15 @@ export function DashboardPage() {
         searchLink: '/app/knowledge?search=sanctions'
       };
     }
+    // NEW PHASE 35 PROMOTION: 100 SURVIVAL TIPS
+    if ((stageId === 'camp' || stageId === 'ppa') && !readArticlesSet.has('k-insider-tips')) {
+      return {
+        title: '100 Practical Survival Tips',
+        desc: 'Insider Intelligence: A comprehensive master guide of 100 battle-tested tips for camp, money, and PPA survival.',
+        risk: 'medium' as PriorityRisk,
+        searchLink: '/app/knowledge?search=tips'
+      };
+    }
     // STAGE SPECIFIC UNREAD GUIDES
     if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-eligibility')) {
       return {
