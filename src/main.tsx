@@ -6,7 +6,6 @@ import { createRoot } from 'react-dom/client'
 import {
   createBrowserRouter,
   RouterProvider,
-  Navigate,
 } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -18,14 +17,10 @@ import { DashboardPage } from '@/pages/DashboardPage'
 import { JourneyMapPage } from '@/pages/JourneyMapPage'
 import { KnowledgeBasePage } from '@/pages/KnowledgeBasePage'
 import { StateGuidePage } from '@/pages/StateGuidePage'
+import { CDSToolkitPage } from '@/pages/CDSToolkitPage'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
-import { useAppStore } from '@/lib/store'
+import { ProtectedRoute } from '@/components/ProtectedRoute'
 const queryClient = new QueryClient();
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const isOnboarded = useAppStore(s => s.isOnboarded);
-  if (!isOnboarded) return <Navigate to="/onboarding" replace />;
-  return <>{children}</>;
-}
 const router = createBrowserRouter([
   {
     path: "/",
@@ -55,6 +50,11 @@ const router = createBrowserRouter([
   {
     path: "/app/state-guide",
     element: <ProtectedRoute><DashboardLayout><StateGuidePage /></DashboardLayout></ProtectedRoute>,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/app/cds",
+    element: <ProtectedRoute><DashboardLayout><CDSToolkitPage /></DashboardLayout></ProtectedRoute>,
     errorElement: <RouteErrorBoundary />,
   },
 ]);

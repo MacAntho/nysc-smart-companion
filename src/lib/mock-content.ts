@@ -39,9 +39,27 @@ export const JOURNEY_STAGES = [
   }
 ];
 export const KNOWLEDGE_ARTICLES = [
-  { id: 'k1', category: 'Official', title: 'The NYSC Act', summary: 'Understanding the legal framework of your service year.' },
-  { id: 'k2', category: 'Survival', title: 'Camp Packing List', summary: 'Everything you need to bring to the orientation camp.' },
-  { id: 'k3', category: 'CDS', title: 'Project Ideas', summary: 'How to start a meaningful community project.' },
+  { 
+    id: 'k1', 
+    category: 'Official', 
+    title: 'The NYSC Act', 
+    summary: 'Understanding the legal framework of your service year.',
+    content: 'The National Youth Service Corps (NYSC) Act is the enabling law for the scheme. It mandates that every Nigerian graduate under the age of 30 at graduation must serve for one year. The act covers discipline, allowance, and the four cardinal programs of the NYSC.'
+  },
+  { 
+    id: 'k2', 
+    category: 'Survival', 
+    title: 'Camp Packing List', 
+    summary: 'Everything you need to bring to the orientation camp.',
+    content: 'Essential items for camp include: White t-shirts (4-6), White shorts (4-6), White socks (6 pairs), White sneakers, Toiletries, Mosquito net, Waist bag, and original documents (Statement of Result, Call-up Letter, Medical Fitness Certificate).'
+  },
+  { 
+    id: 'k3', 
+    category: 'CDS', 
+    title: 'Project Ideas', 
+    summary: 'How to start a meaningful community project.',
+    content: 'A Community Development Service (CDS) project is successful when it meets a felt need in the community. Steps include: Needs assessment, Proposal writing, Seeking approval from the Local Government Inspector (LGI), Execution, and Commissioning.'
+  },
 ];
 export const STATE_DATA: Record<string, any> = {
   'Lagos': {
@@ -59,3 +77,39 @@ export const DEADLINES = [
   { id: 'd1', title: 'Online Registration Ends', date: '2024-10-15', stage: 'mobilization' },
   { id: 'd2', title: 'Camp Portal Closure', date: '2024-11-01', stage: 'camp' },
 ];
+export const CDS_RESOURCES = {
+  categories: [
+    { id: 'edu', name: 'Education', icon: 'Book' },
+    { id: 'health', name: 'Health', icon: 'HeartPulse' },
+    { id: 'environ', name: 'Environment', icon: 'Leaf' },
+    { id: 'ict', name: 'ICT/Literacy', icon: 'Cpu' },
+  ],
+  projects: [
+    {
+      id: 'cp1',
+      category: 'Education',
+      title: 'Free Vacation Lessons',
+      description: 'Organize free tutoring for students during their break period.',
+      requirements: ['Permission from School Principal', 'Curriculum Guide']
+    },
+    {
+      id: 'cp2',
+      category: 'Health',
+      title: 'Deworming Exercise',
+      description: 'Partner with local clinics to provide deworming medication for school children.',
+      requirements: ['Medical Supervisor', 'LGI Approval']
+    },
+    {
+      id: 'cp3',
+      category: 'Environment',
+      title: 'Clean-up Campaign',
+      description: 'Monthly sanitation sensitization and drainage clearing exercise.',
+      requirements: ['Community Head Consent', 'Basic Tools']
+    }
+  ],
+  templates: [
+    { id: 't1', title: 'Project Proposal Letter', type: 'Word', size: '24KB' },
+    { id: 't2', title: 'Request for Funds (Sponsorship)', type: 'Word', size: '30KB' },
+    { id: 't3', title: 'Completion Report Form', type: 'PDF', size: '150KB' }
+  ]
+};

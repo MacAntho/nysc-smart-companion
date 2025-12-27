@@ -1,6 +1,14 @@
-/* This is a demo sidebar. **COMPULSORY** Edit this file to customize the sidebar OR remove it from appLayout OR don't use appLayout at all */
 import React from "react";
-import { Home, Layers, Compass, Star, Settings, LifeBuoy } from "lucide-react";
+import { 
+  LayoutDashboard, 
+  Map, 
+  BookOpen, 
+  MapPin, 
+  Briefcase, 
+  ExternalLink,
+  ShieldCheck
+} from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 import {
   Sidebar,
   SidebarContent,
@@ -8,65 +16,78 @@ import {
   SidebarGroup,
   SidebarHeader,
   SidebarSeparator,
-  SidebarInput,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarMenuAction,
-  SidebarMenuBadge,
 } from "@/components/ui/sidebar";
-
+const NAV_ITEMS = [
+  { title: "Dashboard", icon: LayoutDashboard, url: "/app" },
+  { title: "Journey Map", icon: Map, url: "/app/journey" },
+  { title: "Knowledge Base", icon: BookOpen, url: "/app/knowledge" },
+  { title: "State Guide", icon: MapPin, url: "/app/state-guide" },
+  { title: "CDS Toolkit", icon: Briefcase, url: "/app/cds" },
+];
+const EXTERNAL_LINKS = [
+  { title: "NYSC Portal", url: "https://portal.nysc.org.ng" },
+  { title: "Official Website", url: "https://nysc.gov.ng" },
+];
 export function AppSidebar(): JSX.Element {
+  const location = useLocation();
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarHeader>
-        <div className="flex items-center gap-2 px-2 py-1">
-          <div className="h-6 w-6 rounded-md bg-gradient-to-br from-indigo-500 to-purple-500" />
-          <span className="text-sm font-medium">Demo Sidebar</span>
+        <div className="flex items-center gap-3 px-2 py-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-nysc-green-800 text-white">
+            <ShieldCheck className="h-5 w-5" />
+          </div>
+          <div className="flex flex-col gap-0.5 leading-none group-data-[collapsible=icon]:hidden">
+            <span className="font-bold text-nysc-green-900">Smart Companion</span>
+            <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Service Guide</span>
+          </div>
         </div>
-        <SidebarInput placeholder="Search" />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
+          <SidebarGroupLabel>Main Navigation</SidebarGroupLabel>
           <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive>
-                <a href="#"><Home /> <span>Home</span></a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <a href="#"><Layers /> <span>Projects</span></a>
-              </SidebarMenuButton>
-              <SidebarMenuAction>
-                <Star className="size-4" />
-              </SidebarMenuAction>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <a href="#"><Compass /> <span>Explore</span></a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+            {NAV_ITEMS.map((item) => (
+              <SidebarMenuItem key={item.url}>
+                <SidebarMenuButton 
+                  asChild 
+                  isActive={location.pathname === item.url}
+                  tooltip={item.title}
+                >
+                  <Link to={item.url}>
+                    <item.icon />
+                    <span>{item.title}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
           </SidebarMenu>
         </SidebarGroup>
-
         <SidebarSeparator />
-
         <SidebarGroup>
-          <SidebarGroupLabel>Quick Links</SidebarGroupLabel>
+          <SidebarGroupLabel>Resource Links</SidebarGroupLabel>
           <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <a href="#"><Star /> <span>Starred</span></a>
-              </SidebarMenuButton>
-              <SidebarMenuBadge>5</SidebarMenuBadge>
-            </SidebarMenuItem>
+            {EXTERNAL_LINKS.map((link) => (
+              <SidebarMenuItem key={link.url}>
+                <SidebarMenuButton asChild tooltip={link.title}>
+                  <a href={link.url} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink />
+                    <span>{link.title}</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <div className="px-2 text-xs text-muted-foreground">A simple shadcn sidebar</div>
+        <div className="px-4 py-4 text-[10px] text-muted-foreground group-data-[collapsible=icon]:hidden">
+          Official NYSC Rules Apply. v1.0.0
+        </div>
       </SidebarFooter>
     </Sidebar>
   );
