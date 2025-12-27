@@ -48,6 +48,14 @@ export function DashboardPage() {
       };
     }
     const readArticlesSet = new Set(readArticles ?? []);
+    if (!readArticlesSet.has('k-emergency')) {
+      return {
+        title: 'Emergency Response Guide',
+        desc: 'Process Critical: Mandatory safety protocols for medical emergencies, security incidents, and document loss.',
+        risk: 'high' as PriorityRisk,
+        searchLink: '/app/knowledge?search=emergency'
+      };
+    }
     if ((stageId === 'prospective' || stageId === 'mobilization') &&
         readArticlesSet.has('k-eligibility') && readArticlesSet.has('k-batches') && !readArticlesSet.has('k-faqs')) {
       return {
