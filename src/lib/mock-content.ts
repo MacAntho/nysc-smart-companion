@@ -66,6 +66,23 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-clearance',
+    category: 'Official',
+    title: 'NYSC Clearance Process: Monthly & Final Protocols',
+    summary: 'A guide to PPA/CDS documentation, LGI verification steps, and avoiding allowance delays.',
+    content: `Clearance is the lifeblood of the NYSC service year. Failure to complete it correctly results in "No Pay" status or service extension.
+MONTHLY CLEARANCE (The 3-Step Chain):
+1. PPA CLEARANCE LETTER: Every month-end (usually from the 20th), obtain a signed and stamped letter from your PPA employer confirming your diligent service and presence. 
+2. CDS CLEARANCE: Ensure your CDS Vice President or Secretary signs your green card/attendance register during weekly meetings.
+3. LGI VERIFICATION: Take your PPA letter and CDS card to the Local Government Inspector (LGI). The LGI performs a digital "face-match" or thumbprint verification on the portal. Once the LGI "clears" you online, your allowance is triggered for that month.
+CRITICAL DEADLINE: Monthly clearance usually happens between the 25th and last day of the month. Missing this window means you won't be paid for that month until the next cycle.
+FINAL CLEARANCE (Winding-Up/POP):
+1. KIT RETURN: You must return specified NYSC gear (usually the boots and tunic) as directed by the state secretariat.
+2. SIGNATURE CHAIN: Obtain final signatures from your PPA employer (Final Release Letter), the Zonal Inspector (ZI), and finally the LGI.
+3. CLEARANCE SLIP: Present all signed documents to receive your "Discharge Certificate" on POP day.`,
+    metadata: { stage: 'ppa', risk: 'high', source: 'NYSC Official', featured: true }
+  },
+  {
     id: 'k-cds-execution',
     category: 'Official',
     title: 'CDS Project Execution Process: From Proposal to Completion',
