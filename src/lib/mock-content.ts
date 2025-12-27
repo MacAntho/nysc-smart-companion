@@ -62,6 +62,40 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-camp-rules',
+    category: 'Survival',
+    title: 'NYSC Orientation Camp Rules & Realities',
+    summary: 'Critical guide on dress code, prohibited items, disciplinary penalties, and emergency protocols.',
+    content: `Compliance with NYSC Bye-laws during the 21-day orientation is non-negotiable. Failure to adhere to these rules can lead to 'Decamping' (expulsion from camp) or an extension of service.
+
+1. THE 6/6 DRESS CODE MANDATE
+- You must be in your official uniform at all times.
+- 'Full 6/6' refers to: Cap, Crested Vest, Khaki Jacket/Trousers, Belt, Socks, and Jungle Boots.
+- 'White-on-White' refers to: White round-neck T-shirt, White shorts, White socks, and White sneakers.
+- Wearing mufti (civilian clothes) is strictly prohibited and can lead to immediate disciplinary action.
+
+2. PROHIBITED ITEMS & FIRE SAFETY
+- Boiling Rings & Irons: These are the #1 cause of hostel fires. If found, they will be confiscated, and the owner may face the camp court.
+- Sharp Objects: Knives, metal forks, and scissors are not allowed. Use plastic alternatives.
+- Alcohol & Narcotics: Bringing spirits or illegal substances into camp is a 'decampable' offense.
+
+3. ATTENDANCE & DISCIPLINE
+- The Bugle is Law: When the bugle sounds, you must move immediately to the designated area (Parade Ground or Lecture Hall).
+- Unauthorized Absence: Leaving the camp premises without a written exit permit from the State Coordinator is treated as absconding.
+- Lights Out: By 10:00 PM, all lights must be off and hostels silent.
+
+4. HEALTH & EMERGENCIES
+- The Camp Clinic: Open 24/7 for all corps members. Do not self-medicate in the hostel.
+- Report any symptoms of exhaustion or illness to your Platoon Commander or the medical team immediately.`,
+    metadata: {
+      stage: 'camp',
+      risk: 'high',
+      source: 'NYSC Bye-laws',
+      last_updated: '2025',
+      featured: true
+    }
+  },
+  {
     id: 'k-camp-life',
     category: 'Survival',
     title: 'NYSC Orientation Camp: Daily Schedule & Activities',

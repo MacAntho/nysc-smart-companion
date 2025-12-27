@@ -1,5 +1,6 @@
-import { IndexedEntity, Entity } from "./core-utils";
+import { IndexedEntity, Entity, Index } from "./core-utils";
 import type { NYSCProfile } from "@shared/types";
+export { Index };
 export interface OtpState {
   otp: string;
   expires: number;
@@ -30,7 +31,7 @@ export class ContentEntity extends IndexedEntity<ContentItem> {
   static readonly initialState: ContentItem = { id: "", type: "article", data: {} };
 }
 /**
- * @deprecated Simplified auth bypasses OTP state check, 
+ * @deprecated Simplified auth bypasses OTP state check,
  * but OtpEntity is kept for structural compatibility.
  */
 export class OtpEntity extends Entity<OtpState> {

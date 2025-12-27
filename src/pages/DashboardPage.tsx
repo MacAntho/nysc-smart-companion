@@ -41,8 +41,8 @@ export function DashboardPage() {
         };
       case 'camp':
         return {
-          title: 'Camp Daily Schedule',
-          desc: 'Master the 21-day regimented routine. View the full timeline of parades, lectures, and social activities.'
+          title: 'Camp Rules & Safety Protocols',
+          desc: 'Crucial survival guide: Understand the bye-laws to avoid service extensions or decamping.'
         };
       case 'ppa':
         return {
