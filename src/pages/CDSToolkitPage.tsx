@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useAppStore } from '@/lib/store';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -44,16 +44,9 @@ export function CDSToolkitPage() {
   const activeProjectId = useAppStore(s => s.activeProjectId);
   const setActiveProject = useAppStore(s => s.setActiveProject);
   const completedTasks = useAppStore(s => s.completedTasks);
-  const [tabValue, setTabValue] = useState<string>("ideas");
-  useEffect(() => {
-    if (activeProjectId && tabValue !== "diary") {
-      setTabValue("diary");
-    } else if (!activeProjectId && tabValue === "diary") {
-      setTabValue("ideas");
-    }
-  }, [activeProjectId, tabValue]);
+  // Decoupled tab state: Start on 'ideas' if no project, or allow manual navigation
+  const [tabValue, setTabValue] = useState<string>(activeProjectId ? "diary" : "ideas");
   const [search, setSearch] = useState('');
-  const [activeFilter, setActiveFilter] = useState<'all' | 'low-budget' | 'short-term'>('all');
   const [dialogProject, setDialogProject] = useState<CDSProject | null>(null);
   const filteredProjects = useMemo(() => {
     return CDS_RESOURCES.projects.filter(p => {
@@ -63,7 +56,6 @@ export function CDSToolkitPage() {
     });
   }, [search]);
   const activeProject = CDS_RESOURCES.projects.find(p => p.id === activeProjectId);
-  // Real dynamic milestones mapped to journey tasks
   const milestones = useMemo(() => {
     const cdsPhase = JOURNEY_STAGES.find(s => s.id === 'cds');
     return cdsPhase?.tasks.map(t => ({
@@ -84,6 +76,10 @@ export function CDSToolkitPage() {
     { title: 'Execute', desc: 'Build Impact', icon: PlayCircle },
     { title: 'Complete', desc: 'Report & POP', icon: Trophy },
   ];
+  const handleEnroll = (projectId: string) => {
+    setActiveProject(projectId);
+    setTabValue("diary");
+  };
   const handleEnrollFromDialog = () => {
     if (dialogProject) {
       setActiveProject(dialogProject.id);
@@ -162,10 +158,7 @@ export function CDSToolkitPage() {
                     <div className="grid grid-cols-2 gap-2">
                         <Button variant="outline" className="font-bold border-gray-200" onClick={() => setDialogProject(project)}>Details</Button>
                         <Button
-                          onClick={() => {
-                            setActiveProject(project.id);
-                            setTabValue("diary");
-                          }}
+                          onClick={() => handleEnroll(project.id)}
                           className={cn("font-bold", activeProjectId === project.id ? 'bg-gray-100' : 'bg-nysc-green-800 hover:bg-nysc-green-900')}
                           disabled={activeProjectId === project.id}
                         >

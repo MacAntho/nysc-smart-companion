@@ -36,11 +36,11 @@ export function DashboardPage() {
   const priorityContent = useMemo(() => {
     if (!isInitialized) return null;
     const readArticlesSet = new Set(readArticles ?? []);
-    // 0. Essential Foundational Knowledge (Eligibility)
-    if (stageId === 'prospective' && !readArticlesSet.has('k-eligibility')) {
+    // 0. Essential Foundational Knowledge (Eligibility) - Expand to mobilization phase
+    if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-eligibility')) {
       return {
         title: 'NYSC Eligibility Guide',
-        desc: 'Strategic Roadmap: Detailed legal clarity on the 30-year age exemption rule and academic prerequisites before you register.',
+        desc: 'Strategic Roadmap: Detailed legal clarity on the 30-year age exemption rule and academic prerequisites before you finalize registration.',
         risk: 'low' as PriorityRisk,
         searchLink: '/app/knowledge?search=eligibility'
       };
@@ -166,7 +166,7 @@ export function DashboardPage() {
               {priorityContent.risk === 'high' ? 'Process Critical' : 'Priority Resource'}
             </Badge>
             <CardTitle className="text-2xl font-display tracking-tight leading-none">{priorityContent.title}</CardTitle>
-            <CardDescription className="font-bold text-sm text-gray-800 max-w-2xl mt-1 leading-relaxed">
+            <CardDescription className="font-bold text-sm text-gray-800 max-w-2xl mt-1 leading-relaxed pr-8 sm:pr-0">
               {priorityContent.desc}
             </CardDescription>
           </CardHeader>

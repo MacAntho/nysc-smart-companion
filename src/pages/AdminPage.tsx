@@ -5,7 +5,6 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ShieldAlert, Users, BookOpen, Trash2, Edit3, Search, RefreshCw, ArrowLeft, Eye, Copy, Check, GraduationCap, Trophy, LayoutGrid, Clock } from 'lucide-react';
 import { KNOWLEDGE_ARTICLES } from '@/lib/mock-content';
@@ -34,7 +33,7 @@ export function AdminPage() {
           completedTasks: Array.isArray(u.completedTasks) ? u.completedTasks : [],
           readArticles: Array.isArray(u.readArticles) ? u.readArticles : [],
           stateOfDeployment: u.stateOfDeployment || 'Not Set',
-          updatedAt: u.updatedAt || 0
+          updatedAt: Number(u.updatedAt) || 0
         })).sort((a: NYSCProfile, b: NYSCProfile) => (b.updatedAt || 0) - (a.updatedAt || 0));
         setUsers(sanitizedUsers);
       }
@@ -174,13 +173,13 @@ export function AdminPage() {
                                <div className="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                                   <div
                                     className="h-full bg-nysc-green-800"
-                                    style={{ width: `${Math.min(100, (u.readArticles.length / KNOWLEDGE_ARTICLES.length) * 100)}%` }}
+                                    style={{ width: `${Math.min(100, (u.readArticles.length / Math.max(1, KNOWLEDGE_ARTICLES.length)) * 100)}%` }}
                                   />
                                </div>
                              </div>
                           </td>
                           <td className="px-6 py-4 text-[11px] font-semibold text-muted-foreground">
-                            {isDateValid ? format(dateObj, 'MMM d, HH:mm') : 'No History'}
+                            {isDateValid ? format(dateObj, 'MMM d, HH:mm') : 'New Member'}
                           </td>
                           <td className="px-6 py-4 text-right">
                             <Button
@@ -252,51 +251,55 @@ export function AdminPage() {
           </Card>
         </TabsContent>
       </Tabs>
-      <Dialog open={!!selectedUser} onOpenChange={() => setSelectedUser(null)}>
+      <Dialog open={!!selectedUser} onOpenChange={(o) => !o && setSelectedUser(null)}>
         <DialogContent className="max-w-md rounded-3xl border-none shadow-2xl p-0 overflow-hidden">
-          <DialogHeader className="p-8 bg-nysc-green-900 text-white relative">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16" />
-            <div className="relative z-10 flex items-center justify-between">
-              <DialogTitle className="font-display text-2xl font-bold flex items-center gap-3">
-                Profile Audit
-              </DialogTitle>
-              {selectedUser?.isPro && (
-                <Badge className="bg-nysc-gold text-white font-black text-[9px] uppercase px-2 py-1">Pro Member</Badge>
-              )}
-            </div>
-            <DialogDescription className="text-nysc-green-200 font-mono text-xs font-bold mt-2 relative z-10">
-              Identity: {selectedUser?.id}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="p-8 space-y-8">
-            <div className="grid grid-cols-2 gap-4">
-              <AuditStat label="Service Phase" value={selectedUser?.stage} icon={<Trophy className="w-3.5 h-3.5" />} />
-              <AuditStat label="Deployment" value={selectedUser?.stateOfDeployment} icon={<GraduationCap className="w-3.5 h-3.5" />} />
-              <AuditStat label="Tasks Completed" value={selectedUser?.completedTasks?.length.toString()} icon={<Check className="w-3.5 h-3.5" />} />
-              <AuditStat label="Articles Read" value={selectedUser?.readArticles?.length.toString()} icon={<BookOpen className="w-3.5 h-3.5" />} />
-            </div>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Progression Integrity</p>
-                <span className="text-[10px] font-bold text-nysc-green-800 flex items-center gap-1"><Clock className="w-3 h-3" /> System Verified</span>
+          {selectedUser && (
+            <>
+              <DialogHeader className="p-8 bg-nysc-green-900 text-white relative">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16" />
+                <div className="relative z-10 flex items-center justify-between">
+                  <DialogTitle className="font-display text-2xl font-bold flex items-center gap-3">
+                    Profile Audit
+                  </DialogTitle>
+                  {selectedUser.isPro && (
+                    <Badge className="bg-nysc-gold text-white font-black text-[9px] uppercase px-2 py-1">Pro Member</Badge>
+                  )}
+                </div>
+                <DialogDescription className="text-nysc-green-200 font-mono text-xs font-bold mt-2 relative z-10">
+                  Identity: {selectedUser.id}
+                </DialogDescription>
+              </DialogHeader>
+              <div className="p-8 space-y-8">
+                <div className="grid grid-cols-2 gap-4">
+                  <AuditStat label="Service Phase" value={selectedUser.stage} icon={<Trophy className="w-3.5 h-3.5" />} />
+                  <AuditStat label="Deployment" value={selectedUser.stateOfDeployment} icon={<GraduationCap className="w-3.5 h-3.5" />} />
+                  <AuditStat label="Tasks Completed" value={selectedUser.completedTasks?.length.toString()} icon={<Check className="w-3.5 h-3.5" />} />
+                  <AuditStat label="Articles Read" value={selectedUser.readArticles?.length.toString()} icon={<BookOpen className="w-3.5 h-3.5" />} />
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Progression Integrity</p>
+                    <span className="text-[10px] font-bold text-nysc-green-800 flex items-center gap-1"><Clock className="w-3 h-3" /> System Verified</span>
+                  </div>
+                  <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 font-mono text-[10px] overflow-auto max-h-48 whitespace-pre text-gray-700 leading-relaxed">
+                    {JSON.stringify(selectedUser, null, 2)}
+                  </div>
+                </div>
               </div>
-              <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 font-mono text-[10px] overflow-auto max-h-48 whitespace-pre text-gray-700 leading-relaxed">
-                {JSON.stringify(selectedUser, null, 2)}
+              <div className="p-6 bg-gray-50 border-t flex justify-end gap-3">
+                <Button variant="outline" onClick={() => setSelectedUser(null)} className="font-bold rounded-xl border-gray-200">Dismiss</Button>
+                <Button
+                  className="bg-nysc-green-800 hover:bg-nysc-green-900 font-bold rounded-xl shadow-lg shadow-nysc-green-800/20"
+                  onClick={() => {
+                    copyToClipboard(selectedUser.id || '');
+                    setSelectedUser(null);
+                  }}
+                >
+                  Export Identity
+                </Button>
               </div>
-            </div>
-          </div>
-          <div className="p-6 bg-gray-50 border-t flex justify-end gap-3">
-            <Button variant="outline" onClick={() => setSelectedUser(null)} className="font-bold rounded-xl border-gray-200">Dismiss</Button>
-            <Button
-              className="bg-nysc-green-800 hover:bg-nysc-green-900 font-bold rounded-xl shadow-lg shadow-nysc-green-800/20"
-              onClick={() => {
-                copyToClipboard(selectedUser?.id || '');
-                setSelectedUser(null);
-              }}
-            >
-              Export Identity
-            </Button>
-          </div>
+            </>
+          )}
         </DialogContent>
       </Dialog>
     </div>
