@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { ShieldAlert, Users, BookOpen, Calendar, MapPin, Plus, Trash2, Edit3, Search, Loader2, RefreshCw, UserMinus, ArrowLeft, Eye } from 'lucide-react';
+import { ShieldAlert, Users, BookOpen, Calendar, MapPin, Plus, Trash2, Edit3, Search, Loader2, RefreshCw, UserMinus, ArrowLeft, Eye, Copy, Check } from 'lucide-react';
 import { KNOWLEDGE_ARTICLES } from '@/lib/mock-content';
 import type { NYSCProfile } from '@shared/types';
 import { toast } from 'sonner';
@@ -19,6 +19,7 @@ export function AdminPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUser, setSelectedUser] = useState<NYSCProfile | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const fetchAdminData = useCallback(async (silent = false) => {
     if (!silent) setIsLoading(true);
     try {
@@ -37,7 +38,7 @@ export function AdminPage() {
         })).sort((a: NYSCProfile, b: NYSCProfile) => b.updatedAt - a.updatedAt);
         setUsers(sanitizedUsers);
       }
-      if (!silent) toast.success('Platform status synchronized');
+      if (!silent) toast.success('Administrative records updated');
     } catch (err) {
       console.error('[ADMIN FETCH ERROR]', err);
       toast.error('Failed to load administrative records');
@@ -56,6 +57,12 @@ export function AdminPage() {
       (u.stage || '').toLowerCase().includes(q)
     );
   });
+  const copyToClipboard = (id: string) => {
+    navigator.clipboard.writeText(id);
+    setCopiedId(id);
+    toast.success('User ID copied to clipboard');
+    setTimeout(() => setCopiedId(null), 2000);
+  };
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-fade-in px-4">
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 p-8 bg-nysc-green-900 rounded-3xl text-white shadow-xl relative overflow-hidden">
@@ -81,10 +88,10 @@ export function AdminPage() {
             <p className="text-[8px] font-black uppercase tracking-widest opacity-50">System</p>
             <p className="text-lg font-bold text-nysc-green-400">{stats.systemHealth}</p>
           </div>
-          <Button
-            variant="secondary"
-            size="icon"
-            className="h-10 w-10 rounded-xl bg-white/20 hover:bg-white/30 text-white border-none"
+          <Button 
+            variant="secondary" 
+            size="icon" 
+            className="h-10 w-10 rounded-xl bg-white/20 hover:bg-white/30 text-white border-none transition-transform active:rotate-180"
             onClick={() => fetchAdminData()}
             disabled={isLoading}
           >
@@ -152,7 +159,7 @@ export function AdminPage() {
               <div className="relative w-full sm:w-72">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-3.5 h-3.5" />
                 <Input
-                  placeholder="Filter by State or Stage..."
+                  placeholder="ID, State, or Stage..."
                   className="pl-9 h-10 text-xs rounded-lg bg-white border-gray-200"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -175,8 +182,14 @@ export function AdminPage() {
                     {filteredUsers.length > 0 ? filteredUsers.map((u) => (
                       <tr key={u.id} className="hover:bg-gray-50/50 transition-colors">
                         <td className="px-6 py-4">
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-gray-900">{u.id}</span>
+                          <div className="flex items-center gap-2 group">
+                            <span className="font-bold text-gray-900 font-mono text-xs">{u.id}</span>
+                            <button 
+                              onClick={() => copyToClipboard(u.id)}
+                              className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-nysc-green-800 transition-all"
+                            >
+                              {copiedId === u.id ? <Check className="w-3 h-3 text-nysc-green-500" /> : <Copy className="w-3 h-3" />}
+                            </button>
                             {u.isPro && <Badge className="bg-nysc-gold text-[8px] h-4 font-black">PRO</Badge>}
                           </div>
                         </td>
@@ -218,21 +231,43 @@ export function AdminPage() {
         </TabsContent>
       </Tabs>
       <Dialog open={!!selectedUser} onOpenChange={() => setSelectedUser(null)}>
-        <DialogContent className="max-w-md rounded-2xl">
-          <DialogHeader>
-            <DialogTitle className="font-display">User Audit: {selectedUser?.id}</DialogTitle>
-            <DialogDescription>Full structural state verification.</DialogDescription>
+        <DialogContent className="max-w-md rounded-2xl border-none shadow-2xl p-0 overflow-hidden">
+          <DialogHeader className="p-6 bg-nysc-green-50 border-b">
+            <DialogTitle className="font-display text-xl text-nysc-green-900 flex items-center justify-between">
+              User Audit
+              {selectedUser?.isPro && (
+                <Badge className="bg-nysc-gold text-white font-black text-[10px] uppercase">Pro Tier</Badge>
+              )}
+            </DialogTitle>
+            <DialogDescription className="font-mono text-xs font-bold text-nysc-green-700">
+              ID: {selectedUser?.id}
+            </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-2">
-              <AuditItem label="Stage" value={selectedUser?.stage} />
+          <div className="p-6 space-y-6">
+            <div className="grid grid-cols-2 gap-3">
+              <AuditItem label="Phase" value={selectedUser?.stage} />
               <AuditItem label="State" value={selectedUser?.stateOfDeployment} />
               <AuditItem label="Tasks Done" value={selectedUser?.completedTasks.length.toString()} />
               <AuditItem label="Articles Read" value={selectedUser?.readArticles.length.toString()} />
             </div>
-            <div className="p-4 bg-gray-50 rounded-xl border font-mono text-[10px] overflow-auto max-h-48 whitespace-pre">
-              {JSON.stringify(selectedUser, null, 2)}
+            <div className="space-y-2">
+              <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Structural State Verification</p>
+              <div className="p-4 bg-gray-50 rounded-xl border font-mono text-[10px] overflow-auto max-h-48 whitespace-pre text-gray-600">
+                {JSON.stringify(selectedUser, null, 2)}
+              </div>
             </div>
+          </div>
+          <div className="p-4 bg-gray-100 flex justify-end gap-2">
+            <Button variant="ghost" onClick={() => setSelectedUser(null)} className="font-bold">Close</Button>
+            <Button 
+              className="bg-nysc-green-800 hover:bg-nysc-green-900 font-bold"
+              onClick={() => {
+                copyToClipboard(selectedUser?.id || '');
+                setSelectedUser(null);
+              }}
+            >
+              Copy Full ID
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -241,9 +276,9 @@ export function AdminPage() {
 }
 function AuditItem({ label, value }: { label: string, value?: string }) {
   return (
-    <div className="p-3 bg-gray-50 rounded-xl border border-gray-100">
+    <div className="p-3 bg-white rounded-xl border border-gray-100 shadow-sm">
       <p className="text-[8px] font-black uppercase tracking-widest text-muted-foreground mb-1">{label}</p>
-      <p className="text-xs font-bold text-gray-900 truncate">{value || 'N/A'}</p>
+      <p className="text-xs font-bold text-gray-900 truncate capitalize">{value || 'N/A'}</p>
     </div>
   );
 }

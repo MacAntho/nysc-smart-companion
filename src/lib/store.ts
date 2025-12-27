@@ -17,6 +17,7 @@ interface AppState {
   isSyncing: boolean;
   lastSynced: number | null;
   lastSyncedPayload: string | null;
+  isInitialized: boolean;
   // Auth Actions
   setAuth: (data: { userId: string; email: string; role: 'user' | 'admin'; isPro: boolean }) => void;
   logout: () => void;
@@ -49,12 +50,14 @@ export const useAppStore = create<AppState>()(
       isSyncing: false,
       lastSynced: null,
       lastSyncedPayload: null,
+      isInitialized: false,
       setAuth: (data) => set({
         userId: data.userId,
         userEmail: data.email,
         userRole: data.role,
         isAuthenticated: true,
-        isPro: data.isPro
+        isPro: data.isPro,
+        isInitialized: true
       }),
       logout: () => {
         get().reset();
@@ -79,7 +82,7 @@ export const useAppStore = create<AppState>()(
             ? currentTasks.filter((id) => id !== taskId)
             : [...currentTasks, taskId],
         });
-        toast.success(isRemoving ? 'Task marked as incomplete' : 'Task completed!');
+        toast.success(isRemoving ? 'Task revisited' : 'Task completed!');
         if (get().isAuthenticated) get().syncProfile();
       },
       toggleReadArticle: (articleId) => {
@@ -90,7 +93,7 @@ export const useAppStore = create<AppState>()(
             ? currentArticles.filter((id) => id !== articleId)
             : [...currentArticles, articleId],
         });
-        toast.info(isRead ? 'Article marked as unread' : 'Knowledge shared! Article read.');
+        toast.info(isRead ? 'Article marked as unread' : 'Knowledge stored.');
         if (get().isAuthenticated) get().syncProfile();
       },
       setActiveProject: (activeProjectId) => {
@@ -108,9 +111,8 @@ export const useAppStore = create<AppState>()(
       },
       syncProfile: async () => {
         const state = get();
-        const userId = state.userId;
-        const isAuthenticated = state.isAuthenticated;
-        if (!userId || !isAuthenticated || state.isSyncing) return;
+        const { userId, isAuthenticated, isSyncing, lastSyncedPayload } = state;
+        if (!userId || !isAuthenticated || isSyncing) return;
         const payload = {
           stage: state.stage,
           stateOfDeployment: state.stateOfDeployment,
@@ -120,7 +122,8 @@ export const useAppStore = create<AppState>()(
           isOnboarded: state.isOnboarded
         };
         const payloadString = JSON.stringify(payload);
-        if (payloadString === state.lastSyncedPayload) return;
+        // Prevent redundant syncs
+        if (payloadString === lastSyncedPayload) return;
         set({ isSyncing: true });
         try {
           const response = await fetch(`/api/profile/${userId}`, {
@@ -131,7 +134,7 @@ export const useAppStore = create<AppState>()(
           if (response.ok) {
             set({ lastSynced: Date.now(), lastSyncedPayload: payloadString });
           } else {
-            console.warn('[SYNC WARNING] Server rejected sync');
+            console.warn('[SYNC WARNING] Server rejected packet');
           }
         } catch (error) {
           console.error('[SYNC FAILURE]', error);
@@ -140,9 +143,8 @@ export const useAppStore = create<AppState>()(
         }
       },
       loadProfile: async () => {
-        const userId = get().userId;
-        const isAuthenticated = get().isAuthenticated;
-        if (!userId || !isAuthenticated || get().isSyncing) return;
+        const { userId, isAuthenticated, isSyncing } = get();
+        if (!userId || !isAuthenticated || isSyncing) return;
         set({ isSyncing: true });
         try {
           const response = await fetch(`/api/profile/${userId}`);
@@ -150,6 +152,14 @@ export const useAppStore = create<AppState>()(
             const result = await response.json();
             if (result.success && result.data) {
               const p = result.data as NYSCProfile;
+              const incomingPayloadString = JSON.stringify({
+                stage: p.stage,
+                stateOfDeployment: p.stateOfDeployment,
+                completedTasks: p.completedTasks,
+                readArticles: p.readArticles,
+                activeProjectId: p.activeProjectId,
+                isOnboarded: p.isOnboarded
+              });
               set({
                 stage: p.stage || 'prospective',
                 stateOfDeployment: p.stateOfDeployment || '',
@@ -159,14 +169,8 @@ export const useAppStore = create<AppState>()(
                 isOnboarded: p.isOnboarded ?? false,
                 lastSynced: p.updatedAt || Date.now(),
                 isPro: p.isPro ?? false,
-                lastSyncedPayload: JSON.stringify({
-                  stage: p.stage,
-                  stateOfDeployment: p.stateOfDeployment,
-                  completedTasks: p.completedTasks,
-                  readArticles: p.readArticles,
-                  activeProjectId: p.activeProjectId,
-                  isOnboarded: p.isOnboarded
-                })
+                lastSyncedPayload: incomingPayloadString,
+                isInitialized: true
               });
             }
           }
@@ -191,12 +195,16 @@ export const useAppStore = create<AppState>()(
           isOnboarded: false,
           lastSynced: null,
           lastSyncedPayload: null,
-          isSyncing: false
+          isSyncing: false,
+          isInitialized: false
         });
       },
     }),
     {
       name: 'nysc-companion-storage',
+      onRehydrateStorage: () => (state) => {
+        if (state) state.isInitialized = true;
+      },
       partialize: (state) => ({
         userId: state.userId,
         userEmail: state.userEmail,

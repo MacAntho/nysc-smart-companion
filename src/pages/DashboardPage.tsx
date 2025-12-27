@@ -29,61 +29,71 @@ export function DashboardPage() {
   const progressPercent = stageTasks.length > 0 ? (completedCount / stageTasks.length) * 100 : 0;
   const readPercent = (readArticles.length / KNOWLEDGE_ARTICLES.length) * 100;
   const relevantDeadlines = DEADLINES.filter(d => d.stage === stageId);
-  const getPriorityContent = (): { title: string; desc: string; risk: PriorityRisk; articleId?: string } => {
+  const getPriorityContent = (): { title: string; desc: string; risk: PriorityRisk; searchLink: string } => {
     const hasReadRedeployment = readArticles.includes('k-redeployment');
     switch(stageId) {
       case 'prospective':
         return {
           title: 'Exemption & Exclusion Guide',
           desc: 'Determine if you are eligible for national service or require an exemption certificate.',
-          risk: 'low'
+          risk: 'low',
+          searchLink: '/app/knowledge?q=exemption'
         };
       case 'mobilization':
         return !hasReadRedeployment ? {
           title: 'Redeployment & Relocation Protocol',
           desc: 'Crucial: Learn the health, marital, and security grounds for relocating to a different state.',
           risk: 'medium',
-          articleId: 'k-redeployment'
+          searchLink: '/app/knowledge?q=redeployment'
         } : {
           title: 'Official Registration Guide',
           desc: 'Critical step-by-step instructions for your current registration stage.',
-          risk: 'medium'
+          risk: 'medium',
+          searchLink: '/app/knowledge?q=registration'
         };
       case 'camp':
         return {
           title: 'Surviving the 21-Day Orientation Camp',
           desc: 'The definitive survival toolkit: Accommodation, food, health, and security tips.',
-          risk: 'medium'
+          risk: 'medium',
+          searchLink: '/app/knowledge?q=survival'
         };
       case 'ppa':
         return !hasReadRedeployment ? {
           title: 'Post-Camp Relocation Window',
           desc: 'The 3-month relocation portal opens soon. Verify your documentation for marital or health grounds.',
           risk: 'medium',
-          articleId: 'k-redeployment'
+          searchLink: '/app/knowledge?q=redeployment'
         } : {
           title: 'Monthly Clearance & PPA Protocol',
           desc: 'Essential: Your guide to monthly signatures, registers, and handling PPA rejection.',
-          risk: 'high'
+          risk: 'high',
+          searchLink: '/app/knowledge?q=ppa'
         };
       case 'cds':
         return {
           title: 'CDS Project Lifecycle',
           desc: 'Navigate the approval, implementation, and documentation of your legacy community project.',
-          risk: 'low'
+          risk: 'low',
+          searchLink: '/app/cds'
         };
       case 'pop':
         return {
           title: 'Final Winding-Up Guide',
           desc: 'Crucial steps for your final PPA clearance and physical certificate collection.',
-          risk: 'high'
+          risk: 'high',
+          searchLink: '/app/knowledge?q=pop'
         };
       default:
-        return { title: 'Essential Knowledge', desc: 'Browse the verified knowledge base for official rules.', risk: 'low' };
+        return { 
+          title: 'Essential Knowledge', 
+          desc: 'Browse the verified knowledge base for official rules.', 
+          risk: 'low',
+          searchLink: '/app/knowledge'
+        };
     }
   };
-  const { title: priorityTitle, desc: priorityDesc, risk } = getPriorityContent();
-  const priorityLink = stageId === 'cds' ? '/app/cds' : '/app/knowledge';
+  const { title: priorityTitle, desc: priorityDesc, risk, searchLink: priorityLink } = getPriorityContent();
   const riskStyles: Record<PriorityRisk, string> = {
     high: "border-destructive/40 bg-red-50/50 shadow-destructive/10",
     medium: "border-nysc-gold border-2 bg-amber-50/50 shadow-nysc-gold/10",
@@ -94,7 +104,6 @@ export function DashboardPage() {
     medium: "bg-nysc-gold text-white",
     low: "bg-nysc-green-800 text-white"
   };
-  const safeRisk = risk as keyof typeof riskStyles;
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-fade-in px-4">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -108,7 +117,7 @@ export function DashboardPage() {
           <p className="text-muted-foreground font-medium">Serving the Nation with Digital Intelligence.</p>
         </div>
         <div className="flex flex-col items-end gap-1">
-          <div className="flex items-center gap-3 text-[11px] font-semibold px-4 py-2 rounded-full bg-white border shadow-sm">
+          <div className="flex items-center gap-3 text-[11px] font-semibold px-4 py-2 rounded-full bg-white border shadow-sm transition-all hover:bg-gray-50">
             {isSyncing ? (
               <><div className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" /><span className="text-muted-foreground uppercase tracking-wider">Syncing...</span></>
             ) : (
@@ -116,12 +125,12 @@ export function DashboardPage() {
             )}
           </div>
           <span className="text-[9px] font-black text-nysc-green-800 uppercase tracking-widest opacity-40 px-2 flex items-center gap-1">
-            <Fingerprint className="w-3 h-3" /> Digital Check-in Recommended Daily
+            <Fingerprint className="w-3 h-3" /> System Integrity Verified
           </span>
         </div>
       </header>
       {priorityTitle && (
-        <Card className={cn("border-2 shadow-lg overflow-hidden relative group transition-all duration-300", riskStyles[safeRisk] || riskStyles.low)}>
+        <Card className={cn("border-2 shadow-lg overflow-hidden relative group transition-all duration-300", riskStyles[risk] || riskStyles.low)}>
           <div className="absolute top-0 right-0 p-4">
              {risk === 'high' ? (
                <ShieldAlert className="w-12 h-12 text-destructive opacity-20 group-hover:scale-125 transition-transform duration-500" />
@@ -130,9 +139,9 @@ export function DashboardPage() {
              )}
           </div>
           <CardHeader className="pb-2">
-            <Badge className={cn("w-fit mb-2 uppercase text-[9px] font-black tracking-widest flex items-center gap-1", badgeStyles[safeRisk] || badgeStyles.low)}>
+            <Badge className={cn("w-fit mb-2 uppercase text-[9px] font-black tracking-widest flex items-center gap-1", badgeStyles[risk] || badgeStyles.low)}>
               {risk === 'high' && <AlertTriangle className="w-3 h-3" />}
-              {risk === 'high' ? 'High Risk Action Required' : 'Priority Phase Resource'}
+              {risk === 'high' ? 'Action Required' : 'Priority Resource'}
             </Badge>
             <CardTitle className={cn("text-xl font-display", risk === 'high' ? "text-destructive" : "text-amber-900")}>{priorityTitle}</CardTitle>
             <CardDescription className={cn("font-medium text-sm", risk === 'high' ? "text-red-800" : "text-amber-800")}>{priorityDesc}</CardDescription>
@@ -140,7 +149,7 @@ export function DashboardPage() {
           <CardContent className="pb-6">
             <Link to={priorityLink}>
               <Button className={cn("font-bold h-12 rounded-xl group shadow-md", risk === 'high' ? "bg-destructive hover:bg-red-700" : "bg-nysc-gold hover:bg-amber-700")}>
-                {risk === 'high' ? 'Handle Rejection Now' : 'Open Guide'} <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                {risk === 'high' ? 'Review Protocol Now' : 'Open Detailed Guide'} <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
           </CardContent>
