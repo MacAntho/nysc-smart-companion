@@ -66,10 +66,45 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-security-redeploy',
+    category: 'Official',
+    title: 'Security-Based Redeployment Guide',
+    summary: 'Official relocation protocol for corps members in areas facing insurgency, banditry, or personal safety threats.',
+    content: `Security Redeployment is a critical provision to ensure the safety of corps members deployed to volatile regions.
+1. RECOGNIZED SECURITY GROUNDS
+Relocation may be granted under the following conditions:
+- Active Insurgency: Official declaration of conflict in the local government or zone.
+- Civil Unrest: Sustained communal clashes or banditry affecting the PPA location.
+- Personal Threat: Verified evidence of specific threats against the life of a corps member.
+- Religious/Ethnic Hostility: Clear evidence of targeted hostility in the host community.
+2. IMMEDIATE SAFETY PROTOCOL
+If you feel your life is in immediate danger:
+- Evacuate: Move immediately to the nearest military barracks, police station, or NYSC State Secretariat.
+- Report: Contact your Local Government Inspector (LGI) and State Coordinator via the emergency lines on your dashboard.
+- Documentation: Do not wait for formal letters if there is an active kinetic threat; secure your life first.
+3. MANDATORY DOCUMENTATION
+To formalize the relocation after securing safety, you will need:
+- Police/DSS Report: An official report confirming the security incident or personal threat.
+- LGI Identification: A formal letter from the NYSC field officer verifying the situation in the community.
+- Incident Brief: A signed personal account of the safety breach or threat.
+4. RELOCATION OUTCOMES
+- Intra-State Reposting: Moving you to a safer local government within the same state (e.g., the state capital).
+- Inter-State Redeployment: Complete move to a different state if the entire host state is deemed unsafe for service.
+5. WARNING
+- "Self-Relocation" without reporting to the NYSC office within 48 hours of moving for safety is treated as absconding. Always ensure the State Secretariat is informed of your temporary safety location.`,
+    metadata: {
+      stage: 'ppa/camp',
+      risk: 'high',
+      source: 'NYSC Policy',
+      last_updated: '2025',
+      featured: true
+    }
+  },
+  {
     id: 'k-marital-redeploy',
     category: 'Official',
     title: 'Marital Redeployment Guide',
-    summary: 'Official relocation protocol for married female corps members wishing to serve in their husband’s state of residence.',
+    summary: 'Official relocation protocol for married female corps members wishing to serve in their husband��s state of residence.',
     content: `Marital Redeployment is a specific provision granted to married female corps members to ensure family stability during the service year.
 1. ELIGIBILITY
 - This provision applies exclusively to married female corps members.

@@ -54,16 +54,16 @@ export function StateGuidePage() {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
-          <Card className="overflow-hidden shadow-sm border-gray-100">
+          <Card className="overflow-hidden shadow-sm border-gray-100 min-w-0">
             <CardHeader className="bg-gray-50/50 border-b">
               <CardTitle className="text-xs font-black uppercase tracking-widest flex items-center gap-2 text-nysc-green-800">
                 <TrendingUp className="w-4 h-4" /> Monthly Expense Benchmark
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-8 px-6">
-              <div className="h-[280px] w-full">
+              <div className="aspect-video w-full min-h-[280px] min-w-0 relative">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartData}>
+                  <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                     <XAxis dataKey="name" fontSize={11} fontWeight={700} tickLine={false} axisLine={false} />
                     <YAxis hide />

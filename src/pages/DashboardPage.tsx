@@ -33,6 +33,7 @@ export function DashboardPage() {
     const hasReadRedeployment = readArticles.includes('k-redeployment');
     const hasReadMedicalRedeploy = readArticles.includes('k-medical-redeploy');
     const hasReadMaritalRedeploy = readArticles.includes('k-marital-redeploy');
+    const hasReadSecurityRedeploy = readArticles.includes('k-security-redeploy');
     switch(stageId) {
       case 'prospective':
         return {
@@ -42,15 +43,23 @@ export function DashboardPage() {
           searchLink: '/app/knowledge?q=exemption'
         };
       case 'mobilization':
+      case 'camp':
+      case 'ppa':
+        if (!hasReadSecurityRedeploy) return {
+          title: 'Security & Relocation Protocol',
+          desc: 'Critical: Official NYSC guide for relocation in areas facing insurgency or banditry. Protect your life.',
+          risk: 'high',
+          searchLink: '/app/knowledge?q=security'
+        };
         if (!hasReadMedicalRedeploy) return {
           title: 'Medical Redeployment Guide',
-          desc: 'Essential for corps members with chronic health conditions (Sickle Cell, CKD, etc.). Learn the official board review process.',
+          desc: 'Essential for corps members with chronic health conditions. Learn the official board review process.',
           risk: 'medium',
           searchLink: '/app/knowledge?q=medical'
         };
-        if (!hasReadMaritalRedeploy) return {
-          title: 'Marital Redeployment Guide',
-          desc: 'Official relocation rights for married women wishing to serve in their husband’s state of residence.',
+        if (stageId === 'ppa' && !hasReadMaritalRedeploy) return {
+          title: 'Marital Relocation Protocol',
+          desc: 'Married women relocation window is open. Verify your marriage certificate and employer letters for relocation.',
           risk: 'medium',
           searchLink: '/app/knowledge?q=marital'
         };
@@ -61,42 +70,10 @@ export function DashboardPage() {
           searchLink: '/app/knowledge?q=redeployment'
         };
         return {
-          title: 'Official Registration Guide',
-          desc: 'Critical step-by-step instructions for your current registration stage.',
-          risk: 'medium',
-          searchLink: '/app/knowledge?q=registration'
-        };
-      case 'camp':
-        return {
-          title: 'Surviving the 21-Day Orientation Camp',
-          desc: 'The definitive survival toolkit: Accommodation, food, health, and security tips.',
-          risk: 'medium',
-          searchLink: '/app/knowledge?q=survival'
-        };
-      case 'ppa':
-        if (!hasReadMedicalRedeploy) return {
-          title: 'Health-Based Relocation Protocol',
-          desc: 'The Post-Camp medical window is open. Verify your government hospital reports for specialized care needs.',
-          risk: 'medium',
-          searchLink: '/app/knowledge?q=medical'
-        };
-        if (!hasReadMaritalRedeploy) return {
-          title: 'Marital Relocation Protocol',
-          desc: 'Married women relocation window is open. Verify your marriage certificate and employer letters for relocation.',
-          risk: 'medium',
-          searchLink: '/app/knowledge?q=marital'
-        };
-        if (!hasReadRedeployment) return {
-          title: 'Post-Camp Relocation Window',
-          desc: 'The 3-month relocation portal opens soon. Verify your documentation for marital or health grounds.',
-          risk: 'medium',
-          searchLink: '/app/knowledge?q=redeployment'
-        };
-        return {
-          title: 'Monthly Clearance & PPA Protocol',
-          desc: 'Essential: Your guide to monthly signatures, registers, and handling PPA rejection.',
-          risk: 'high',
-          searchLink: '/app/knowledge?q=ppa'
+          title: 'Official Operational Guide',
+          desc: 'Browse verified knowledge base for official rules and survival tips.',
+          risk: 'low',
+          searchLink: '/app/knowledge'
         };
       case 'cds':
         return {
@@ -113,9 +90,9 @@ export function DashboardPage() {
           searchLink: '/app/knowledge?q=pop'
         };
       default:
-        return { 
-          title: 'Essential Knowledge', 
-          desc: 'Browse the verified knowledge base for official rules.', 
+        return {
+          title: 'Essential Knowledge',
+          desc: 'Browse the verified knowledge base for official rules.',
           risk: 'low',
           searchLink: '/app/knowledge'
         };
@@ -169,7 +146,7 @@ export function DashboardPage() {
           <CardHeader className="pb-2">
             <Badge className={cn("w-fit mb-2 uppercase text-[9px] font-black tracking-widest flex items-center gap-1", badgeStyles[risk] || badgeStyles.low)}>
               {risk === 'high' && <AlertTriangle className="w-3 h-3" />}
-              {risk === 'high' ? 'Action Required' : 'Priority Resource'}
+              {risk === 'high' ? 'High Risk Alert' : 'Priority Resource'}
             </Badge>
             <CardTitle className={cn("text-xl font-display", risk === 'high' ? "text-destructive" : "text-amber-900")}>{priorityTitle}</CardTitle>
             <CardDescription className={cn("font-medium text-sm", risk === 'high' ? "text-red-800" : "text-amber-800")}>{priorityDesc}</CardDescription>

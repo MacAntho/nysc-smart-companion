@@ -48,7 +48,7 @@ export function ChartContainer({
         {...props}
       >
         <ChartStyle id={idToUse} config={config} />
-        <RechartsPrimitive.ResponsiveContainer>
+        <RechartsPrimitive.ResponsiveContainer width="100%" height="100%">
           {children}
         </RechartsPrimitive.ResponsiveContainer>
       </div>
@@ -56,8 +56,8 @@ export function ChartContainer({
   )
 }
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
-  const colorConfig = Object.entries(config).filter(
-    ([, config]) => config.theme || config.color
+  const colorConfig = Object.entries(config || {}).filter(
+    ([, itemConfig]) => itemConfig && (itemConfig.theme || itemConfig.color)
   )
   if (!colorConfig.length) {
     return null
@@ -71,25 +71,23 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
 [data-chart=${id}] {
   ${colorConfig
     .map(([key, itemConfig]) => {
-      const color =
+      const themeColor =
         itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
         itemConfig.color
-      return color ? `--color-${key}: ${color};` : null
+      return themeColor ? `--color-${key}: ${themeColor};` : null
     })
+    .filter(Boolean)
     .join("\n")}
 }
 `
           )
+          .filter(style => style.trim().length > 0)
           .join("\n"),
       }}
     />
   )
 }
 export const ChartTooltip = RechartsPrimitive.Tooltip
-/**
- * ChartTooltipContent
- * Fixed TS2339 by using a loose interface for Recharts' runtime property injection
- */
 interface ChartTooltipContentProps {
   active?: boolean
   payload?: any[]
@@ -162,7 +160,7 @@ export const ChartTooltipContent = React.forwardRef<
             const indicatorColor = itemConfig?.color || item.payload?.fill || item.color
             return (
               <div
-                key={item.dataKey || item.name}
+                key={item.dataKey || item.name || index}
                 className={cn(
                   "flex w-full items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-muted-foreground",
                   indicator === "dot" && "items-center"
@@ -222,10 +220,6 @@ export const ChartTooltipContent = React.forwardRef<
 )
 ChartTooltipContent.displayName = "ChartTooltip"
 export const ChartLegend = RechartsPrimitive.Legend
-/**
- * ChartLegendContent
- * Fixed TS2344, TS2339 by ensuring payload is typed correctly and handling length/map safely
- */
 interface ChartLegendContentProps {
   className?: string
   hideIcon?: boolean
@@ -254,12 +248,12 @@ export const ChartLegendContent = React.forwardRef<
           className
         )}
       >
-        {payload.map((item) => {
+        {payload.map((item, index) => {
           const key = `${nameKey || item.dataKey || item.name || "value"}`
           const itemConfig = config[key as keyof typeof config]
           return (
             <div
-              key={item.value}
+              key={item.value || index}
               className={cn(
                 "flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-muted-foreground"
               )}
