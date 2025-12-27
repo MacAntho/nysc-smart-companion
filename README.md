@@ -1,6 +1,6 @@
 # Cloudflare Workers + React Full-Stack Template
 
-[![[cloudflarebutton]]](https://deploy.workers.cloudflare.com)
+[![[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/MacAntho/nysc-smart-companion)]](https://deploy.workers.cloudflare.com)
 
 A production-ready full-stack application template powered by Cloudflare Workers. Features a React frontend with shadcn/ui, TanStack Query, and a Workers backend using Durable Objects for scalable, stateful entities (Users, Chats, Messages). Includes hot-reloading development, type-safety, and one-click deployment.
 
@@ -94,7 +94,7 @@ bun run deploy
 
 Or use the one-click deploy:
 
-[[cloudflarebutton]]
+[[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/MacAntho/nysc-smart-companion)]
 
 **Requirements**:
 - [Cloudflare Account](https://dash.cloudflare.com)
