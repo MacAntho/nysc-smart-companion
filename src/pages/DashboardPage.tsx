@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, CheckCircle, ChevronRight, Sparkles, ArrowRight, ShieldAlert, Briefcase, Info } from 'lucide-react';
+import { Calendar, CheckCircle, ChevronRight, Sparkles, ArrowRight, ShieldAlert, Briefcase, Info, CheckCircle2 } from 'lucide-react';
 import { JOURNEY_STAGES, DEADLINES } from '@/lib/mock-content';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow, differenceInDays, parseISO, isPast } from 'date-fns';
@@ -22,7 +22,7 @@ export function DashboardPage() {
   const isOnboarded = useAppStore(s => s.isOnboarded);
   const currentStage = useMemo(() => JOURNEY_STAGES.find(s => s.id === stageId), [stageId]);
   const stageTasks = useMemo(() => currentStage?.tasks || [], [currentStage]);
-  const completedCount = useMemo(() => stageTasks.filter(t => (completedTasks || []).includes(t.id)).length, [stageTasks, completedTasks]);
+  const completedCount = useMemo(() => (stageTasks || []).filter(t => (completedTasks || []).includes(t.id)).length, [stageTasks, completedTasks]);
   const progressPercent = stageTasks.length > 0 ? (completedCount / stageTasks.length) * 100 : 0;
   const relevantDeadlines = useMemo(() => {
     return (DEADLINES || [])
@@ -39,199 +39,113 @@ export function DashboardPage() {
       });
   }, [stageId]);
   const priorityContent = useMemo(() => {
-    if (!isInitialized || !isOnboarded) {
-      return {
-        title: 'Initializing Intelligence...',
-        desc: 'Fetching verified official rules and strategic field guides for your deployment phase.',
-        risk: 'low' as PriorityRisk,
-        searchLink: '/app/knowledge'
-      };
-    }
+    if (!isInitialized || !isOnboarded) return null;
     const readArticlesSet = new Set(readArticles ?? []);
-    // EMERGENCY GUIDE IS ALWAYS TOP PRIORITY UNLESS READ
     if (!readArticlesSet.has('k-emergency')) {
-      return {
-        title: 'Emergency Response Guide',
-        desc: 'Process Critical: Mandatory safety protocols for medical emergencies, security incidents, and document loss.',
-        risk: 'high' as PriorityRisk,
-        searchLink: '/app/knowledge?search=emergency'
-      };
+      return { title: 'Emergency Response Guide', desc: 'Process Critical: Mandatory safety protocols for medical emergencies and security incidents.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=emergency' };
     }
-    // DISQUALIFICATION RISK IS SECOND HIGHEST
     if (!readArticlesSet.has('k-disqualification')) {
-      return {
-        title: 'Disqualification Protocol',
-        desc: 'Critical Risk: Understand the grounds for service cancellation and legal implications of abscondment.',
-        risk: 'high' as PriorityRisk,
-        searchLink: '/app/knowledge?search=disqualification'
-      };
+      return { title: 'Disqualification Protocol', desc: 'Critical Risk: Understand the grounds for service cancellation and legal implications.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=disqualification' };
     }
-    // SANCTIONS GUIDE
-    if (!readArticlesSet.has('k-sanctions')) {
-      return {
-        title: 'Violations & Penalties Guide',
-        desc: 'Official Advisory: Learn how to avoid Service Extensions and administrative sanctions through compliance.',
-        risk: 'high' as PriorityRisk,
-        searchLink: '/app/knowledge?search=sanctions'
-      };
+    // Promoted survival tips for ALL stages once basic emergency guides are read
+    if (!readArticlesSet.has('k-insider-tips')) {
+      return { title: '100 Practical Survival Tips', desc: 'Expert Intelligence: Battle-tested tips for camp, finance, and PPA survival.', risk: 'medium' as PriorityRisk, link: '/app/knowledge?search=tips' };
     }
-    // NEW PHASE 35 PROMOTION: 100 SURVIVAL TIPS
-    if ((stageId === 'camp' || stageId === 'ppa') && !readArticlesSet.has('k-insider-tips')) {
-      return {
-        title: '100 Practical Survival Tips',
-        desc: 'Insider Intelligence: A comprehensive master guide of 100 battle-tested tips for camp, money, and PPA survival.',
-        risk: 'medium' as PriorityRisk,
-        searchLink: '/app/knowledge?search=tips'
-      };
-    }
-    // STAGE SPECIFIC UNREAD GUIDES
-    if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-eligibility')) {
-      return {
-        title: 'NYSC Eligibility Guide',
-        desc: 'Strategic Roadmap: Detailed legal clarity on the 30-year age exemption rule and academic prerequisites.',
-        risk: 'low' as PriorityRisk,
-        searchLink: '/app/knowledge?search=eligibility'
-      };
-    }
-    if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-batches')) {
-      return {
-        title: 'Batch System Intelligence',
-        desc: 'Logistics Roadmap: Understand the A/B/C batch cycles, stream assignments, and revalidation protocol.',
-        risk: 'low' as PriorityRisk,
-        searchLink: '/app/knowledge?search=batches'
-      };
-    }
-    if ((stageId === 'camp' || stageId === 'ppa') && !readArticlesSet.has('k-relocation')) {
-      return {
-        title: 'NYSC Relocation Intelligence',
-        desc: 'Strategic Roadmap: Understand valid grounds (Marital/Medical) and the application windows.',
-        risk: 'medium' as PriorityRisk,
-        searchLink: '/app/knowledge?search=relocation'
-      };
-    }
-    // MASTER FAQ FALLBACK
     if (!readArticlesSet.has('k-faqs')) {
-      return {
-        title: 'NYSC FAQs: 50+ Verified Answers',
-        desc: 'Operational Intelligence: Master the entire service cycle with answers to 50+ common questions.',
-        risk: 'low' as PriorityRisk,
-        searchLink: '/app/knowledge?search=faqs'
-      };
+      return { title: 'Verified NYSC FAQs', desc: 'Master the entire service cycle with answers to 50+ common official questions.', risk: 'low' as PriorityRisk, link: '/app/knowledge?search=faqs' };
     }
-    // IF ALL PRIORITY CONTENT IS READ AND MILESTONES DONE
-    if (progressPercent === 100) {
-      return {
-        title: 'Phase Milestone Achieved',
-        desc: 'You have completed all milestones for this stage. Prepare for the next phase by checking the State Guide.',
-        risk: 'low' as PriorityRisk,
-        searchLink: '/app/state-guide'
-      };
-    }
-    return {
-      title: 'Command Center Ready',
-      desc: 'Your service year is tracked with verified intelligence. Review your current milestones to stay compliant.',
-      risk: 'low' as PriorityRisk,
-      searchLink: '/app/journey'
-    };
-  }, [stageId, readArticles, isInitialized, isOnboarded, progressPercent]);
-  const riskStyles: Record<PriorityRisk, string> = {
-    high: "border-destructive/40 bg-red-50/40 shadow-xl shadow-destructive/10 ring-1 ring-destructive/20",
-    medium: "border-nysc-gold/30 bg-amber-50/40 shadow-lg shadow-nysc-gold/5",
-    low: "border-nysc-green-100 bg-nysc-green-50/20 shadow-md shadow-nysc-green-800/5"
-  };
-  const syncStatusText = useMemo(() => {
-    if (isSyncing) return 'Syncing...';
-    if (!lastSynced) return 'First Session';
-    const diffMs = Date.now() - lastSynced;
-    if (diffMs < 30000) return 'Just now';
-    return `Synced ${formatDistanceToNow(lastSynced, { addSuffix: true })}`;
+    return { title: 'Phase Readiness Active', desc: 'You are tracking well. Review your current milestones to ensure 100% compliance.', risk: 'low' as PriorityRisk, link: '/app/journey' };
+  }, [readArticles, isInitialized, isOnboarded]);
+  const syncStatus = useMemo(() => {
+    if (isSyncing) return { text: 'Cloud Sync Active', color: 'bg-amber-500', pulse: true };
+    if (!lastSynced) return { text: 'Session Started', color: 'bg-nysc-green-800', pulse: false };
+    return { text: `Synced ${formatDistanceToNow(lastSynced, { addSuffix: true })}`, color: 'bg-nysc-green-800', pulse: false };
   }, [isSyncing, lastSynced]);
   return (
     <div className="max-w-7xl mx-auto px-4 space-y-8 animate-fade-in">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="text-3xl font-display font-bold text-nysc-green-800 tracking-tight">Corper Command</h1>
+          <h1 className="text-3xl font-display font-bold text-nysc-green-800 tracking-tight">Command Center</h1>
           <p className="text-muted-foreground font-medium">Serving the Nation with Digital Intelligence.</p>
         </div>
-        <div className="flex items-center gap-3 text-[11px] font-semibold px-4 py-2 rounded-full bg-white border shadow-sm">
-          <div className={cn("h-2 w-2 rounded-full", isSyncing ? "bg-amber-500 animate-pulse" : "bg-nysc-green-800")} />
-          <span className="text-muted-foreground uppercase tracking-wider">
-            Cloud {syncStatusText}
-          </span>
+        <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full bg-white border shadow-sm">
+          <div className={cn("h-2 w-2 rounded-full", syncStatus.color, syncStatus.pulse && "animate-pulse")} />
+          <span className="text-muted-foreground">{syncStatus.text}</span>
         </div>
       </header>
       {priorityContent && (
-        <Card className={cn("border overflow-hidden relative group transition-all duration-300", riskStyles[priorityContent.risk])}>
-          <div className="absolute top-0 right-0 p-4 opacity-15 transition-transform group-hover:scale-110">
-            {priorityContent.risk === 'high' ? <ShieldAlert className="w-20 h-20 text-destructive" /> : <Sparkles className="w-20 h-20 text-nysc-gold" />}
-          </div>
-          <CardHeader className="pb-2 relative z-10">
-            <Badge className={cn("w-fit mb-2 uppercase text-[9px] font-black tracking-widest border-none", priorityContent.risk === 'high' ? "bg-destructive text-white" : "bg-nysc-green-800 text-white")}>
-              {priorityContent.risk === 'high' ? 'Process Critical' : 'Priority Resource'}
+        <Card className={cn(
+          "border relative group transition-all duration-300 rounded-3xl overflow-hidden",
+          priorityContent.risk === 'high' ? "bg-red-50/50 border-red-100" : "bg-nysc-green-50/20 border-nysc-green-100/50"
+        )}>
+          <CardHeader className="pb-2">
+            <Badge className={cn("w-fit mb-2 uppercase text-[8px] font-black tracking-widest border-none", priorityContent.risk === 'high' ? "bg-destructive" : "bg-nysc-green-800")}>
+              {priorityContent.risk === 'high' ? 'Process Critical' : 'Priority Advisory'}
             </Badge>
-            <CardTitle className="text-2xl font-display tracking-tight leading-none">{priorityContent.title}</CardTitle>
-            <CardDescription className="font-bold text-sm text-gray-800 max-w-2xl mt-1 leading-relaxed pr-8 sm:pr-0">
-              {priorityContent.desc}
-            </CardDescription>
+            <CardTitle className="text-2xl font-display font-bold">{priorityContent.title}</CardTitle>
+            <CardDescription className="font-bold text-sm text-gray-800 max-w-2xl mt-1">{priorityContent.desc}</CardDescription>
           </CardHeader>
-          <CardContent className="pb-6 relative z-10">
-            <Link to={priorityContent.searchLink}>
-              <Button className={cn("font-bold h-12 rounded-xl shadow-lg transition-all active:scale-95", priorityContent.risk === 'high' ? "bg-destructive hover:bg-red-700 animate-hover-glow" : "bg-nysc-gold hover:bg-amber-700")}>
-                View Strategic Guide <ArrowRight className="ml-2 w-4 h-4" />
+          <CardContent className="pb-6">
+            <Link to={priorityContent.link}>
+              <Button className={cn("font-bold rounded-xl h-11", priorityContent.risk === 'high' ? "bg-destructive hover:bg-red-700 shadow-red-100 shadow-lg" : "bg-nysc-gold hover:bg-amber-700 shadow-amber-100 shadow-lg")}>
+                View Guide <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </Link>
           </CardContent>
         </Card>
       )}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2 shadow-sm border-gray-100 bg-white">
-          <CardHeader className="pb-2">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-xl">Stage: <span className="text-nysc-green-800 capitalize">{stageId}</span></CardTitle>
-              <CheckCircle className="text-nysc-green-800 w-6 h-6" />
+        <Card className="lg:col-span-2 shadow-sm border-gray-100 rounded-2xl">
+          <CardHeader className="pb-2 flex flex-row items-center justify-between">
+            <div>
+              <CardTitle className="text-lg">Phase: <span className="text-nysc-green-800 capitalize">{stageId}</span></CardTitle>
+              <CardDescription className="font-bold text-xs">Milestone Completion: {Math.round(progressPercent)}%</CardDescription>
             </div>
-            <CardDescription className="text-base font-medium">Phase Readiness: {Math.round(progressPercent)}%</CardDescription>
+            <CheckCircle2 className="w-6 h-6 text-nysc-green-800 opacity-20" />
           </CardHeader>
-          <CardContent className="pt-4 space-y-4">
-            <Progress value={progressPercent} className="h-2 bg-gray-100" />
+          <CardContent className="pt-4 space-y-6">
+            <Progress value={progressPercent} className="h-2.5 bg-gray-100" />
             <div className="grid grid-cols-1 gap-2 pt-2">
-              {stageTasks.map(task => (
-                <div key={task.id} className="flex items-center gap-3 p-3 border rounded-xl hover:bg-gray-50/50 transition-colors bg-white">
-                  <div className={`w-2 h-2 rounded-full ${completedTasks.includes(task.id) ? 'bg-nysc-green-800' : 'bg-gray-200'}`} />
-                  <span className={`text-sm flex-1 font-semibold ${completedTasks.includes(task.id) ? 'text-muted-foreground line-through' : 'text-gray-900'}`}>{task.title}</span>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-8 text-[10px] font-black uppercase text-nysc-green-800"
-                    onClick={() => toggleTask(task.id)}
-                  >
-                    {completedTasks.includes(task.id) ? 'Revisit' : 'Done'}
-                  </Button>
-                </div>
-              ))}
+              {stageTasks.map(task => {
+                const isDone = completedTasks.includes(task.id);
+                return (
+                  <div key={task.id} className="flex items-center gap-3 p-4 border rounded-xl bg-white hover:bg-gray-50 transition-colors">
+                    <div className={cn("w-2 h-2 rounded-full", isDone ? "bg-nysc-green-800" : "bg-gray-200")} />
+                    <span className={cn("text-sm flex-1 font-bold", isDone ? "text-muted-foreground line-through" : "text-gray-900")}>{task.title}</span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 text-[9px] font-black uppercase tracking-widest text-nysc-green-800"
+                      onClick={() => toggleTask(task.id)}
+                    >
+                      {isDone ? 'Revisit' : 'Done'}
+                    </Button>
+                  </div>
+                );
+              })}
             </div>
           </CardContent>
         </Card>
         <div className="space-y-6">
-          <Card className="bg-nysc-green-800 text-white border-none shadow-xl overflow-hidden relative">
+          <Card className="bg-nysc-green-900 text-white border-none shadow-xl overflow-hidden rounded-2xl relative">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-white font-display text-lg">
-                <Briefcase className="w-5 h-5 text-nysc-gold" /> Legacy Hub
+                <Briefcase className="w-5 h-5 text-nysc-gold" /> CDS Legacy
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-xs text-nysc-green-100 font-medium">Build your legacy in {stateName || 'your community'} with verified project blueprints.</p>
+              <p className="text-xs text-nysc-green-100 font-bold">Build your sustainable project in <span className="text-white underline underline-offset-4 decoration-nysc-gold">{stateName || 'your state'}</span> with verified blueprints.</p>
               <Link to="/app/cds">
-                <Button className="w-full bg-white text-nysc-green-800 hover:bg-gray-100 font-bold h-11">
-                  Open Toolkit <ChevronRight className="ml-1 w-4 h-4" />
+                <Button className="w-full bg-white text-nysc-green-900 hover:bg-gray-100 font-black h-11 rounded-xl">
+                  Legacy Toolkit <ChevronRight className="ml-1 w-4 h-4" />
                 </Button>
               </Link>
             </CardContent>
           </Card>
-          <Card className="shadow-sm border-gray-100 bg-white">
+          <Card className="shadow-sm border-gray-100 rounded-2xl">
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-muted-foreground">
+                <CardTitle className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-nysc-green-800" /> Deadline Radar
                 </CardTitle>
                 <Link to="/app/deadlines" className="text-[9px] font-black uppercase text-nysc-green-800 hover:underline">Full View</Link>
@@ -240,17 +154,17 @@ export function DashboardPage() {
             <CardContent className="space-y-3">
               {relevantDeadlines.length > 0 ? (
                 relevantDeadlines.map(d => (
-                  <div key={d.id} className={cn("flex items-center justify-between p-3 border rounded-xl", d.past ? "bg-red-50 border-red-100" : "bg-gray-50/30")}>
-                    <p className={cn("text-xs font-bold", d.past ? "text-destructive" : "text-gray-900")}>{d.title}</p>
-                    <p className={cn("text-[10px] font-black uppercase", d.past ? "text-destructive" : "text-nysc-gold")}>
-                      {d.past ? "Closed" : `${d.diff}d Left`}
+                  <div key={d.id} className={cn("flex items-center justify-between p-3 border rounded-xl bg-gray-50/50", d.past && "opacity-50")}>
+                    <p className="text-xs font-bold truncate pr-2">{d.title}</p>
+                    <p className={cn("text-[9px] font-black uppercase whitespace-nowrap", d.past ? "text-gray-400" : d.diff <= 7 ? "text-destructive" : "text-nysc-gold")}>
+                      {d.past ? "Closed" : d.diff === 0 ? "Today" : `${d.diff}d Left`}
                     </p>
                   </div>
                 ))
               ) : (
-                <div className="text-center py-8 border-2 border-dashed rounded-xl">
-                  <Info className="w-6 h-6 text-gray-300 mx-auto mb-2" />
-                  <p className="text-[9px] text-muted-foreground font-black uppercase">No Current Phase Deadlines</p>
+                <div className="text-center py-10 border-2 border-dashed rounded-xl">
+                  <Info className="w-6 h-6 text-gray-200 mx-auto mb-2" />
+                  <p className="text-[9px] text-muted-foreground font-black uppercase">No phase deadlines active</p>
                 </div>
               )}
             </CardContent>

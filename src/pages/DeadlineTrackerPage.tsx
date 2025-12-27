@@ -1,18 +1,17 @@
 import React, { useMemo, useState } from 'react';
-import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { useAppStore } from '@/lib/store';
 import { DEADLINES } from '@/lib/mock-content';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Bell, 
-  Calendar, 
-  Clock, 
-  AlertTriangle, 
-  CheckCircle2, 
-  ExternalLink, 
+import {
+  Bell,
+  Calendar,
+  Clock,
+  AlertTriangle,
+  CheckCircle2,
+  ExternalLink,
   Info,
   ShieldAlert,
   CalendarCheck
@@ -20,10 +19,9 @@ import {
 import { parseISO, differenceInDays, isPast, format } from 'date-fns';
 import { cn } from '@/lib/utils';
 export default function DeadlineTrackerPage() {
-  const stage = useAppStore(s => s.stage);
   const [filter, setFilter] = useState<string>('all');
   const processedDeadlines = useMemo(() => {
-    return DEADLINES.map(d => {
+    return (DEADLINES || []).map(d => {
       const date = parseISO(d.date);
       const diff = differenceInDays(date, new Date());
       const past = isPast(date);
@@ -35,6 +33,16 @@ export default function DeadlineTrackerPage() {
     if (filter === 'upcoming') return processedDeadlines.filter(d => !d.past);
     return processedDeadlines.filter(d => d.stage === filter);
   }, [processedDeadlines, filter]);
+  const filterLabels: Record<string, string> = {
+    all: "All Service Deadlines",
+    upcoming: "Pending Tasks",
+    prospective: "Pre-Mobilization",
+    mobilization: "Registration Windows",
+    camp: "Orientation Phase",
+    ppa: "Primary Assignment",
+    cds: "Project Deadlines",
+    pop: "Winding Up / POP"
+  };
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10">
       <header className="space-y-4 mb-8">
@@ -47,18 +55,21 @@ export default function DeadlineTrackerPage() {
             <p className="text-muted-foreground font-medium">Critical dates across the NYSC service calendar.</p>
           </div>
         </div>
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-4">
-          <Tabs value={filter} onValueChange={setFilter} className="w-full md:w-auto">
-            <TabsList className="bg-white border rounded-xl p-1 h-auto flex flex-wrap gap-1 shadow-sm">
-              <TabsTrigger value="all" className="text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-lg">All Dates</TabsTrigger>
-              <TabsTrigger value="upcoming" className="text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-lg">Upcoming</TabsTrigger>
-              <TabsTrigger value="mobilization" className="text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-lg">Mobilization</TabsTrigger>
-              <TabsTrigger value="ppa" className="text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-lg">PPA/CDS</TabsTrigger>
-              <TabsTrigger value="pop" className="text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-lg">Winding Up</TabsTrigger>
+        <div className="flex flex-col gap-4 pt-4">
+          <Tabs value={filter} onValueChange={setFilter} className="w-full">
+            <TabsList className="bg-white border rounded-xl p-1 h-auto flex flex-wrap gap-1 shadow-sm overflow-x-auto">
+              <TabsTrigger value="all" className="text-[9px] font-black uppercase tracking-widest px-4 py-2 rounded-lg">All</TabsTrigger>
+              <TabsTrigger value="upcoming" className="text-[9px] font-black uppercase tracking-widest px-4 py-2 rounded-lg">Upcoming</TabsTrigger>
+              <TabsTrigger value="prospective" className="text-[9px] font-black uppercase tracking-widest px-4 py-2 rounded-lg">Prospective</TabsTrigger>
+              <TabsTrigger value="mobilization" className="text-[9px] font-black uppercase tracking-widest px-4 py-2 rounded-lg">Mobilization</TabsTrigger>
+              <TabsTrigger value="camp" className="text-[9px] font-black uppercase tracking-widest px-4 py-2 rounded-lg">Camp</TabsTrigger>
+              <TabsTrigger value="ppa" className="text-[9px] font-black uppercase tracking-widest px-4 py-2 rounded-lg">PPA</TabsTrigger>
+              <TabsTrigger value="cds" className="text-[9px] font-black uppercase tracking-widest px-4 py-2 rounded-lg">CDS</TabsTrigger>
+              <TabsTrigger value="pop" className="text-[9px] font-black uppercase tracking-widest px-4 py-2 rounded-lg">POP</TabsTrigger>
             </TabsList>
           </Tabs>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 border border-amber-100 text-amber-800 text-[10px] font-black uppercase tracking-widest shadow-sm">
-            <Info className="w-4 h-4" /> Portals update independently
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 border border-amber-100 text-amber-800 text-[10px] font-black uppercase tracking-widest shadow-sm w-fit">
+            <Info className="w-4 h-4" /> Filtered by: {filterLabels[filter] || filter}
           </div>
         </div>
       </header>
@@ -71,7 +82,7 @@ export default function DeadlineTrackerPage() {
               !d.past && d.diff <= 7 ? "ring-2 ring-destructive/20 border-destructive/10 shadow-lg shadow-destructive/5" : ""
             )}>
               <div className={cn(
-                "absolute top-0 left-0 w-1 h-full",
+                "absolute top-0 left-0 w-1.5 h-full",
                 d.past ? "bg-gray-300" : d.diff <= 7 ? "bg-destructive" : "bg-nysc-green-800"
               )} />
               <CardHeader className="pb-3">
@@ -96,9 +107,12 @@ export default function DeadlineTrackerPage() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gray-50/50 rounded-2xl p-4 border border-gray-100">
+                <div className={cn(
+                  "rounded-2xl p-4 border transition-colors",
+                  d.past ? "bg-gray-50 border-gray-100" : d.diff <= 7 ? "bg-red-50 border-red-100" : "bg-nysc-green-50/30 border-nysc-green-100/50"
+                )}>
                   <div className="flex justify-between items-end">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Status</span>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Countdown</span>
                     <span className={cn(
                       "text-lg font-black",
                       d.past ? "text-gray-400" : d.diff <= 7 ? "text-destructive" : "text-nysc-green-800"
@@ -109,11 +123,11 @@ export default function DeadlineTrackerPage() {
                 </div>
                 <div className="space-y-3">
                   <p className="text-xs text-muted-foreground font-medium leading-relaxed">
-                    {d.past 
-                      ? "This deadline has passed. If you missed this window, contact your LGI or visit the portal for revalidation."
-                      : d.diff <= 7 
-                        ? "CRITICAL: This window is closing soon. Ensure all documents are uploaded and biometrics are verified."
-                        : "Maintain compliance by preparing your documentation in advance of this scheduled window."}
+                    {d.past
+                      ? "This window is closed. For late registration or missed biometrics, please visit your State Secretariat ICT office."
+                      : d.diff <= 7
+                        ? "URGENT: This deadline is imminent. Ensure all requirements are met before the system window expires."
+                        : "Prepare your documents in advance. Check the Knowledge Base for the required documentation for this phase."}
                   </p>
                   <div className="flex items-center gap-2 pt-2">
                     <Button variant="outline" className="flex-1 h-10 rounded-xl font-bold border-gray-200" asChild>
@@ -136,11 +150,11 @@ export default function DeadlineTrackerPage() {
         <div className="flex flex-col items-center justify-center py-24 text-center space-y-4 border-2 border-dashed rounded-3xl bg-gray-50/50">
           <CalendarCheck className="w-12 h-12 text-gray-300" />
           <div className="space-y-1">
-            <h3 className="text-xl font-bold text-gray-900">No matching deadlines</h3>
-            <p className="text-muted-foreground max-w-xs font-medium">Try adjusting your filters to see more dates.</p>
+            <h3 className="text-xl font-bold text-gray-900">No deadlines for this filter</h3>
+            <p className="text-muted-foreground max-w-xs font-medium">There are currently no scheduled system deadlines recorded for the {filter} phase.</p>
           </div>
           <Button variant="outline" onClick={() => setFilter('all')} className="font-bold border-gray-200">
-            Clear Filters
+            Show All Dates
           </Button>
         </div>
       )}
@@ -149,9 +163,9 @@ export default function DeadlineTrackerPage() {
           <ShieldAlert className="w-7 h-7" />
         </div>
         <div className="space-y-1 text-center md:text-left">
-          <h4 className="font-display font-bold text-gray-900">Authoritative Source Notice</h4>
+          <h4 className="font-display font-bold text-gray-900">Operational Integrity Disclaimer</h4>
           <p className="text-xs text-muted-foreground max-w-4xl font-medium leading-relaxed">
-            Deadlines displayed here are synchronized with the general NYSC 2025 calendar. However, state-specific dates or batch streams may vary. Always cross-check with your <strong>Official Dashboard</strong> on the NYSC portal for the most accurate personal windows.
+            While we strive for 100% accuracy, NYSC timelines can change without notice. This tool tracks the standard annual calendar. Always verify your personal <strong>Call-up Number</strong> specific windows on the official portal.
           </p>
         </div>
       </footer>
