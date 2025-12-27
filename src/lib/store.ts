@@ -61,7 +61,7 @@ export const useAppStore = create<AppState>()(
         isPro: data.isPro,
         isSyncing: false,
         lastSyncError: null,
-        isInitialized: false // Re-initialize for new user session
+        isInitialized: false 
       }),
       logout: () => {
         localStorage.removeItem('nysc-companion-storage');
@@ -109,8 +109,7 @@ export const useAppStore = create<AppState>()(
       },
       syncProfile: async () => {
         const state = get();
-        const { userId, isAuthenticated, isSyncing, lastSyncedPayload } = state;
-        if (!userId || !isAuthenticated || isSyncing) return;
+        if (!state.userId || !state.isAuthenticated || state.isSyncing) return;
         const generatePayload = () => JSON.stringify({
           stage: get().stage,
           stateOfDeployment: get().stateOfDeployment,
@@ -120,10 +119,10 @@ export const useAppStore = create<AppState>()(
           isOnboarded: get().isOnboarded
         });
         const currentPayload = generatePayload();
-        if (currentPayload === lastSyncedPayload) return;
+        if (currentPayload === state.lastSyncedPayload) return;
         set({ isSyncing: true, lastSyncError: null });
         try {
-          const response = await fetch(`/api/profile/${userId}`, {
+          const response = await fetch(`/api/profile/${state.userId}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: currentPayload,
@@ -131,40 +130,44 @@ export const useAppStore = create<AppState>()(
           if (response.ok) {
             set({
               lastSynced: Date.now(),
-              lastSyncedPayload: currentPayload
+              lastSyncedPayload: currentPayload,
+              isSyncing: false
             });
+            // Check for consistency after update
+            const finalPayload = generatePayload();
+            if (finalPayload !== currentPayload) {
+              setTimeout(() => get().syncProfile(), 200);
+            }
           } else {
-            set({ lastSyncError: 'Sync refused by server' });
+            set({ isSyncing: false, lastSyncError: 'Sync refused by server' });
           }
         } catch (error) {
-          console.error('[SYNC FAILURE]', error);
-          set({ lastSyncError: 'Connection issue' });
-        } finally {
-          set({ isSyncing: false });
-          // Eventual consistency check
-          const latestPayload = generatePayload();
-          if (latestPayload !== currentPayload) {
-            setTimeout(() => get().syncProfile(), 150);
-          }
+          set({ isSyncing: false, lastSyncError: 'Connection issue' });
         }
       },
       loadProfile: async (force = false) => {
         const state = get();
-        const { userId, isAuthenticated, isSyncing, isInitialized } = state;
-        // Skip if already working or initialized (unless forced)
-        if (!userId || !isAuthenticated || (isSyncing && !force) || (isInitialized && !force)) {
-          if (!isInitialized && userId && isAuthenticated) {
-             set({ isInitialized: true });
-          }
+        if (!state.userId || !state.isAuthenticated) {
+          set({ isInitialized: true });
           return;
         }
+        if (state.isSyncing && !force) return;
+        if (state.isInitialized && !force) return;
         set({ isSyncing: true, lastSyncError: null });
         try {
-          const response = await fetch(`/api/profile/${userId}`);
+          const response = await fetch(`/api/profile/${state.userId}`);
           if (response.ok) {
             const result = await response.json();
             if (result.success && result.data) {
               const p = result.data as NYSCProfile;
+              const remotePayload = JSON.stringify({
+                stage: p.stage,
+                stateOfDeployment: p.stateOfDeployment,
+                completedTasks: p.completedTasks,
+                readArticles: p.readArticles,
+                activeProjectId: p.activeProjectId,
+                isOnboarded: p.isOnboarded
+              });
               set({
                 stage: p.stage || state.stage,
                 stateOfDeployment: p.stateOfDeployment || state.stateOfDeployment,
@@ -174,22 +177,19 @@ export const useAppStore = create<AppState>()(
                 isOnboarded: p.isOnboarded ?? state.isOnboarded,
                 lastSynced: p.updatedAt || Date.now(),
                 isPro: p.isPro ?? state.isPro,
-                lastSyncedPayload: JSON.stringify({
-                  stage: p.stage,
-                  stateOfDeployment: p.stateOfDeployment,
-                  completedTasks: p.completedTasks,
-                  readArticles: p.readArticles,
-                  activeProjectId: p.activeProjectId,
-                  isOnboarded: p.isOnboarded
-                }),
+                lastSyncedPayload: remotePayload,
+                isInitialized: true
               });
+            } else {
+              set({ isInitialized: true });
             }
+          } else {
+            set({ isInitialized: true });
           }
         } catch (error) {
-          set({ lastSyncError: 'Failed to fetch cloud profile' });
+          set({ lastSyncError: 'Failed to fetch cloud profile', isInitialized: true });
         } finally {
-          // Robust initialized transition: always true to avoid render loops on fallback
-          set({ isSyncing: false, isInitialized: true });
+          set({ isSyncing: false });
         }
       },
       reset: () => {

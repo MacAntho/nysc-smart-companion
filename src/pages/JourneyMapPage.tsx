@@ -2,8 +2,9 @@ import React from 'react';
 import { useAppStore } from '@/lib/store';
 import { JOURNEY_STAGES } from '@/lib/mock-content';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { CheckCircle2, Circle, Info } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 export function JourneyMapPage() {
   const currentStage = useAppStore(s => s.stage);
   const completedTasks = useAppStore(s => s.completedTasks);
@@ -34,7 +35,7 @@ export function JourneyMapPage() {
                     {stage.title}
                   </h3>
                   {isActive && (
-                    <Badge className="bg-nysc-green-100 text-nysc-green-800 text-[10px] font-bold uppercase tracking-wider w-fit border-nysc-green-200">
+                    <Badge variant="secondary" className="bg-nysc-green-100 text-nysc-green-800 text-[10px] font-bold uppercase tracking-wider w-fit border-nysc-green-200">
                       Active Phase
                     </Badge>
                   )}
@@ -51,7 +52,7 @@ export function JourneyMapPage() {
                       {stage.tasks.map(task => {
                         const isDone = completedTasks.includes(task.id);
                         return (
-                          <motion.div 
+                          <motion.div
                             key={task.id}
                             whileTap={{ scale: 0.99 }}
                             onClick={() => toggleTask(task.id)}
@@ -59,7 +60,7 @@ export function JourneyMapPage() {
                           >
                             <div className="mt-0.5">
                               {isDone ? (
-                                <CheckCircle2 className="w-5 h-5 text-nysc-green-500 fill-nysc-green-50" />
+                                <CheckCircle2 className="w-5 h-5 text-nysc-green-50 fill-nysc-green-50" />
                               ) : (
                                 <Circle className="w-5 h-5 text-gray-300 group-hover:text-nysc-green-200 transition-colors" />
                               )}
@@ -83,12 +84,5 @@ export function JourneyMapPage() {
         })}
       </div>
     </div>
-  );
-}
-function Badge({ children, className }: { children: React.ReactNode, className?: string }) {
-  return (
-    <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] border ${className}`}>
-      {children}
-    </span>
   );
 }
