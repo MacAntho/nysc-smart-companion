@@ -56,7 +56,7 @@ export function KnowledgeBasePage() {
       a.summary.toLowerCase().includes(searchLower) ||
       (a.metadata?.source?.toLowerCase() || '').includes(searchLower) ||
       (a.metadata?.stage?.toLowerCase() || '').includes(searchLower);
-    const matchesCategory = category === 'All' || a.category.includes(category);
+    const matchesCategory = category === 'All' || a.category === category || a.category.includes(category);
     return matchesSearch && matchesCategory;
   });
   const clearFilters = () => {
@@ -120,11 +120,11 @@ export function KnowledgeBasePage() {
                   <Card
                     key={article.id}
                     className={cn(
-                      "hover:shadow-2xl transition-all duration-300 group border-gray-100 flex flex-col h-full relative rounded-3xl overflow-hidden min-h-[220px]",
-                      isHighRisk 
-                        ? "ring-2 ring-destructive bg-red-50/10 shadow-lg shadow-red-100/50" 
-                        : isFeatured 
-                          ? "ring-2 ring-nysc-gold bg-amber-50/10 shadow-nysc-gold/5" 
+                      "hover:shadow-2xl transition-all duration-300 group border-gray-100 flex flex-col h-full relative rounded-3xl overflow-hidden min-h-[220px] transition-colors",
+                      isHighRisk
+                        ? "ring-2 ring-destructive bg-red-50/30 shadow-lg shadow-red-100/50 animate-pulse-subtle"
+                        : isFeatured
+                          ? "ring-2 ring-nysc-gold bg-amber-50/10 shadow-nysc-gold/5"
                           : "bg-white"
                     )}
                   >

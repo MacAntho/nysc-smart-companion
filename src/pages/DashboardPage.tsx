@@ -40,6 +40,14 @@ export function DashboardPage() {
   const priorityContent = useMemo(() => {
     if (!isInitialized) return null;
     const readArticlesSet = new Set(readArticles);
+    if (!readArticlesSet.has('k-disqualification')) {
+      return {
+        title: 'Disqualification & Remobilization Protocol',
+        desc: 'Highest Risk: Understand the grounds for service cancellation and the legal implications of disqualification.',
+        risk: 'high' as PriorityRisk,
+        searchLink: '/app/knowledge?search=disqualification'
+      };
+    }
     if (!readArticlesSet.has('k-sanctions')) {
       return {
         title: 'NYSC Violations & Penalties Guide',

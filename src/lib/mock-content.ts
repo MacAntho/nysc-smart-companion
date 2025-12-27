@@ -66,6 +66,29 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-disqualification',
+    category: 'Official/Advisory',
+    title: 'NYSC Disqualification, Remobilization & Extensions',
+    summary: 'Detailed guide on disciplinary offenses, the difference between cancellation and disqualification, and the official remobilization protocol.',
+    content: `Understanding the severity of NYSC disciplinary measures is vital for every Corps Member. The NYSC Act and Bye-laws differentiate between penalties that delay your service and those that nullify it.
+1. CANCELLATION VS. EXTENSION:
+A "Service Extension" is a penalty of extra time (weeks or months) served after the official POP date. However, "Cancellation of Service" is the nuclear option. When service is cancelled, your entire year is declared void. You will not receive a certificate, and you must apply for "Remobilization" to start the service year fresh from Day 1 at the orientation camp.
+2. GROUNDS FOR DISQUALIFICATION:
+Disqualification often stems from foundational eligibility issues or gross criminal misconduct:
+• CERTIFICATE FORGERY: Presenting a fake degree, statement of result, or medical certificate. This leads to immediate disqualification and blacklisting.
+• AGE FALSIFICATION: Manipulating date of birth to fall under the 30-year limit. Discovery at any stage leads to service cancellation.
+• DUAL SERVICE: Attempting to serve twice (often to get another certificate or allowance). This is a criminal offense under the NYSC Act.
+• ABSCONDMENT: Being absent from PPA for over 3 months without any communication or authorization.
+3. REMOBILIZATION PROTOCOL:
+If your service is cancelled for reasons other than forgery (e.g., medical leave exceeding limits or authorized withdrawal), you must go through Remobilization.
+• You must wait for the next mobilization cycle.
+• You must re-register on the portal as a "Remobilization" candidate.
+• You are mandated to return to the Orientation Camp, even if you completed it previously.
+4. LEGAL IMPLICATIONS:
+The NYSC Act (Section 13) provides for the prosecution of individuals who provide false information or forge documents. Penalties include fines and imprisonment. Disqualification is often accompanied by a formal report to the individual's degree-awarding institution and potential employers.`,
+    metadata: { stage: 'all', risk: 'high', source: 'NYSC Act', featured: true }
+  },
+  {
     id: 'k-extension',
     category: 'Official/Advisory',
     title: 'NYSC Service Extensions: Causes, Appeals, Implications',
