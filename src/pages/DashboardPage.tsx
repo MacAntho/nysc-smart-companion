@@ -32,6 +32,7 @@ export function DashboardPage() {
   const getPriorityContent = (): { title: string; desc: string; risk: PriorityRisk; searchLink: string } => {
     const hasReadRedeployment = readArticles.includes('k-redeployment');
     const hasReadMedicalRedeploy = readArticles.includes('k-medical-redeploy');
+    const hasReadMaritalRedeploy = readArticles.includes('k-marital-redeploy');
     switch(stageId) {
       case 'prospective':
         return {
@@ -46,6 +47,12 @@ export function DashboardPage() {
           desc: 'Essential for corps members with chronic health conditions (Sickle Cell, CKD, etc.). Learn the official board review process.',
           risk: 'medium',
           searchLink: '/app/knowledge?q=medical'
+        };
+        if (!hasReadMaritalRedeploy) return {
+          title: 'Marital Redeployment Guide',
+          desc: 'Official relocation rights for married women wishing to serve in their husband’s state of residence.',
+          risk: 'medium',
+          searchLink: '/app/knowledge?q=marital'
         };
         if (!hasReadRedeployment) return {
           title: 'Redeployment & Relocation Protocol',
@@ -72,6 +79,12 @@ export function DashboardPage() {
           desc: 'The Post-Camp medical window is open. Verify your government hospital reports for specialized care needs.',
           risk: 'medium',
           searchLink: '/app/knowledge?q=medical'
+        };
+        if (!hasReadMaritalRedeploy) return {
+          title: 'Marital Relocation Protocol',
+          desc: 'Married women relocation window is open. Verify your marriage certificate and employer letters for relocation.',
+          risk: 'medium',
+          searchLink: '/app/knowledge?q=marital'
         };
         if (!hasReadRedeployment) return {
           title: 'Post-Camp Relocation Window',

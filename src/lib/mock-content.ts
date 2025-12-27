@@ -1,6 +1,6 @@
 import { KnowledgeArticle } from "@shared/types";
 export const NIGERIAN_STATES = [
-  'Lagos', 'Abuja', 'Oyo', 'Rivers', 'Kano', 'Kaduna', 'Enugu', 'Edo', 
+  'Lagos', 'Abuja', 'Oyo', 'Rivers', 'Kano', 'Kaduna', 'Enugu', 'Edo',
   'Cross River', 'Delta', 'Anambra', 'Plateau', 'Kwara', 'Imo', 'Akwa Ibom'
 ];
 export const JOURNEY_STAGES = [
@@ -65,6 +65,37 @@ export const JOURNEY_STAGES = [
   }
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
+  {
+    id: 'k-marital-redeploy',
+    category: 'Official',
+    title: 'Marital Redeployment Guide',
+    summary: 'Official relocation protocol for married female corps members wishing to serve in their husband’s state of residence.',
+    content: `Marital Redeployment is a specific provision granted to married female corps members to ensure family stability during the service year.
+1. ELIGIBILITY
+- This provision applies exclusively to married female corps members.
+- The request must be to move to the state where the husband officially resides and works.
+2. MANDATORY DOCUMENTATION
+To apply, you must upload or present the following legal documents:
+- Marriage Certificate: A valid certificate from a recognized Marriage Registry (Court Marriage).
+- Newspaper Change of Name: A publication in a national daily newspaper announcing your change of surname.
+- Sworn Affidavit: An affidavit from a High Court confirming the marriage and change of name.
+- Husband’s Employer Letter: A formal letter from the husband's workplace confirming his employment status and residential address in the target state.
+- Husband’s Identity: A copy of the husband's valid ID (Work ID, Driver’s License, or International Passport).
+3. APPLICATION WINDOWS
+- During Registration: You can indicate your marital status and upload documents during the online mobilization phase.
+- In-Camp: If your status changed after registration, you can apply during the first week of orientation camp using the relocation forms provided.
+- Post-Camp (In-Service): You can apply via your dashboard 3 months after camp exit if you recently got married.
+4. IMPORTANT NOTES
+- Verification: NYSC officials strictly verify all submitted documents. Forgery leads to disciplinary action.
+- Timing: Relocation is not instantaneous; you must remain at your current station until the official Relocation Letter is issued.`,
+    metadata: {
+      stage: 'mobilization/ppa',
+      risk: 'low',
+      source: 'NYSC',
+      last_updated: '2025',
+      featured: true
+    }
+  },
   {
     id: 'k-medical-redeploy',
     category: 'Official',

@@ -138,7 +138,9 @@ export const useAppStore = create<AppState>()(
             try {
               const err = JSON.parse(errText);
               errMsg += ` ${err.error || err.message || 'Unknown'}`;
-            } catch {}
+            } catch {
+              /* Ignore parsing errors for non-JSON failure responses */
+            }
             console.warn(errMsg);
           }
         } catch (error) {
