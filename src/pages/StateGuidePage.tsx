@@ -66,8 +66,8 @@ export function StateGuidePage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-8 px-6">
-              <div className="h-[280px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
+              <div className="h-[280px] w-full relative">
+                <ResponsiveContainer width="100%" height="100%" minHeight={280}>
                   <BarChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                     <XAxis dataKey="name" fontSize={11} fontWeight={700} tickLine={false} axisLine={false} dy={10} />
