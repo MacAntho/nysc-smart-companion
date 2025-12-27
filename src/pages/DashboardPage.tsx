@@ -21,8 +21,8 @@ export function DashboardPage() {
   const isInitialized = useAppStore(s => s.isInitialized);
   const isOnboarded = useAppStore(s => s.isOnboarded);
   const lastSyncError = useAppStore(s => s.lastSyncError);
-  const completedTasks = Array.isArray(completedTasksRaw) ? completedTasksRaw : [];
-  const readArticles = Array.isArray(readArticlesRaw) ? readArticlesRaw : [];
+  const completedTasks = useMemo(() => Array.isArray(completedTasksRaw) ? completedTasksRaw : [], [completedTasksRaw]);
+  const readArticles = useMemo(() => Array.isArray(readArticlesRaw) ? readArticlesRaw : [], [readArticlesRaw]);
   const currentStage = useMemo(() => JOURNEY_STAGES.find(s => s.id === stageId), [stageId]);
   const stageTasks = useMemo(() => currentStage?.tasks || [], [currentStage]);
   const completedCount = useMemo(() => {
@@ -54,7 +54,16 @@ export function DashboardPage() {
     if (!readArticlesSet.has('k-emergency') && exists('k-emergency')) {
       return { title: 'Emergency Protocols', desc: 'Safety Mandate: Follow these exact steps for medical or security emergencies. Protocol adherence is legally mandatory.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=emergency' };
     }
-    // 2. Batch Schedule (New Strategic Surfacing)
+    // 2. NEW: Critical Risk Advisory (Top Mistakes)
+    if (!readArticlesSet.has('k-mistakes') && exists('k-mistakes')) {
+      return {
+        title: 'Policy Risk Advisory',
+        desc: 'Process Critical: A definitive guide to avoiding service extensions, disqualification, or criminal prosecution based on NYSC bye-laws.',
+        risk: 'high' as PriorityRisk,
+        link: '/app/knowledge?search=mistakes'
+      };
+    }
+    // 3. Batch Schedule (Strategic Surfacing)
     if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-batch-schedule') && exists('k-batch-schedule')) {
       return {
         title: 'Batch Schedule Alert',
@@ -63,7 +72,7 @@ export function DashboardPage() {
         link: '/app/knowledge?search=batch'
       };
     }
-    // 3. Financial Intelligence Expansion
+    // 4. Financial Intelligence Expansion
     const financialStages = ['mobilization', 'camp', 'ppa'];
     if (financialStages.includes(stageId) && !readArticlesSet.has('k-allawee') && exists('k-allawee')) {
       return {
@@ -73,7 +82,7 @@ export function DashboardPage() {
         link: '/app/knowledge?search=allawee'
       };
     }
-    // 4. Final Milestone: Certificate Intelligence (POP)
+    // 5. Final Milestone: Certificate Intelligence (POP)
     if (stageId === 'pop' && !readArticlesSet.has('k-pop-certificate') && exists('k-pop-certificate')) {
       return { title: 'Mandatory Certificate Guide', desc: 'Process Critical: Essential requirements for certificate collection and the official protocol for handling loss.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=certificate' };
     }

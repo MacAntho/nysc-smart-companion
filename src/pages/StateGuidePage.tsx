@@ -8,22 +8,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Tent, CreditCard, ShieldAlert, TrendingUp, Lightbulb, Briefcase, Info } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-
 export function StateGuidePage() {
   const profileState = useAppStore(s => s.stateOfDeployment);
   const [selectedState, setSelectedState] = useState<string>(profileState || '');
-
   useEffect(() => {
     if (profileState && !selectedState) {
       setSelectedState(profileState);
     }
-  }, [profileState]);
-
+  }, [profileState, selectedState]);
   const data = useMemo(() => {
     if (!selectedState) return null;
     return STATE_DATA[selectedState] || STATE_DATA['DEFAULT'];
   }, [selectedState]);
-
   const chartData = useMemo(() => {
     const fallback = STATE_DATA['DEFAULT'].metrics;
     const m = data?.metrics || fallback;
@@ -33,7 +29,6 @@ export function StateGuidePage() {
       { name: 'Transport', amount: Number(m.transport) || 0, avg: 15000 },
     ];
   }, [data]);
-
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-fade-in px-4">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-6 bg-white border rounded-2xl shadow-sm">
@@ -159,4 +154,3 @@ export function StateGuidePage() {
     </div>
   );
 }
-//

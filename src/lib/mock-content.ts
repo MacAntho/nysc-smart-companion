@@ -66,6 +66,33 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-mistakes',
+    category: 'Advisory/Risk',
+    title: 'Top 10 Critical NYSC Mistakes (Penalties/Extensions/Disqual)',
+    summary: 'High Risk Intelligence: A definitive guide to avoiding service extensions, disqualification, or criminal prosecution based on NYSC bye-laws.',
+    content: `I. FAKE CREDENTIALS & IDENTITY
+Presentation of forged degree certificates or results leads to immediate disqualification and handover to the Nigerian Police for criminal prosecution. NYSC verifies results with all awarding institutions.
+II. ABSCONDING / AWOL
+Leaving your place of primary assignment (PPA) for more than 3 months without official permission results in "Abscondment." You will be declared wanted and forced to remobilize (start from Day 1) in a future batch.
+III. UNAUTHORIZED TRAVEL
+Traveling outside your state of deployment without a written approval letter from the State Coordinator is a serious disciplinary offense. If an accident occurs during such travel, NYSC insurance and support are nullified.
+IV. UNIFORM MISUSE
+Wearing the NYSC uniform in unauthorized places (like political rallies, protests, or night clubs) or "re-styling" the khaki (slimming/tapering) is a breach of the code of conduct.
+V. CDS ABSENTEEISM
+Missing weekly Community Development Service meetings or your monthly clearance without valid medical proof leads to the withholding of your monthly allowance (Allawee).
+VI. POLITICAL INVOLVEMENT
+Corps members are strictly forbidden from participating in partisan politics or serving as agents for political parties, except for official INEC electoral duties.
+VII. DISOBEYING OFFICIALS
+Insubordination to Camp Officials, Soldiers, LGIs, or ZIs can result in immediate "Decampment" (eviction from orientation) or an extension of service (1-4 months).
+VIII. ILLEGAL PPA CHANGE
+Leaving your assigned PPA to work elsewhere without a formal "Letter of Release" and official approval from the NYSC Secretariat is "Ghosting" and leads to cancellation of the service year.
+IX. FINANCIAL FRAUD & EXTORTION
+Collecting money from other corps members under the guise of "NYSC official fees" or attempting to bribe officials for postings is a criminal offense under the NYSC Act.
+X. IMMORAL CONDUCT
+Engaging in acts deemed scandalous or immoral while in uniform or within NYSC premises can lead to disciplinary trials and service extension.`,
+    metadata: { stage: 'all', risk: 'high', source: 'NYSC Bye-laws', featured: true, last_updated: '2025-02-28' }
+  },
+  {
     id: 'k-batch-schedule',
     category: 'Official/Mobilization',
     title: 'NYSC Official Batch Schedule & Streams',
