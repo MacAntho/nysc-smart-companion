@@ -66,6 +66,46 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-cds',
+    category: 'Official',
+    title: 'Community Development Service (CDS): Groups & Lifecycle',
+    summary: 'Comprehensive guide on group types, weekly attendance, project timelines, and clearance protocols.',
+    content: `Community Development Service (CDS) is a mandatory component of the NYSC scheme designed to impact host communities through sustainable projects.
+1. CDS GROUP TYPES
+Upon leaving camp, you will be assigned to a specific CDS group based on your discipline or interest:
+- Editorial: Managing state newsletters and public relations.
+- ICT/Digital Literacy: Teaching tech skills in schools and communities.
+- Medical & Health: Rural health sensitization and clinic support.
+- Road Safety (FRSC): Assisting in traffic control and safety education.
+- Anti-Corruption (EFCC/ICPC): Promoting integrity and transparency.
+- Environment & Sanitation: Monthly environmental sanitation and waste management.
+- Charity/SDGs: Poverty alleviation and sustainable development projects.
+2. WEEKLY MEETING MANDATE
+- Frequency: Meetings are held once every week (usually Thursdays) at the Local Government Secretariat.
+- Attendance Rule: You must maintain at least 75% attendance in your CDS group.
+- The "No Attendance, No Allowance" Policy: Your Local Government Inspector (LGI) verifies your attendance before signing your monthly clearance. Missing meetings without valid permission leads to the forfeiture of your monthly allowance.
+3. THE PROJECT LIFECYCLE
+If you choose to carry out a Personal/Individual project:
+- Identification: Perform a needs assessment in your community.
+- Proposal: Write a detailed project proposal following the NYSC template.
+- Approval: Submit the proposal to the LGI. If the budget is significant, it moves to the Zonal Inspector (ZI) for final approval.
+- Implementation: Execute the project only AFTER receiving the official Letter of Approval.
+- Report: Submit a final Project Completion Report with "Before" and "After" photographs.
+4. FEES & CONTRIBUTIONS
+- Legal Dues: Small monthly contributions for group logistics (e.g., N500 - N1000) are officially recognized but must be receipted.
+- Illegal Charges: Any demand for large sums of money for "posting" or "clearance" is illegal and should be reported to the State Coordinator.
+5. THE CLEARANCE PROTOCOL
+- Monthly Clearance: Every month, the LGI must sign your clearance form. This confirms you attended all CDS meetings and performed your duties at your PPA.
+- Exit Clearance: At the end of the service year, you must be cleared by your CDS President and LGI to be eligible for your Discharge Certificate.`,
+    metadata: {
+      stage: 'cds',
+      risk: 'low',
+      source: 'NYSC Official',
+      last_updated: '2025',
+      featured: true
+    }
+  },
+  {
     id: 'k-pop-guide',
     category: 'Official',
     title: 'Passing Out Parade (POP) & Certification Guide',

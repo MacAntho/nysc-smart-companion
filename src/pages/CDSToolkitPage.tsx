@@ -13,12 +13,15 @@ import {
   Info,
   Sparkles,
   Target,
+  ShieldCheck,
+  ExternalLink,
   ArrowRight
 } from 'lucide-react';
 import { CDS_RESOURCES } from '@/lib/mock-content';
 export function CDSToolkitPage() {
   const activeProjectId = useAppStore(s => s.activeProjectId);
   const setActiveProject = useAppStore(s => s.setActiveProject);
+  const readArticles = useAppStore(s => s.readArticles);
   const activeProject = CDS_RESOURCES.projects.find(p => p.id === activeProjectId);
   const milestones = [
     { id: 'm1', label: 'Proposal Submission' },
@@ -26,6 +29,7 @@ export function CDSToolkitPage() {
     { id: 'm3', label: 'Implementation Phase' },
     { id: 'm4', label: 'Final Documentation' },
   ];
+  const hasReadCDSGuide = readArticles.includes('k-cds');
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-fade-in">
       <header className="space-y-2">
@@ -80,6 +84,22 @@ export function CDSToolkitPage() {
               <CardDescription className="font-medium">Download these standardized templates to formalize your CDS project.</CardDescription>
             </CardHeader>
             <CardContent>
+              <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-2xl flex items-start gap-4">
+                <div className="p-2 bg-amber-100 rounded-lg shrink-0">
+                  <ShieldCheck className="w-5 h-5 text-amber-700" />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs font-black uppercase tracking-widest text-amber-800">Operational Warning</p>
+                  <p className="text-xs text-amber-900 font-medium leading-relaxed">
+                    Ensure you follow the official NYSC Project Approval Lifecycle before committing any funds. Starting a project without a formal Letter of Approval from the LGI is a disciplinary offense.
+                  </p>
+                  <Link to="/app/knowledge?q=cds" className="inline-flex items-center gap-1.5 text-xs font-bold text-nysc-green-800 hover:underline mt-2">
+                    Read Official CDS Guide <ExternalLink className="w-3 h-3" />
+                  </Link>
+                </div>
+              </div>
+              
+              <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground mb-4 px-1">LGI / Zonal Standardized Forms</h4>
               <div className="divide-y border rounded-2xl overflow-hidden bg-gray-50/30">
                 {CDS_RESOURCES.templates.map((template) => (
                   <div key={template.id} className="flex items-center justify-between p-5 hover:bg-white transition-colors group">

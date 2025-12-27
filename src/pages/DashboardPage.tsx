@@ -34,6 +34,7 @@ export function DashboardPage() {
     const hasReadMedicalRedeploy = readArticles.includes('k-medical-redeploy');
     const hasReadMaritalRedeploy = readArticles.includes('k-marital-redeploy');
     const hasReadSecurityRedeploy = readArticles.includes('k-security-redeploy');
+    const hasReadCDSGuide = readArticles.includes('k-cds');
     switch(stageId) {
       case 'prospective':
         return {
@@ -76,6 +77,12 @@ export function DashboardPage() {
           searchLink: '/app/knowledge'
         };
       case 'cds':
+        if (!hasReadCDSGuide) return {
+          title: 'CDS Group & Lifecycle Policy',
+          desc: 'Mandatory: Review official protocols for weekly meetings, dues, and project approval to avoid extension.',
+          risk: 'high',
+          searchLink: '/app/knowledge?q=cds'
+        };
         return {
           title: 'CDS Project Lifecycle',
           desc: 'Navigate the approval, implementation, and documentation of your legacy community project.',
@@ -100,7 +107,7 @@ export function DashboardPage() {
   };
   const { title: priorityTitle, desc: priorityDesc, risk, searchLink: priorityLink } = getPriorityContent();
   const riskStyles: Record<PriorityRisk, string> = {
-    high: "border-destructive/40 bg-red-50/50 shadow-destructive/10",
+    high: "border-destructive border-2 bg-red-50/50 shadow-destructive/10",
     medium: "border-nysc-gold border-2 bg-amber-50/50 shadow-nysc-gold/10",
     low: "border-nysc-green-100 bg-nysc-green-50/20 shadow-nysc-green-100/10"
   };
@@ -146,7 +153,7 @@ export function DashboardPage() {
           <CardHeader className="pb-2">
             <Badge className={cn("w-fit mb-2 uppercase text-[9px] font-black tracking-widest flex items-center gap-1", badgeStyles[risk] || badgeStyles.low)}>
               {risk === 'high' && <AlertTriangle className="w-3 h-3" />}
-              {risk === 'high' ? 'High Risk Alert' : 'Priority Resource'}
+              {risk === 'high' ? 'Process Critical' : 'Priority Resource'}
             </Badge>
             <CardTitle className={cn("text-xl font-display", risk === 'high' ? "text-destructive" : "text-amber-900")}>{priorityTitle}</CardTitle>
             <CardDescription className={cn("font-medium text-sm", risk === 'high' ? "text-red-800" : "text-amber-800")}>{priorityDesc}</CardDescription>
