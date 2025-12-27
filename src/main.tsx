@@ -6,6 +6,7 @@ import { createRoot, Root } from 'react-dom/client'
 import {
   createBrowserRouter,
   RouterProvider,
+  Outlet,
 } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -38,49 +39,53 @@ const router = createBrowserRouter([
   },
   {
     path: "/onboarding",
-    // Only AuthGuard here to allow access to onboarding without triggering the OnboardingGuard redirect
     element: <AuthGuard><OnboardingPage /></AuthGuard>,
     errorElement: <RouteErrorBoundary />,
   },
   {
     path: "/app",
-    element: <ProtectedRoute><DashboardLayout><DashboardPage /></DashboardLayout></ProtectedRoute>,
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout>
+          <Outlet />
+        </DashboardLayout>
+      </ProtectedRoute>
+    ),
     errorElement: <RouteErrorBoundary />,
-  },
-  {
-    path: "/app/journey",
-    element: <ProtectedRoute><DashboardLayout><JourneyMapPage /></DashboardLayout></ProtectedRoute>,
-    errorElement: <RouteErrorBoundary />,
-  },
-  {
-    path: "/app/knowledge",
-    element: <ProtectedRoute><DashboardLayout><KnowledgeBasePage /></DashboardLayout></ProtectedRoute>,
-    errorElement: <RouteErrorBoundary />,
-  },
-  {
-    path: "/app/deadlines",
-    element: <ProtectedRoute><DashboardLayout><DeadlineTrackerPage /></DashboardLayout></ProtectedRoute>,
-    errorElement: <RouteErrorBoundary />,
-  },
-  {
-    path: "/app/state-guide",
-    element: <ProtectedRoute><DashboardLayout><StateGuidePage /></DashboardLayout></ProtectedRoute>,
-    errorElement: <RouteErrorBoundary />,
-  },
-  {
-    path: "/app/cds",
-    element: <ProtectedRoute><DashboardLayout><CDSToolkitPage /></DashboardLayout></ProtectedRoute>,
-    errorElement: <RouteErrorBoundary />,
-  },
-  {
-    path: "/app/profile",
-    element: <ProtectedRoute><DashboardLayout><ProfilePage /></DashboardLayout></ProtectedRoute>,
-    errorElement: <RouteErrorBoundary />,
-  },
-  {
-    path: "/app/admin",
-    element: <AdminRoute><DashboardLayout><AdminPage /></DashboardLayout></AdminRoute>,
-    errorElement: <RouteErrorBoundary />,
+    children: [
+      {
+        index: true,
+        element: <DashboardPage />,
+      },
+      {
+        path: "journey",
+        element: <JourneyMapPage />,
+      },
+      {
+        path: "knowledge",
+        element: <KnowledgeBasePage />,
+      },
+      {
+        path: "deadlines",
+        element: <DeadlineTrackerPage />,
+      },
+      {
+        path: "state-guide",
+        element: <StateGuidePage />,
+      },
+      {
+        path: "cds",
+        element: <CDSToolkitPage />,
+      },
+      {
+        path: "profile",
+        element: <ProfilePage />,
+      },
+      {
+        path: "admin",
+        element: <AdminRoute><AdminPage /></AdminRoute>,
+      },
+    ],
   },
 ]);
 const container = document.getElementById('root')!;

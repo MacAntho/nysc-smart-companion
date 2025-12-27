@@ -22,20 +22,23 @@ export function DashboardPage() {
   const isOnboarded = useAppStore(s => s.isOnboarded);
   const currentStage = useMemo(() => JOURNEY_STAGES.find(s => s.id === stageId), [stageId]);
   const stageTasks = useMemo(() => currentStage?.tasks || [], [currentStage]);
-  const completedCount = useMemo(() => stageTasks.filter(t => completedTasks.includes(t.id)).length, [stageTasks, completedTasks]);
+  const completedCount = useMemo(() => stageTasks.filter(t => (completedTasks || []).includes(t.id)).length, [stageTasks, completedTasks]);
   const progressPercent = stageTasks.length > 0 ? (completedCount / stageTasks.length) * 100 : 0;
   const relevantDeadlines = useMemo(() => {
-    return DEADLINES
+    return (DEADLINES || [])
       .filter(d => d.stage === stageId)
       .map(d => {
-        const date = parseISO(d.date);
-        const diff = differenceInDays(date, new Date());
-        const past = isPast(date);
-        return { ...d, diff, past };
+        try {
+          const date = parseISO(d.date);
+          const diff = differenceInDays(date, new Date());
+          const past = isPast(date);
+          return { ...d, diff, past };
+        } catch (e) {
+          return { ...d, diff: 0, past: true };
+        }
       });
   }, [stageId]);
   const priorityContent = useMemo(() => {
-    // Return loading placeholder if store is not yet initialized to prevent layout jumps
     if (!isInitialized || !isOnboarded) {
       return {
         title: 'Initializing Intelligence...',
@@ -45,8 +48,7 @@ export function DashboardPage() {
       };
     }
     const readArticlesSet = new Set(readArticles ?? []);
-    // 0. NYSC Master FAQ (Promote to early stages after foundational reading)
-    if ((stageId === 'prospective' || stageId === 'mobilization') && 
+    if ((stageId === 'prospective' || stageId === 'mobilization') &&
         readArticlesSet.has('k-eligibility') && readArticlesSet.has('k-batches') && !readArticlesSet.has('k-faqs')) {
       return {
         title: 'NYSC FAQs: 50+ Verified Answers',
@@ -55,7 +57,6 @@ export function DashboardPage() {
         searchLink: '/app/knowledge?search=faqs'
       };
     }
-    // 0. Essential Foundational Knowledge (Eligibility)
     if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-eligibility')) {
       return {
         title: 'NYSC Eligibility Guide',
@@ -64,7 +65,6 @@ export function DashboardPage() {
         searchLink: '/app/knowledge?search=eligibility'
       };
     }
-    // 1. Batch System Intelligence
     if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-batches')) {
       return {
         title: 'Batch System Intelligence',
@@ -73,7 +73,6 @@ export function DashboardPage() {
         searchLink: '/app/knowledge?search=batches'
       };
     }
-    // 2. Critical Disciplinary Guides (Risk High)
     if (!readArticlesSet.has('k-disqualification')) {
       return {
         title: 'Disqualification Protocol',
@@ -90,7 +89,6 @@ export function DashboardPage() {
         searchLink: '/app/knowledge?search=sanctions'
       };
     }
-    // 2.5 Relocation Intelligence
     if ((stageId === 'camp' || stageId === 'ppa') && !readArticlesSet.has('k-relocation')) {
       return {
         title: 'NYSC Relocation Intelligence',
@@ -99,7 +97,6 @@ export function DashboardPage() {
         searchLink: '/app/knowledge?search=relocation'
       };
     }
-    // 3. Stage-Specific Critical Intelligence
     if (stageId === 'prospective' && !readArticlesSet.has('k-registration')) {
       return {
         title: 'Online Registration Roadmap',
@@ -132,7 +129,6 @@ export function DashboardPage() {
         searchLink: '/app/knowledge?search=pop'
       };
     }
-    // 5. Milestone Achievement Fallback
     if (progressPercent === 100) {
       return {
         title: 'Phase Milestone Achieved',
@@ -161,7 +157,7 @@ export function DashboardPage() {
     return `Synced ${formatDistanceToNow(lastSynced, { addSuffix: true })}`;
   }, [isSyncing, lastSynced]);
   return (
-    <div className="max-w-7xl mx-auto px-4 space-y-8 animate-fade-in py-8 md:py-10">
+    <div className="max-w-7xl mx-auto px-4 space-y-8 animate-fade-in">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div className="space-y-1">
           <h1 className="text-3xl font-display font-bold text-nysc-green-800 tracking-tight">Corper Command</h1>

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, Outlet } from "react-router-dom";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,17 +10,20 @@ import { MobileNav } from "./MobileNav";
 import { useAppStore } from "@/lib/store";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, ShieldCheck } from "lucide-react";
-export function DashboardLayout({ children }: { children: React.ReactNode }) {
+export function DashboardLayout({ children }: { children?: React.ReactNode }) {
   const location = useLocation();
   const pathParts = location.pathname.split('/').filter(Boolean);
   const isPro = useAppStore(s => s.isPro);
   const userRole = useAppStore(s => s.userRole);
   const loadProfile = useAppStore(s => s.loadProfile);
   const isInitialized = useAppStore(s => s.isInitialized);
-  // Global Profile Hydration: Ensure cloud data is synced regardless of entry route
+  const isAuthenticated = useAppStore(s => s.isAuthenticated);
+  // Global Profile Hydration: Ensure cloud data is synced once upon entry
   useEffect(() => {
-    loadProfile();
-  }, [loadProfile]);
+    if (isAuthenticated) {
+      loadProfile();
+    }
+  }, [loadProfile, isAuthenticated]);
   return (
     <SidebarProvider defaultOpen={true}>
       <AppSidebar />
@@ -72,7 +75,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             <ThemeToggle className="static" />
           </div>
         </header>
-        <main className="flex-1 pb-24 md:pb-12 overflow-x-hidden">
+        <main className="flex-1 pb-24 md:pb-12 overflow-x-hidden relative">
           <AnimatePresence mode="wait">
             {!isInitialized ? (
               <div className="flex items-center justify-center min-h-[60vh]">
@@ -90,7 +93,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                 }}
                 className="py-6 md:py-10"
               >
-                {children}
+                {children || <Outlet />}
               </motion.div>
             )}
           </AnimatePresence>
