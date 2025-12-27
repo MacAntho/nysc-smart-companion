@@ -28,6 +28,12 @@ export function DashboardPage() {
   const readPercent = (readArticles.length / KNOWLEDGE_ARTICLES.length) * 100;
   const relevantDeadlines = DEADLINES.filter(d => d.stage === stageId);
   const showPriorityAction = stageId === 'prospective' || stageId === 'mobilization';
+  const priorityTitle = stageId === 'prospective' 
+    ? 'Exemption & Exclusion Guide' 
+    : 'Official Registration Guide';
+  const priorityDesc = stageId === 'prospective'
+    ? 'Determine if you are eligible for national service or require an exemption certificate.'
+    : 'Critical step-by-step instructions for your current registration stage.';
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-fade-in px-4">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -55,13 +61,13 @@ export function DashboardPage() {
           </div>
           <CardHeader className="pb-2">
             <Badge className="w-fit bg-nysc-gold mb-2 uppercase text-[9px] font-black tracking-widest">Priority Phase Resource</Badge>
-            <CardTitle className="text-xl font-display text-amber-900">Official Registration Guide</CardTitle>
-            <CardDescription className="text-amber-800 font-medium">Critical step-by-step instructions for your current stage.</CardDescription>
+            <CardTitle className="text-xl font-display text-amber-900">{priorityTitle}</CardTitle>
+            <CardDescription className="text-amber-800 font-medium">{priorityDesc}</CardDescription>
           </CardHeader>
           <CardContent className="pb-6">
             <Link to="/app/knowledge">
               <Button className="bg-nysc-gold hover:bg-amber-700 text-white font-bold h-12 rounded-xl group">
-                Open Registration Guide <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                Open Guide <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
           </CardContent>

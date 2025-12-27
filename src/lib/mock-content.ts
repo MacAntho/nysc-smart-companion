@@ -7,6 +7,7 @@ export const JOURNEY_STAGES = [
     tasks: [
       { id: 'p1', title: 'Verify Senate List', description: 'Ensure your name is on the NYSC senate list.' },
       { id: 'p2', title: 'Final Clearance', description: 'Complete your university final clearance.' },
+      { id: 'p3', title: 'Check Exemption Eligibility', description: 'Determine if you qualify for Exemption (Age > 30) or Exclusion.' },
     ]
   },
   {
@@ -50,6 +51,38 @@ export const JOURNEY_STAGES = [
   }
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
+  {
+    id: 'k-exemptions',
+    category: 'Official',
+    title: 'Guide to NYSC Exemptions and Exclusions',
+    summary: 'Understanding the difference between Certificate of Exemption and Letter of Exclusion, qualification criteria, and application process.',
+    content: `The NYSC Act specifies who must serve and who is legally excused.
+1. CERTIFICATE OF EXEMPTION:
+Issued to graduates of regular programs who:
+- Are over 30 years of age at the date of graduation.
+- Have served in the Nigerian Armed Forces or Police for more than 9 months.
+- Have been conferred with national honors.
+2. LETTER OF EXCLUSION:
+Issued to graduates who are not eligible for national service but are not technically "exempted" under the criteria above. This primarily applies to:
+- Part-time graduates.
+- Sandwich program graduates.
+- Distance learning graduates (including NOUN).
+3. APPLICATION PROCESS:
+- Register on the NYSC portal during a mobilization window.
+- Select the appropriate category (Part-time or Regular).
+- Upload required documents: Degree/HND Statement of Result, Institutional ID card, and O'Level results.
+- For foreign-trained graduates, physical verification of documents at NYSC HQ Abuja is mandatory.
+4. COLLECTION:
+- Certificates of Exemption are usually sent to your institution for collection.
+- Letters of Exclusion can often be printed directly from your dashboard after successful portal verification.`,
+    metadata: {
+      stage: 'prospective',
+      risk: 'low',
+      source: 'NYSC Act/Portal',
+      last_updated: '2025',
+      featured: true
+    }
+  },
   {
     id: 'k-callup',
     category: 'Official',
