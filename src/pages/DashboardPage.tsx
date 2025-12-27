@@ -49,23 +49,34 @@ export function DashboardPage() {
     if (!isInitialized || !isOnboarded) return null;
     const readArticlesSet = new Set(readArticles ?? []);
     const exists = (id: string) => KNOWLEDGE_ARTICLES.some(a => a.id === id);
-    // 1. Final Milestone: Certificate Intelligence (Highest Priority for POP)
-    if (stageId === 'pop' && !readArticlesSet.has('k-pop-certificate') && exists('k-pop-certificate')) {
-      return { title: 'Mandatory Certificate Guide', desc: 'Process Critical: Essential requirements for certificate collection, recognition, and the official protocol for handling loss.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=certificate' };
-    }
-    // 2. Critical Emergency Check (Global)
+    // 1. Critical Emergency Check (Global) - Safety First
     if (!readArticlesSet.has('k-emergency') && exists('k-emergency')) {
       return { title: 'Emergency Protocols', desc: 'Safety Mandate: Follow these exact steps for medical or security emergencies. Failure to follow protocol voids official insurance.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=emergency' };
     }
-    // 3. Critical Disqualification Check (Global)
+    // 2. Financial Intelligence Expansion (Phase 43 Priority)
+    // Surface for mobilization, camp, and PPA phases as a High Priority advisory
+    const financialStages = ['mobilization', 'camp', 'ppa'];
+    if (financialStages.includes(stageId) && !readArticlesSet.has('k-allawee') && exists('k-allawee')) {
+      return { 
+        title: '₦77k Allawee Intelligence', 
+        desc: 'Payment Security: Authority breakdown of the new allowance schedule, state-specific stipends, and protocols to avoid payment rejection.', 
+        risk: 'high' as PriorityRisk, 
+        link: '/app/knowledge?search=allawee' 
+      };
+    }
+    // 3. Final Milestone: Certificate Intelligence (Highest Priority for POP)
+    if (stageId === 'pop' && !readArticlesSet.has('k-pop-certificate') && exists('k-pop-certificate')) {
+      return { title: 'Mandatory Certificate Guide', desc: 'Process Critical: Essential requirements for certificate collection, recognition, and the official protocol for handling loss.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=certificate' };
+    }
+    // 4. Critical Disqualification Check (Global)
     if (!readArticlesSet.has('k-disqualification') && exists('k-disqualification')) {
       return { title: 'Disqualification Risk', desc: 'Critical Advisory: Understand the specific bye-laws that lead to service extension or total remobilization.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=disqualification' };
     }
-    // 4. Financial Intelligence (For PPA/CDS)
+    // 5. Financial Intelligence (General)
     if ((stageId === 'ppa' || stageId === 'cds') && !readArticlesSet.has('k-financial-survival') && exists('k-financial-survival')) {
       return { title: 'Financial Survival Active', desc: 'Strategy Required: Mastery of the ₦77k allowance, PPA perks, and avoiding high-interest debt traps.', risk: 'medium' as PriorityRisk, link: '/app/knowledge?search=financial' };
     }
-    // 5. Practical Insider Tips (Global)
+    // 6. Practical Insider Tips (Global)
     if (!readArticlesSet.has('k-insider-tips') && exists('k-insider-tips')) {
       return { title: '100 Insider Survival Tips', desc: 'Expert Intelligence: Battle-tested practical tips for camp, finance, and PPA survival.', risk: 'medium' as PriorityRisk, link: '/app/knowledge?search=tips' };
     }

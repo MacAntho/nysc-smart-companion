@@ -66,6 +66,32 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-allawee',
+    category: 'Financial/Official',
+    title: 'NYSC Allawee Guide: ₦77k Payments & State Stipends',
+    summary: 'Comprehensive operational breakdown: Understanding the ₦77k federal allowance, payment windows, state stipends, and protocols for the final POP payment.',
+    content: `Effective October 2024, the Federal Government of Nigeria officially increased the monthly allowance for Corps Members to ₦77,000. 
+I. THE FEDERAL ALLOWANCE (ALLAWEE)
+1. PAYMENT AMOUNT: ₦77,000 per month.
+2. PAYMENT WINDOW: Alerts typically drop between the 25th of the current month and the 5th of the following month.
+3. THE CLEARANCE FACTOR: Payment is strictly tied to monthly clearance. If your LGI does not upload your biometric data before the state deadline, your payment will be delayed until the 'backlog' cycle (usually mid-month).
+II. BANKING PROTOCOLS
+1. MANDATORY ACCOUNTS: Most states use specific banks (Access, FirstBank, Zenith, UBA).
+2. STABILITY RULE: Never attempt to change your NYSC-linked bank account mid-service. This is the #1 cause of 'unpaid' months and requires a complex manual rectification at the state headquarters.
+III. STATE-SPECIFIC STIPENDS (APPROXIMATIVE)
+Some states pay additional stipends on top of the Federal ₦77k:
+- Lagos: ₦10,000 - ₦15,000 (Ministry/Agencies)
+- Rivers: ₦10,000 - ₦15,000
+- Abuja (FCT): Usually ₦0 (No state allowee, but high PPA bonuses)
+- Oyo: ₦5,000
+IV. PPA BONUSES & PERKS
+1. PRIVATE SECTOR: Many firms pay between ₦20,000 and ₦100,000 extra.
+2. SCHOOLS: Often provide free accommodation and a monthly 'transport' stipend (₦5k - ₦10k).
+V. THE FINAL POP PAYMENT
+Your last allowance is processed differently. It is typically paid alongside your 'transportation' allowance for returning home. You must complete the 'Final Clearance' chain to trigger this payment. No Final Clearance = No Final Allawee.`,
+    metadata: { stage: 'ppa', risk: 'medium', source: 'Federal Govt', featured: true, last_updated: '2025-01-20' }
+  },
+  {
     id: 'k-pop-certificate',
     category: 'Official',
     title: 'NYSC Certificate: Jobs, Recognition & Loss Procedure',
@@ -96,7 +122,7 @@ I. ORIENTATION CAMP SURVIVAL
 II. PPA & COMMUNITY INTEGRATION
 1. LOCAL LANGUAGE: Learn basic greetings in the local dialect. It drastically improves your safety and bargaining power at markets.
 2. THE LGI FACTOR: Your Local Government Inspector is the most important person in your service year. Be respectful, be punctual, and never argue with them in public.
-3. ALLOWANCE BUFFERS: Always assume your allowance will be 3-5 days late. Never spend your last ���5,000 before the alert drops.`,
+3. ALLOWANCE BUFFERS: Always assume your allowance will be 3-5 days late. Never spend your last ₦5,000 before the alert drops.`,
     metadata: { stage: 'all', risk: 'low', source: 'NYSC Smart Companion Alumni', featured: true, last_updated: '2025-01-10' }
   },
   {
