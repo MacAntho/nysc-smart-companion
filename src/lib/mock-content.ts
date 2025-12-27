@@ -52,6 +52,42 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-camp-life',
+    category: 'Survival',
+    title: 'NYSC Orientation Camp: Daily Schedule & Activities',
+    summary: 'A comprehensive breakdown of the 21-day regimented life, from the 4:00 AM bugle to 10:00 PM lights out.',
+    content: `Orientation camp is a highly structured environment governed by military-style discipline. To survive and thrive, you must master the daily routine.
+1. THE MORNING SURGE (04:00 - 07:30)
+- 04:00 AM: The Bugle. This is the wake-up call. You have 30-45 minutes to use the restroom, dress in your white kit, and head to the parade ground.
+- 04:45 AM: Fall-in. Platoons gather on the parade ground for morning meditation, national anthem, and prayers.
+- 05:00 AM - 07:00 AM: Morning Drills. Physical training (PT) or parade rehearsals led by military instructors.
+- 07:00 AM - 07:30 AM: Inspection. Soldiers inspect the hostels for cleanliness.
+2. REFUEL & LECTURES (07:30 - 14:00)
+- 07:30 AM - 08:30 AM: Breakfast. Queue at the kitchen with your meal ticket.
+- 09:00 AM - 01:00 PM: SAED Lectures. Skill Acquisition and Entrepreneurship Development lectures in the multi-purpose hall. Attendance is mandatory.
+- 01:00 PM - 02:00 PM: Lunch Break.
+3. EVENING RECREATION & DRILLS (14:00 - 18:00)
+- 02:00 PM - 04:00 PM: Rest or continued SAED practicals.
+- 04:00 PM - 06:00 PM: Evening Parade/Sports. Inter-platoon football, volleyball, or drill competitions.
+- 06:00 PM: Retreat. The bugle sounds for the lowering of the flag. You must stand at attention wherever you are until the bugle finishes.
+4. SOCIALS & LIGHTS OUT (19:00 - 22:00)
+- 07:00 PM - 08:00 PM: Dinner.
+- 08:00 PM - 10:00 PM: Social Activities. Drama, dance competitions, pageantry (Miss NYSC/Mr Macho), and talent shows at the pavilion.
+- 10:00 PM: Lights Out. The final bugle. Hostels must be dark and silent. All corps members must be in bed.
+SPECIAL ACTIVITIES:
+- Platoon Duty Day: One day a week, your platoon will be responsible for camp sanitation and kitchen duties.
+- Man-O-War Drills: Usually a 1-2 day intensive obstacle course training.
+- Swearing-in & POP: The two ceremonial days with full 6/6 dress code.
+Pro-Tip: Use your "SAED time" to network. While the hall can be hot, the connections made during these 21 days often last a lifetime.`,
+    metadata: {
+      stage: 'camp',
+      risk: 'medium',
+      source: 'NYSC Official',
+      last_updated: '2025',
+      featured: true
+    }
+  },
+  {
     id: 'k-camp-packing',
     category: 'Survival',
     title: 'NYSC Orientation Camp: Official Documents & Packing List',

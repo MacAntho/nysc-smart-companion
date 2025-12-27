@@ -42,7 +42,7 @@ export function KnowledgeBasePage() {
             <div className="relative group">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 transition-colors group-focus-within:text-nysc-gold" />
               <Input
-                placeholder="Search packing, documents, clearance, POP, rules..."
+                placeholder="Search schedule, routine, packing, documents, POP, rules..."
                 className="pl-10 h-14 bg-white text-gray-900 border-none focus-visible:ring-2 focus-visible:ring-nysc-gold shadow-lg rounded-2xl"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}

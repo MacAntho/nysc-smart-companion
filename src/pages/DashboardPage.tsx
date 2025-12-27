@@ -27,8 +27,6 @@ export function DashboardPage() {
   const progressPercent = stageTasks.length > 0 ? (completedCount / stageTasks.length) * 100 : 0;
   const readPercent = (readArticles.length / KNOWLEDGE_ARTICLES.length) * 100;
   const relevantDeadlines = DEADLINES.filter(d => d.stage === stageId);
-  // Surfacing logic for priority resources based on stage - Now covers ALL phases
-  const showPriorityAction = true;
   const getPriorityContent = () => {
     switch(stageId) {
       case 'prospective':
@@ -43,8 +41,8 @@ export function DashboardPage() {
         };
       case 'camp':
         return {
-          title: 'Camp Packing & Doc Checklist',
-          desc: 'Ensure you have all mandatory documents and gear before reporting to your orientation camp.'
+          title: 'Camp Daily Schedule',
+          desc: 'Master the 21-day regimented routine. View the full timeline of parades, lectures, and social activities.'
         };
       case 'ppa':
         return {
@@ -86,7 +84,7 @@ export function DashboardPage() {
           )}
         </div>
       </header>
-      {showPriorityAction && priorityTitle && (
+      {priorityTitle && (
         <Card className="border-nysc-gold border-2 bg-amber-50/50 shadow-lg shadow-nysc-gold/10 overflow-hidden relative group">
           <div className="absolute top-0 right-0 p-4">
              <Sparkles className="w-12 h-12 text-nysc-gold opacity-20 group-hover:scale-125 transition-transform duration-500" />
