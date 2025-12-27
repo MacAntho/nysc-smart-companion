@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, CheckCircle, ChevronRight, ArrowRight, ShieldAlert, Briefcase, Info, CheckCircle2 } from 'lucide-react';
+import { Calendar, CheckCircle, ChevronRight, ArrowRight, ShieldAlert, Briefcase, Info, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { JOURNEY_STAGES, DEADLINES, KNOWLEDGE_ARTICLES } from '@/lib/mock-content';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow, differenceInDays, parseISO, isPast } from 'date-fns';
@@ -13,19 +13,20 @@ type PriorityRisk = 'high' | 'medium' | 'low';
 export function DashboardPage() {
   const stageId = useAppStore(s => s.stage);
   const stateName = useAppStore(s => s.stateOfDeployment);
-  const completedTasks = useAppStore(s => s.completedTasks);
-  const readArticles = useAppStore(s => s.readArticles);
+  const completedTasksRaw = useAppStore(s => s.completedTasks);
+  const readArticlesRaw = useAppStore(s => s.readArticles);
   const toggleTask = useAppStore(s => s.toggleTask);
   const isSyncing = useAppStore(s => s.isSyncing);
   const lastSynced = useAppStore(s => s.lastSynced);
   const isInitialized = useAppStore(s => s.isInitialized);
   const isOnboarded = useAppStore(s => s.isOnboarded);
   const lastSyncError = useAppStore(s => s.lastSyncError);
+  const completedTasks = Array.isArray(completedTasksRaw) ? completedTasksRaw : [];
+  const readArticles = Array.isArray(readArticlesRaw) ? readArticlesRaw : [];
   const currentStage = useMemo(() => JOURNEY_STAGES.find(s => s.id === stageId), [stageId]);
   const stageTasks = useMemo(() => currentStage?.tasks || [], [currentStage]);
   const completedCount = useMemo(() => {
-    const tasksArr = completedTasks ?? [];
-    return (stageTasks || []).filter(t => tasksArr.includes(t.id)).length;
+    return (stageTasks || []).filter(t => completedTasks.includes(t.id)).length;
   }, [stageTasks, completedTasks]);
   const progressPercent = useMemo(() => {
     if (!stageTasks || stageTasks.length === 0) return 100;
@@ -47,56 +48,43 @@ export function DashboardPage() {
   }, [stageId]);
   const priorityContent = useMemo(() => {
     if (!isInitialized || !isOnboarded) return null;
-    const readArticlesSet = new Set(readArticles ?? []);
+    const readArticlesSet = new Set(readArticles);
     const exists = (id: string) => KNOWLEDGE_ARTICLES.some(a => a.id === id);
-    // 1. Critical Emergency Check (Global) - Safety First
+    // 1. Critical Emergency Check (Global)
     if (!readArticlesSet.has('k-emergency') && exists('k-emergency')) {
-      return { title: 'Emergency Protocols', desc: 'Safety Mandate: Follow these exact steps for medical or security emergencies. Failure to follow protocol voids official insurance.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=emergency' };
+      return { title: 'Emergency Protocols', desc: 'Safety Mandate: Follow these exact steps for medical or security emergencies. Protocol adherence is legally mandatory.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=emergency' };
     }
-    // 2. Financial Intelligence Expansion (Phase 43 Priority)
-    // Surface for mobilization, camp, and PPA phases as a High Priority advisory
+    // 2. Batch Schedule (New Strategic Surfacing)
+    if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-batch-schedule') && exists('k-batch-schedule')) {
+      return {
+        title: 'Batch Schedule Alert',
+        desc: 'Registration Intelligence: Mastery guide for Senate List verification, Streams distribution, and the revalidation window.',
+        risk: 'medium' as PriorityRisk,
+        link: '/app/knowledge?search=batch'
+      };
+    }
+    // 3. Financial Intelligence Expansion
     const financialStages = ['mobilization', 'camp', 'ppa'];
     if (financialStages.includes(stageId) && !readArticlesSet.has('k-allawee') && exists('k-allawee')) {
-      return { 
-        title: '₦77k Allawee Intelligence', 
-        desc: 'Payment Security: Authority breakdown of the new allowance schedule, state-specific stipends, and protocols to avoid payment rejection.', 
-        risk: 'high' as PriorityRisk, 
+      return {
+        title: '₦77k Allawee Intelligence',
+        desc: 'Payment Security: Authority breakdown of the new allowance schedule, state stipends, and bank rejection protocols.',
+        risk: 'high' as PriorityRisk,
         link: '/app/knowledge?search=allawee'
       };
     }
-    // 2.1 Statistical Intelligence (New Priority)
-    if ((stageId === 'prospective' || stageId === 'pop') && !readArticlesSet.has('k-stats') && exists('k-stats')) {
-      return {
-        title: 'Key Service Statistics',
-        desc: 'Strategic Insight: Authoritative breakdown of mobilization volumes, exemption ratios, and national deployment trends.',
-        risk: 'low' as PriorityRisk,
-        link: '/app/knowledge?search=stats'
-      };
-    }
-    // 3. Final Milestone: Certificate Intelligence (Highest Priority for POP)
+    // 4. Final Milestone: Certificate Intelligence (POP)
     if (stageId === 'pop' && !readArticlesSet.has('k-pop-certificate') && exists('k-pop-certificate')) {
-      return { title: 'Mandatory Certificate Guide', desc: 'Process Critical: Essential requirements for certificate collection, recognition, and the official protocol for handling loss.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=certificate' };
+      return { title: 'Mandatory Certificate Guide', desc: 'Process Critical: Essential requirements for certificate collection and the official protocol for handling loss.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=certificate' };
     }
-    // 4. Critical Disqualification Check (Global)
-    if (!readArticlesSet.has('k-disqualification') && exists('k-disqualification')) {
-      return { title: 'Disqualification Risk', desc: 'Critical Advisory: Understand the specific bye-laws that lead to service extension or total remobilization.', risk: 'high' as PriorityRisk, link: '/app/knowledge?search=disqualification' };
-    }
-    // 5. Financial Intelligence (General)
-    if ((stageId === 'ppa' || stageId === 'cds') && !readArticlesSet.has('k-financial-survival') && exists('k-financial-survival')) {
-      return { title: 'Financial Survival Active', desc: 'Strategy Required: Mastery of the ₦77k allowance, PPA perks, and avoiding high-interest debt traps.', risk: 'medium' as PriorityRisk, link: '/app/knowledge?search=financial' };
-    }
-    // 6. Practical Insider Tips (Global)
-    if (!readArticlesSet.has('k-insider-tips') && exists('k-insider-tips')) {
-      return { title: '100 Insider Survival Tips', desc: 'Expert Intelligence: Battle-tested practical tips for camp, finance, and PPA survival.', risk: 'medium' as PriorityRisk, link: '/app/knowledge?search=tips' };
-    }
-    return { title: 'Operational Status: Ready', desc: 'System status stable. All priority intelligence modules have been mastered for your current phase.', risk: 'low' as PriorityRisk, link: '/app/journey' };
+    return { title: 'Operational Status: Active', desc: 'Phase status stable. Continue monitoring your checklist and regional alerts for changes in policy.', risk: 'low' as PriorityRisk, link: '/app/journey' };
   }, [readArticles, isInitialized, isOnboarded, stageId]);
   const syncStatus = useMemo(() => {
     if (isSyncing) return { text: 'Syncing...', color: 'bg-amber-500', pulse: true };
-    if (lastSyncError) return { text: 'Offline', color: 'bg-red-500', pulse: false };
-    if (!lastSynced) return { text: 'Local Only', color: 'bg-nysc-green-800', pulse: false };
+    if (lastSyncError) return { text: 'Local Only (Error)', color: 'bg-red-500', pulse: false };
+    if (!lastSynced) return { text: 'Local Cache Active', color: 'bg-nysc-green-800/40', pulse: false };
     try {
-      return { text: `Synced ${formatDistanceToNow(lastSynced, { addSuffix: true })}`, color: 'bg-nysc-green-800', pulse: false };
+      return { text: `Cloud Synced ${formatDistanceToNow(lastSynced, { addSuffix: true })}`, color: 'bg-nysc-green-800', pulse: false };
     } catch (e) {
       return { text: 'Verified', color: 'bg-nysc-green-800', pulse: false };
     }
@@ -147,7 +135,7 @@ export function DashboardPage() {
             <Progress value={progressPercent} className="h-2.5 bg-gray-100" />
             <div className="grid grid-cols-1 gap-2 pt-2">
               {stageTasks.map(task => {
-                const isDone = (completedTasks ?? []).includes(task.id);
+                const isDone = completedTasks.includes(task.id);
                 return (
                   <div key={task.id} className="flex items-center gap-3 p-4 border rounded-xl bg-white hover:bg-gray-50 transition-colors">
                     <div className={cn("w-2 h-2 rounded-full", isDone ? "bg-nysc-green-800" : "bg-gray-200")} />

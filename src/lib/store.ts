@@ -109,14 +109,14 @@ export const useAppStore = create<AppState>()(
       },
       syncProfile: async () => {
         const state = get();
+        // Guard: Prevent sync if unauth or missing userId to avoid ghosting the storage key
         if (!state.userId || !state.isAuthenticated || state.isSyncing) return;
-        // Final sanity check for malformed userId
-        if (state.userId.length < 5) return;
+        if (state.userId.length < 5) return; 
         const generatePayload = () => JSON.stringify({
           stage: get().stage,
           stateOfDeployment: get().stateOfDeployment,
-          completedTasks: get().completedTasks || [],
-          readArticles: get().readArticles || [],
+          completedTasks: Array.isArray(get().completedTasks) ? get().completedTasks : [],
+          readArticles: Array.isArray(get().readArticles) ? get().readArticles : [],
           activeProjectId: get().activeProjectId,
           isOnboarded: get().isOnboarded
         });
@@ -137,7 +137,7 @@ export const useAppStore = create<AppState>()(
               lastSyncError: null
             });
           } else {
-            set({ isSyncing: false, lastSyncError: 'Sync refused by cloud' });
+            set({ isSyncing: false, lastSyncError: 'Sync refused' });
           }
         } catch (error) {
           set({ isSyncing: false, lastSyncError: 'Network contention' });
@@ -145,7 +145,7 @@ export const useAppStore = create<AppState>()(
       },
       loadProfile: async (force = false) => {
         const state = get();
-        // Crucial: Always set initialized to true even if unauth to unlock UI loaders
+        // Crucial: Set initialized even if unauthenticated to allow UI flow
         if (!state.userId || !state.isAuthenticated) {
           set({ isInitialized: true });
           return;
@@ -162,8 +162,8 @@ export const useAppStore = create<AppState>()(
               const remotePayload = JSON.stringify({
                 stage: p.stage,
                 stateOfDeployment: p.stateOfDeployment,
-                completedTasks: p.completedTasks || [],
-                readArticles: p.readArticles || [],
+                completedTasks: Array.isArray(p.completedTasks) ? p.completedTasks : [],
+                readArticles: Array.isArray(p.readArticles) ? p.readArticles : [],
                 activeProjectId: p.activeProjectId,
                 isOnboarded: p.isOnboarded
               });
@@ -177,7 +177,8 @@ export const useAppStore = create<AppState>()(
                 lastSynced: p.updatedAt || Date.now(),
                 isPro: p.isPro ?? state.isPro,
                 lastSyncedPayload: remotePayload,
-                lastSyncError: null
+                lastSyncError: null,
+                isInitialized: true
               });
             }
           }
@@ -224,8 +225,8 @@ export const useAppStore = create<AppState>()(
         isPro: state.isPro,
         stage: state.stage,
         stateOfDeployment: state.stateOfDeployment,
-        completedTasks: state.completedTasks,
-        readArticles: state.readArticles,
+        completedTasks: Array.isArray(state.completedTasks) ? state.completedTasks : [],
+        readArticles: Array.isArray(state.readArticles) ? state.readArticles : [],
         activeProjectId: state.activeProjectId,
         isOnboarded: state.isOnboarded,
         lastSynced: state.lastSynced,

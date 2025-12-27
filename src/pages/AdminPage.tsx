@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { ShieldAlert, Users, BookOpen, Trash2, Edit3, Search, RefreshCw, ArrowLeft, Eye, Copy, Check, GraduationCap, Trophy, LayoutGrid, Clock, Info } from 'lucide-react';
+import { ShieldAlert, Users, BookOpen, Trash2, Edit3, Search, RefreshCw, ArrowLeft, Eye, Copy, Check, GraduationCap, Trophy, LayoutGrid, Activity, Signal } from 'lucide-react';
 import { KNOWLEDGE_ARTICLES } from '@/lib/mock-content';
 import type { NYSCProfile, NYSCStage } from '@shared/types';
 import { toast } from 'sonner';
@@ -19,31 +19,43 @@ export function AdminPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUser, setSelectedUser] = useState<NYSCProfile | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [backendStatus, setBackendStatus] = useState<'connected' | 'error'>('connected');
   const fetchAdminData = useCallback(async (silent = false) => {
     if (!silent) setIsLoading(true);
     try {
-      const [statsRes, usersRes] = await Promise.all([
-        fetch('/api/admin/stats').then(r => r.json()),
-        fetch('/api/admin/users').then(r => r.json())
-      ]);
-      if (statsRes.success) setStats(statsRes.data);
+      const statsResponse = await fetch('/api/admin/stats');
+      const usersResponse = await fetch('/api/admin/users');
+      if (!statsResponse.ok || !usersResponse.ok) throw new Error('Network failure');
+      const statsRes = await statsResponse.json();
+      const usersRes = await usersResponse.json();
+      if (statsRes.success) {
+        setStats(statsRes.data || { totalUsers: 0, activeToday: 0, proUsers: 0, systemHealth: 'Operational' });
+      }
       if (usersRes.success) {
-        const sanitizedUsers: NYSCProfile[] = (usersRes.data || []).map((u: any) => ({
-          id: u.id || '',
+        const rawItems = Array.isArray(usersRes.data) ? usersRes.data : [];
+        const sanitizedUsers: NYSCProfile[] = rawItems.map((u: any) => ({
+          id: u.id || 'N/A',
           stage: (u.stage as NYSCStage) || 'prospective',
-          stateOfDeployment: u.stateOfDeployment || 'Unset',
+          stateOfDeployment: u.stateOfDeployment || 'Not Set',
           completedTasks: Array.isArray(u.completedTasks) ? u.completedTasks : [],
           readArticles: Array.isArray(u.readArticles) ? u.readArticles : [],
           activeProjectId: u.activeProjectId || null,
           isOnboarded: u.isOnboarded ?? false,
           isPro: u.isPro ?? false,
           updatedAt: Number(u.updatedAt) || 0
-        })).sort((a: NYSCProfile, b: NYSCProfile) => (b.updatedAt || 0) - (a.updatedAt || 0));
+        })).sort((a: NYSCProfile, b: NYSCProfile) => {
+          // Primary sort by recent activity (Sync Time)
+          const timeA = a.updatedAt || 0;
+          const timeB = b.updatedAt || 0;
+          return timeB - timeA;
+        });
         setUsers(sanitizedUsers);
+        setBackendStatus('connected');
       }
       if (!silent) toast.success('Records Synced');
     } catch (err) {
       console.error('[ADMIN FETCH ERROR]', err);
+      setBackendStatus('error');
       toast.error('System synchronization failed');
     } finally {
       setIsLoading(false);
@@ -81,9 +93,15 @@ export function AdminPage() {
             <div className="p-2 bg-nysc-gold rounded-lg shadow-inner">
               <ShieldAlert className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-2xl font-display font-bold">Admin Oversight</h1>
+            <div>
+              <h1 className="text-2xl font-display font-bold">Admin Oversight</h1>
+              <div className="flex items-center gap-2 mt-1">
+                <Badge className={backendStatus === 'connected' ? 'bg-green-500/20 text-green-300 border-green-500/30' : 'bg-red-500/20 text-red-300 border-red-500/30'}>
+                   <Signal className="w-3 h-3 mr-1" /> {backendStatus === 'connected' ? 'Durable Object Linked' : 'DO Connection Fault'}
+                </Badge>
+              </div>
+            </div>
           </div>
-          <p className="text-nysc-green-100 text-sm font-medium">Monitoring system health and member progression.</p>
         </div>
         <div className="flex flex-wrap gap-4 relative z-10">
           <div className="grid grid-cols-2 gap-3">
@@ -169,7 +187,7 @@ export function AdminPage() {
                               {u.stage}
                             </Badge>
                           </td>
-                          <td className="px-6 py-4 text-xs font-bold text-gray-600">{u.stateOfDeployment}</td>
+                          <td className="px-6 py-4 text-xs font-bold text-gray-600">{u.stateOfDeployment || 'Unassigned'}</td>
                           <td className="px-6 py-4 text-[11px] font-semibold text-muted-foreground">
                             {isDateValid ? format(dateObj, 'MMM d, HH:mm') : 'Uninitialized'}
                           </td>
@@ -267,22 +285,26 @@ export function AdminPage() {
                       <GraduationCap className="w-3.5 h-3.5" />
                       <p className="text-[9px] font-black uppercase tracking-widest opacity-60">Location</p>
                     </div>
-                    <p className="text-sm font-bold text-gray-900 truncate capitalize">{selectedUser.stateOfDeployment}</p>
+                    <p className="text-sm font-bold text-gray-900 truncate capitalize">{selectedUser.stateOfDeployment || 'Unset'}</p>
                   </div>
                 </div>
-                {!selectedUser.isOnboarded ? (
-                  <div className="bg-amber-50 p-4 rounded-2xl border border-amber-100 flex items-center gap-3">
-                    <Info className="w-5 h-5 text-amber-600" />
-                    <p className="text-xs font-bold text-amber-900">This member has not completed the onboarding process.</p>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                     <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Progression Node</p>
+                     <Badge variant="outline" className="text-[8px] font-black uppercase tracking-widest px-1.5 h-4">
+                       {selectedUser.isOnboarded ? 'Active Member' : 'Ghost User'}
+                     </Badge>
                   </div>
-                ) : (
-                  <div className="space-y-3">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Progression Node</p>
-                    <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 font-mono text-[10px] overflow-auto max-h-48 whitespace-pre text-gray-700">
-                      {JSON.stringify(selectedUser, null, 2)}
-                    </div>
+                  <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 font-mono text-[10px] overflow-auto max-h-48 whitespace-pre text-gray-700">
+                    {JSON.stringify({
+                      tasksCompleted: (selectedUser.completedTasks || []).length,
+                      articlesRead: (selectedUser.readArticles || []).length,
+                      activeProject: selectedUser.activeProjectId || 'None',
+                      isOnboarded: selectedUser.isOnboarded,
+                      updatedAt: selectedUser.updatedAt
+                    }, null, 2)}
                   </div>
-                )}
+                </div>
               </div>
               <div className="p-6 bg-gray-50 border-t flex justify-end gap-3">
                 <Button variant="outline" onClick={() => setSelectedUser(null)} className="font-bold rounded-xl border-gray-200">Dismiss</Button>

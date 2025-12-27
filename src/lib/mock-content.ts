@@ -66,6 +66,25 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-batch-schedule',
+    category: 'Official/Mobilization',
+    title: 'NYSC Official Batch Schedule & Streams',
+    summary: 'Understanding the Senate List, Stream I vs. Stream II, and the revalidation process for missed batches.',
+    content: `I. THE SENATE LIST VERIFICATION
+The journey begins with your name appearing on the Senate List uploaded by your Institution.
+1. VERIFICATION: Visit the NYSC Portal and use the "Check Senate List" link. You need your Matriculation Number and Surname.
+2. DISCREPANCIES: If your name is missing, contact your school's Student Affairs Officer (SAO). NYSC cannot add you manually; the school must upload the data.
+II. BATCHES AND STREAMS
+NYSC mobilizes in three Batches (A, B, and C) annually, further divided into Streams.
+1. STREAM I: Typically departs for camp immediately after the registration window closes.
+2. STREAM II: Departs roughly 4-6 weeks after Stream I. If you are in Stream II, you do not need to register again; your call-up letter will simply be delayed.
+III. THE REVALIDATION PROCESS
+If you were mobilized in a previous batch but failed to report to camp:
+1. PROCESS: You must "Revalidate" on the portal during the next registration window.
+2. WINDOW: Revalidation is available for up to 2 years after your initial mobilization. After this, you may need to visit the headquarters for regularisation.`,
+    metadata: { stage: 'mobilization', risk: 'low', source: 'NYSC ICT Directorate', featured: true, last_updated: '2025-02-25' }
+  },
+  {
     id: 'k-stats',
     category: 'Official/Stats',
     title: 'NYSC Key Statistics: Mobilization, Deployment & Outcomes',
