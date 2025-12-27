@@ -39,24 +39,24 @@ export const JOURNEY_STAGES = [
   }
 ];
 export const KNOWLEDGE_ARTICLES = [
-  { 
-    id: 'k1', 
-    category: 'Official', 
-    title: 'The NYSC Act', 
+  {
+    id: 'k1',
+    category: 'Official',
+    title: 'The NYSC Act',
     summary: 'Understanding the legal framework of your service year.',
     content: 'The National Youth Service Corps (NYSC) Act is the enabling law for the scheme. It mandates that every Nigerian graduate under the age of 30 at graduation must serve for one year. The act covers discipline, allowance, and the four cardinal programs of the NYSC.'
   },
-  { 
-    id: 'k2', 
-    category: 'Survival', 
-    title: 'Camp Packing List', 
+  {
+    id: 'k2',
+    category: 'Survival',
+    title: 'Camp Packing List',
     summary: 'Everything you need to bring to the orientation camp.',
     content: 'Essential items for camp include: White t-shirts (4-6), White shorts (4-6), White socks (6 pairs), White sneakers, Toiletries, Mosquito net, Waist bag, and original documents (Statement of Result, Call-up Letter, Medical Fitness Certificate).'
   },
-  { 
-    id: 'k3', 
-    category: 'CDS', 
-    title: 'Project Ideas', 
+  {
+    id: 'k3',
+    category: 'CDS',
+    title: 'Project Ideas',
     summary: 'How to start a meaningful community project.',
     content: 'A Community Development Service (CDS) project is successful when it meets a felt need in the community. Steps include: Needs assessment, Proposal writing, Seeking approval from the Local Government Inspector (LGI), Execution, and Commissioning.'
   },
@@ -65,17 +65,44 @@ export const STATE_DATA: Record<string, any> = {
   'Lagos': {
     camp: 'Iyana Ipaja Orientation Camp',
     cost: 'High cost of living, transport heavy.',
-    ppa: 'Plenty of corporate opportunities in Ikeja/Island.',
+    costScale: 5,
+    ppa: 'Corporate firms, tech hubs in Yaba/Island, schools in suburbs.',
   },
   'Abuja': {
     camp: 'Kubwa Orientation Camp',
     cost: 'Moderate to High. Good roads.',
-    ppa: 'Mainly Government Agencies and NGOs.',
+    costScale: 4,
+    ppa: 'Government MDAs, International NGOs, Law firms.',
+  },
+  'Rivers': {
+    camp: 'Nonwa Gbam Tai Orientation Camp',
+    cost: 'Moderate to High. Security conscious.',
+    costScale: 4,
+    ppa: 'Oil & Gas services, private schools, maritime agencies.',
+  },
+  'Oyo': {
+    camp: 'Iseyin Orientation Camp',
+    cost: 'Relatively low cost of living. Large state.',
+    costScale: 2,
+    ppa: 'University of Ibadan research institutes, agribusiness, private colleges.',
+  },
+  'Enugu': {
+    camp: 'Awgu Orientation Camp',
+    cost: 'Moderate. Friendly environment.',
+    costScale: 3,
+    ppa: 'Hospitals, government secretariat, private tech startups.',
+  },
+  'Kano': {
+    camp: 'Kusalla Dam Orientation Camp',
+    cost: 'Low to Moderate. Commercial hub.',
+    costScale: 2,
+    ppa: 'Manufacturing firms, trading companies, islamic studies centers.',
   }
 };
 export const DEADLINES = [
-  { id: 'd1', title: 'Online Registration Ends', date: '2024-10-15', stage: 'mobilization' },
-  { id: 'd2', title: 'Camp Portal Closure', date: '2024-11-01', stage: 'camp' },
+  { id: 'd1', title: 'Online Registration Ends', date: '2025-10-15', stage: 'mobilization' },
+  { id: 'd2', title: 'Camp Portal Closure', date: '2025-11-01', stage: 'camp' },
+  { id: 'd3', title: 'Upload Medical Certificate', date: '2025-06-30', stage: 'prospective' },
 ];
 export const CDS_RESOURCES = {
   categories: [

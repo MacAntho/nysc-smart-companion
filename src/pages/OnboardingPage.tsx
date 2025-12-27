@@ -4,8 +4,8 @@ import { useAppStore } from '@/lib/store';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { NYSCStage } from '@/lib/store';
-import { ArrowRight, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import type { NYSCStage } from '@shared/types';
+import { ArrowRight, ArrowLeft, CheckCircle2, Loader2 } from 'lucide-react';
 const STAGES: { value: NYSCStage; label: string }[] = [
   { value: 'prospective', label: 'Prospective Corper' },
   { value: 'mobilization', label: 'Mobilization/Registration' },
@@ -21,7 +21,11 @@ export function OnboardingPage() {
   const stateOfDeployment = useAppStore(s => s.stateOfDeployment);
   const setStateOfDeployment = useAppStore(s => s.setStateOfDeployment);
   const completeOnboarding = useAppStore(s => s.completeOnboarding);
-  const handleFinish = () => {
+  const setUserId = useAppStore(s => s.setUserId);
+  const isSyncing = useAppStore(s => s.isSyncing);
+  const handleFinish = async () => {
+    const newId = crypto.randomUUID();
+    setUserId(newId);
     completeOnboarding();
     navigate('/app');
   };
@@ -81,10 +85,13 @@ export function OnboardingPage() {
               <CardDescription>We've personalized your dashboard based on your stage and state.</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">You can change these settings anytime in your profile.</p>
+              <p className="text-sm text-muted-foreground">Your profile will be automatically synced to our secure cloud.</p>
             </CardContent>
             <CardFooter>
-              <Button onClick={handleFinish} className="w-full bg-nysc-green-800 h-12 text-lg">Enter Dashboard</Button>
+              <Button onClick={handleFinish} className="w-full bg-nysc-green-800 h-12 text-lg" disabled={isSyncing}>
+                {isSyncing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                Enter Dashboard
+              </Button>
             </CardFooter>
           </Card>
         )}

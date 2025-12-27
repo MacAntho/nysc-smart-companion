@@ -2,7 +2,7 @@ import '@/lib/errorReporter';
 import { enableMapSet } from "immer";
 enableMapSet();
 import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { createRoot, Root } from 'react-dom/client'
 import {
   createBrowserRouter,
   RouterProvider,
@@ -58,7 +58,17 @@ const router = createBrowserRouter([
     errorElement: <RouteErrorBoundary />,
   },
 ]);
-createRoot(document.getElementById('root')!).render(
+// Prevent double-initialization in dev/HMR environments
+const container = document.getElementById('root')!;
+const rootKey = '__reactRootContainer';
+let root: Root;
+if ((window as any)[rootKey]) {
+  root = (window as any)[rootKey];
+} else {
+  root = createRoot(container);
+  (window as any)[rootKey] = root;
+}
+root.render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <ErrorBoundary>
