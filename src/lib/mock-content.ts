@@ -66,13 +66,31 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-pop',
+    category: 'Official',
+    title: 'Passing Out Parade (POP) & Certificate Guide',
+    summary: 'CNS details, clearance, verification, exemptions.',
+    content: `The Passing Out Parade (POP) marks the official end of your service year. To receive your Certificate of National Service (CNS), you must complete the final clearance chain.
+1. FINAL RELEASE & CLEARANCE:
+Obtain your Final Release Letter from your PPA. This letter must state that you have completed your primary assignment and have no outstanding liabilities. Take this to your Local Government Inspector (LGI) along with your updated ID card and CDS clearance.
+2. KIT RETURN PROTOCOL:
+You are required to return specific items issued at camp, typically the Khaki Tunic and sometimes the Jungle Boots. Ensure you receive a "Kit Return Slip" or verbal clearance from the designated store officer.
+3. CNS NAME VERIFICATION:
+Before the final day, check the "CNS Master List" at the secretariat. Ensure your name is spelled correctly as it appears on your Degree Certificate. Corrections after the certificate is printed are extremely difficult and often require an affidavit.
+4. THE ZI & LGI SIGNATURE CHAIN:
+The "Green Card" or Final Clearance Form must be signed by your PPA Employer, the LGI, and finally the Zonal Inspector (ZI). This verified document is what you present on the parade ground to receive your physical certificate.
+5. EXEMPTIONS & EXCLUSIONS:
+If you are an Exemption or Exclusion candidate, your process is strictly digital. Ensure you have printed your certificate from the portal and taken it to the state secretariat for official stamping if required.`,
+    metadata: { stage: 'pop', risk: 'high', source: 'NYSC Official', featured: true }
+  },
+  {
     id: 'k-clearance',
     category: 'Official',
     title: 'NYSC Clearance Process: Monthly & Final Protocols',
     summary: 'A guide to PPA/CDS documentation, LGI verification steps, and avoiding allowance delays.',
     content: `Clearance is the lifeblood of the NYSC service year. Failure to complete it correctly results in "No Pay" status or service extension.
 MONTHLY CLEARANCE (The 3-Step Chain):
-1. PPA CLEARANCE LETTER: Every month-end (usually from the 20th), obtain a signed and stamped letter from your PPA employer confirming your diligent service and presence. 
+1. PPA CLEARANCE LETTER: Every month-end (usually from the 20th), obtain a signed and stamped letter from your PPA employer confirming your diligent service and presence.
 2. CDS CLEARANCE: Ensure your CDS Vice President or Secretary signs your green card/attendance register during weekly meetings.
 3. LGI VERIFICATION: Take your PPA letter and CDS card to the Local Government Inspector (LGI). The LGI performs a digital "face-match" or thumbprint verification on the portal. Once the LGI "clears" you online, your allowance is triggered for that month.
 CRITICAL DEADLINE: Monthly clearance usually happens between the 25th and last day of the month. Missing this window means you won't be paid for that month until the next cycle.
@@ -150,18 +168,6 @@ SELF-REJECTION: Corpers cannot reject a PPA. Doing so without valid LGI approval
 3. SECURITY: In regions with high-risk advisory.
 Submit your application during the orientation camp or through the state coordinator.`,
     metadata: { stage: 'mobilization', risk: 'medium', source: 'Official Policy' }
-  },
-  {
-    id: 'k-pop-guide',
-    category: 'Official',
-    title: 'Passing Out Parade (POP) & Final Clearance',
-    summary: 'Ensuring your certificate is ready and your records are clear for discharge.',
-    content: `Winding up is the final phase.
-1. FINAL CLEARANCE: Get signatures from your PPA and LGI for the final month.
-2. DISCHARGE CERTIFICATE: Issued only after successful final clearance.
-3. EXIT INTERVIEW: Mandatory briefing before the final parade.
-Ensure no outstanding dues or disciplinary cases are against you.`,
-    metadata: { stage: 'pop', risk: 'high', source: 'NYSC HQ', featured: true }
   }
 ];
 export const STATE_DATA: Record<string, any> = {

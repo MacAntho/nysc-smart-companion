@@ -92,17 +92,17 @@ export function DashboardPage() {
           searchLink: '/app/cds'
         };
       case 'pop':
-        if (!readArticlesSet.has('k-clearance')) return {
-          title: 'Final Clearance Protocol',
-          desc: 'Process Critical: Kit return and LGI signatures are required for Discharge Certificate collection.',
-          risk: 'high' as PriorityRisk,
-          searchLink: '/app/knowledge?q=clearance'
-        };
-        if (!readArticlesSet.has('k-pop-guide')) return {
-          title: 'Final Winding-Up Clearance',
-          desc: 'Step-by-step final LGI signatures and certificate collection procedures.',
+        if (!readArticlesSet.has('k-pop')) return {
+          title: 'Passing Out Parade (POP) & Certificate Guide',
+          desc: 'Critical: Verify your CNS name details and complete the LGI/ZI signature chain for discharge.',
           risk: 'high' as PriorityRisk,
           searchLink: '/app/knowledge?q=pop'
+        };
+        if (!readArticlesSet.has('k-clearance')) return {
+          title: 'Final Winding-Up Clearance',
+          desc: 'Mandatory: Kit return and LGI signatures are required for Discharge Certificate collection.',
+          risk: 'high' as PriorityRisk,
+          searchLink: '/app/knowledge?q=clearance'
         };
         return {
           title: 'Career Next Steps',

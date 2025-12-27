@@ -122,7 +122,7 @@ export function KnowledgeBasePage() {
                   <Card
                     key={article.id}
                     className={cn(
-                      "hover:shadow-2xl transition-all duration-300 group border-gray-100 flex flex-col h-full relative rounded-3xl overflow-hidden",
+                      "hover:shadow-2xl transition-all duration-300 group border-gray-100 flex flex-col h-full relative rounded-3xl overflow-hidden min-h-[220px]",
                       isHighRisk ? "ring-2 ring-destructive bg-red-50/10 shadow-destructive/5" : isFeatured ? "ring-2 ring-nysc-gold bg-amber-50/10 shadow-nysc-gold/5" : "bg-white"
                     )}
                   >
