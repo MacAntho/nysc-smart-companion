@@ -9,6 +9,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogFooter,
   DialogTrigger
 } from '@/components/ui/dialog';
@@ -103,26 +104,29 @@ export function KnowledgeBasePage() {
                     <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col p-0">
                       <DialogHeader className="p-6 pb-2">
                         <div className="text-[10px] font-bold text-nysc-green-800 uppercase tracking-widest mb-1">
-                          {selectedArticle?.category} {selectedArticle?.metadata?.featured && "• Featured"}
+                          {article.category} {article.metadata?.featured && "• Featured"}
                         </div>
-                        <DialogTitle className="text-2xl font-bold">{selectedArticle?.title}</DialogTitle>
+                        <DialogTitle className="text-2xl font-bold">{article.title}</DialogTitle>
+                        <DialogDescription className="text-sm text-muted-foreground">
+                          {article.summary || 'Detailed guide on NYSC procedures.'}
+                        </DialogDescription>
                       </DialogHeader>
                       <ScrollArea className="flex-1 p-6 pt-2">
                         <div className="prose prose-sm text-muted-foreground space-y-4 leading-relaxed max-w-none">
-                          <p className="text-lg text-gray-900 font-medium">{selectedArticle?.summary}</p>
+                          <p className="text-lg text-gray-900 font-medium">{article.summary}</p>
                           <div className="h-px bg-gray-100 w-full my-4" />
                           <div className="whitespace-pre-wrap text-sm text-gray-700 leading-relaxed">
-                            {selectedArticle?.content}
+                            {article.content}
                           </div>
                         </div>
                       </ScrollArea>
                       <DialogFooter className="p-4 bg-gray-50 border-t flex flex-row items-center justify-between sm:justify-between">
-                        <span className="text-[10px] text-muted-foreground italic">Source: {selectedArticle?.metadata?.source || 'Verified Official'}</span>
+                        <span className="text-[10px] text-muted-foreground italic">Source: {article.metadata?.source || 'Verified Official'}</span>
                         <Button
-                          onClick={() => selectedArticle && toggleReadArticle(selectedArticle.id)}
-                          className={isRead ? "bg-gray-200 text-gray-700 hover:bg-gray-300" : "bg-nysc-green-800 hover:bg-nysc-green-900"}
+                          onClick={() => toggleReadArticle(article.id)}
+                          className={readArticles.includes(article.id) ? "bg-gray-200 text-gray-700 hover:bg-gray-300" : "bg-nysc-green-800 hover:bg-nysc-green-900"}
                         >
-                          {isRead ? "Mark as Unread" : <><CheckCircle className="w-4 h-4 mr-2" /> Mark as Read</>}
+                          {readArticles.includes(article.id) ? "Mark as Unread" : <><CheckCircle className="w-4 h-4 mr-2" /> Mark as Read</>}
                         </Button>
                       </DialogFooter>
                     </DialogContent>
