@@ -64,6 +64,7 @@ export function DashboardPage() {
     }
   };
   const { title: priorityTitle, desc: priorityDesc } = getPriorityContent();
+  const priorityLink = stageId === 'cds' ? '/app/cds' : '/app/knowledge';
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-fade-in px-4">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -95,7 +96,7 @@ export function DashboardPage() {
             <CardDescription className="text-amber-800 font-medium">{priorityDesc}</CardDescription>
           </CardHeader>
           <CardContent className="pb-6">
-            <Link to="/app/knowledge">
+            <Link to={priorityLink}>
               <Button className="bg-nysc-gold hover:bg-amber-700 text-white font-bold h-12 rounded-xl group shadow-md">
                 Open Guide <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>

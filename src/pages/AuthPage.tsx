@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '@/lib/store';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,13 @@ export function AuthPage() {
   const navigate = useNavigate();
   const setAuth = useAppStore(s => s.setAuth);
   const isOnboarded = useAppStore(s => s.isOnboarded);
+  const isAuthenticated = useAppStore(s => s.isAuthenticated);
+  // Auto-redirect if already logged in
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(isOnboarded ? '/app' : '/onboarding');
+    }
+  }, [isAuthenticated, isOnboarded, navigate]);
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.includes('@')) return toast.error('Enter a valid email');
@@ -58,6 +65,7 @@ export function AuthPage() {
           isPro: result.data.isPro
         });
         toast.success(`Welcome back, ${result.data.role === 'admin' ? 'Admin' : 'Corper'}`);
+        // Navigation is handled by the useEffect redirect, but we can call it here for immediate feedback
         navigate(isOnboarded ? '/app' : '/onboarding');
       } else {
         toast.error(result.error || 'Login failed');
@@ -92,8 +100,8 @@ export function AuthPage() {
                   {step === 1 ? 'Step 1: Identity' : 'Step 2: Verification'}
                 </CardTitle>
                 <CardDescription>
-                  {step === 1 
-                    ? 'Enter any email to start. No password required.' 
+                  {step === 1
+                    ? 'Enter any email to start. No password required.'
                     : 'For rapid testing, any 6-digit code (e.g., 123456) will work.'}
                 </CardDescription>
               </CardHeader>

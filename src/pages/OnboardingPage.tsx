@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import type { NYSCStage } from '@shared/types';
 import { ArrowRight, ArrowLeft, Loader2, Sparkles, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { NIGERIAN_STATES } from '@/lib/mock-content';
 const STAGES: { value: NYSCStage; label: string }[] = [
   { value: 'prospective', label: 'Prospective Corper (Finalist/Graduate)' },
   { value: 'mobilization', label: 'Mobilization & Online Registration' },
@@ -15,7 +16,6 @@ const STAGES: { value: NYSCStage; label: string }[] = [
   { value: 'cds', label: 'CDS Phase (Community Projects)' },
   { value: 'pop', label: 'Winding Up / POP Phase' },
 ];
-const NIGERIAN_STATES = ['Lagos', 'Abuja', 'Oyo', 'Rivers', 'Kano', 'Kaduna', 'Enugu', 'Edo', 'Cross River', 'Delta', 'Anambra', 'Plateau', 'Kwara'];
 export function OnboardingPage() {
   const [step, setStep] = useState(1);
   const navigate = useNavigate();

@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import type { NYSCStage } from '@shared/types';
 import { formatDistanceToNow } from 'date-fns';
-import { JOURNEY_STAGES } from '@/lib/mock-content';
+import { JOURNEY_STAGES, NIGERIAN_STATES } from '@/lib/mock-content';
 const STAGES: { value: NYSCStage; label: string }[] = [
   { value: 'prospective', label: 'Prospective Corper' },
   { value: 'mobilization', label: 'Mobilization' },
@@ -30,7 +30,6 @@ const STAGES: { value: NYSCStage; label: string }[] = [
   { value: 'cds', label: 'CDS Phase' },
   { value: 'pop', label: 'Winding Up / POP' },
 ];
-const NIGERIAN_STATES = ['Lagos', 'Abuja', 'Oyo', 'Rivers', 'Kano', 'Kaduna', 'Enugu', 'Edo', 'Cross River', 'Delta', 'Anambra', 'Plateau', 'Kwara'];
 export function ProfilePage() {
   const userEmail = useAppStore(s => s.userEmail);
   const userRole = useAppStore(s => s.userRole);

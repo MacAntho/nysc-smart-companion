@@ -1,4 +1,19 @@
 import { KnowledgeArticle } from "@shared/types";
+export const NIGERIAN_STATES = [
+  'Lagos', 
+  'Abuja', 
+  'Oyo', 
+  'Rivers', 
+  'Kano', 
+  'Kaduna', 
+  'Enugu', 
+  'Edo', 
+  'Cross River', 
+  'Delta', 
+  'Anambra', 
+  'Plateau', 
+  'Kwara'
+];
 export const JOURNEY_STAGES = [
   {
     id: 'prospective',
