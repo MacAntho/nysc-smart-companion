@@ -110,7 +110,6 @@ export const useAppStore = create<AppState>()(
       syncProfile: async () => {
         const state = get();
         if (!state.userId || !state.isAuthenticated || state.isSyncing) return;
-        if (state.userId.length < 5) return;
         const generatePayload = () => JSON.stringify({
           stage: get().stage,
           stateOfDeployment: get().stateOfDeployment,
@@ -136,10 +135,12 @@ export const useAppStore = create<AppState>()(
               lastSyncError: null
             });
           } else {
-            set({ isSyncing: false, lastSyncError: `Sync failed with status: ${response.status}` });
+            const errText = await response.text();
+            set({ isSyncing: false, lastSyncError: `Sync failed: ${response.status} ${errText}` });
           }
         } catch (error) {
-          set({ isSyncing: false, lastSyncError: 'Network contention' });
+          const msg = error instanceof Error ? error.message : 'Unknown';
+          set({ isSyncing: false, lastSyncError: `Network contention: ${msg}` });
         }
       },
       loadProfile: async (force = false) => {
@@ -157,19 +158,28 @@ export const useAppStore = create<AppState>()(
             const result = await response.json();
             if (result.success && result.data) {
               const p = result.data as NYSCProfile;
+              // Intelligent merge: Combine local and remote progress to prevent data loss
+              const mergedTasks = Array.from(new Set([
+                ...(Array.isArray(p.completedTasks) ? p.completedTasks : []),
+                ...(Array.isArray(state.completedTasks) ? state.completedTasks : [])
+              ]));
+              const mergedArticles = Array.from(new Set([
+                ...(Array.isArray(p.readArticles) ? p.readArticles : []),
+                ...(Array.isArray(state.readArticles) ? state.readArticles : [])
+              ]));
               const remotePayload = JSON.stringify({
                 stage: p.stage,
                 stateOfDeployment: p.stateOfDeployment,
-                completedTasks: Array.isArray(p.completedTasks) ? p.completedTasks : [],
-                readArticles: Array.isArray(p.readArticles) ? p.readArticles : [],
+                completedTasks: mergedTasks,
+                readArticles: mergedArticles,
                 activeProjectId: p.activeProjectId,
                 isOnboarded: p.isOnboarded
               });
               set({
                 stage: p.stage || state.stage,
                 stateOfDeployment: p.stateOfDeployment || state.stateOfDeployment,
-                completedTasks: Array.isArray(p.completedTasks) ? p.completedTasks : [],
-                readArticles: Array.isArray(p.readArticles) ? p.readArticles : [],
+                completedTasks: mergedTasks,
+                readArticles: mergedArticles,
                 activeProjectId: p.activeProjectId || state.activeProjectId,
                 isOnboarded: p.isOnboarded ?? state.isOnboarded,
                 lastSynced: p.updatedAt || Date.now(),
@@ -182,8 +192,10 @@ export const useAppStore = create<AppState>()(
             set({ lastSyncError: `Load failed with status: ${response.status}` });
           }
         } catch (error) {
-          set({ lastSyncError: 'Hydration fault' });
+          const msg = error instanceof Error ? error.message : 'Unknown';
+          set({ lastSyncError: `Hydration fault: ${msg}` });
         } finally {
+          // Guaranteed to prevent infinite loading pulse
           set({ isSyncing: false, isInitialized: true });
         }
       },

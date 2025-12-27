@@ -26,7 +26,8 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
     const emailLower = email.toLowerCase().trim();
     const role = emailLower.endsWith('@admin.nysc.gov.ng') ? 'admin' : 'user';
     const isPro = emailLower.includes('pro');
-    const userId = btoa(emailLower).replace(/[^a-zA-Z0-9]/g, '').slice(0, 12);
+    // Robust UserID generation: alphanumeric only to avoid character encoding issues
+    const userId = btoa(emailLower).replace(/[^a-zA-Z0-9]/g, '').slice(0, 16);
     const profileEntity = new UserEntity(c.env, userId);
     const existing = await profileEntity.exists();
     if (!existing) {
@@ -45,9 +46,10 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
       const userIndex = new Index(c.env, UserEntity.indexName);
       await userIndex.add(userId);
     } else {
+      // Sticky Pro Status: Ensure manual or email-based upgrade persists
       await profileEntity.mutate(curr => ({
         ...curr,
-        isPro: isPro || curr.isPro,
+        isPro: curr.isPro || isPro,
         updatedAt: Date.now()
       }));
     }
@@ -70,8 +72,8 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
     const updated = await entity.mutate(curr => ({
       ...curr,
       ...payload,
-      id,
-      isPro: curr.isPro || payload.isPro || false,
+      id, // Force ID consistency
+      isPro: curr.isPro || payload.isPro || false, // Pro status is sticky
       updatedAt: Date.now()
     }));
     return ok(c, updated);
@@ -80,15 +82,14 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
    * ADMIN: ENDPOINTS
    */
   app.get('/api/admin/stats', async (c) => {
-    // Ensure seed data is present for demonstration purposes
     await UserEntity.ensureSeed(c.env);
     const usersRes = await UserEntity.list(c.env);
-    const users = usersRes.items || [];
+    const users = Array.isArray(usersRes.items) ? usersRes.items : [];
     const now = Date.now();
     const oneDayMs = 24 * 60 * 60 * 1000;
     const totalUsers = users.length;
-    const activeToday = totalUsers === 0 ? 0 : users.filter(u => (now - (u.updatedAt || 0)) < oneDayMs).length;
-    const proUsers = totalUsers === 0 ? 0 : users.filter(u => u.isPro).length;
+    const activeToday = users.filter(u => (now - (Number(u.updatedAt) || 0)) < oneDayMs).length;
+    const proUsers = users.filter(u => u.isPro).length;
     return ok(c, {
       totalUsers,
       activeToday,
@@ -99,7 +100,8 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
   app.get('/api/admin/users', async (c) => {
     await UserEntity.ensureSeed(c.env);
     const users = await UserEntity.list(c.env);
-    const sorted = (users.items || []).sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+    // Robust sorting fallback for updatedAt
+    const sorted = (users.items || []).sort((a, b) => (Number(b.updatedAt) || 0) - (Number(a.updatedAt) || 0));
     return ok(c, sorted);
   });
 }
