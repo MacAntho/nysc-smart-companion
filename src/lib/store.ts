@@ -16,6 +16,7 @@ interface AppState {
   isOnboarded: boolean;
   isSyncing: boolean;
   lastSynced: number | null;
+  lastSyncedPayload: string | null;
   // Auth Actions
   setAuth: (data: { userId: string; email: string; role: 'user' | 'admin'; isPro: boolean }) => void;
   logout: () => void;
@@ -47,6 +48,7 @@ export const useAppStore = create<AppState>()(
       isOnboarded: false,
       isSyncing: false,
       lastSynced: null,
+      lastSyncedPayload: null,
       setAuth: (data) => set({
         userId: data.userId,
         userEmail: data.email,
@@ -55,13 +57,9 @@ export const useAppStore = create<AppState>()(
         isPro: data.isPro
       }),
       logout: () => {
-        // 1. Reset the runtime state fully
         get().reset();
-        // 2. Clear persistent storage to prevent hydration of stale/compromised state
         localStorage.removeItem('nysc-companion-storage');
-        // 3. Force clean slate for any possible next session immediately
         set({ lastSynced: null, userId: null, isAuthenticated: false });
-        // 4. Final redirect to landing
         window.location.href = '/';
       },
       setUserId: (userId) => set({ userId }),
@@ -109,33 +107,34 @@ export const useAppStore = create<AppState>()(
         if (get().isAuthenticated) get().syncProfile();
       },
       syncProfile: async () => {
-        const current = get();
-        const userId = current.userId;
-        const isAuthenticated = current.isAuthenticated;
-        // Defensive check: Do not sync if unauthenticated or missing identity
-        if (!userId || !isAuthenticated || current.isSyncing) return;
+        const state = get();
+        const userId = state.userId;
+        const isAuthenticated = state.isAuthenticated;
+        if (!userId || !isAuthenticated || state.isSyncing) return;
+        const payload = {
+          stage: state.stage,
+          stateOfDeployment: state.stateOfDeployment,
+          completedTasks: state.completedTasks,
+          readArticles: state.readArticles,
+          activeProjectId: state.activeProjectId,
+          isOnboarded: state.isOnboarded
+        };
+        const payloadString = JSON.stringify(payload);
+        if (payloadString === state.lastSyncedPayload) return;
         set({ isSyncing: true });
         try {
           const response = await fetch(`/api/profile/${userId}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              stage: current.stage,
-              stateOfDeployment: current.stateOfDeployment,
-              completedTasks: current.completedTasks,
-              readArticles: current.readArticles,
-              activeProjectId: current.activeProjectId,
-              isOnboarded: current.isOnboarded
-            }),
+            body: payloadString,
           });
           if (response.ok) {
-            set({ lastSynced: Date.now() });
+            set({ lastSynced: Date.now(), lastSyncedPayload: payloadString });
           } else {
-            const errorData = await response.json().catch(() => ({}));
-            console.warn('[SYNC WARNING] Server rejected sync:', errorData.error);
+            console.warn('[SYNC WARNING] Server rejected sync');
           }
         } catch (error) {
-          console.error('[SYNC FAILURE] Network/API error:', error);
+          console.error('[SYNC FAILURE]', error);
         } finally {
           set({ isSyncing: false });
         }
@@ -143,7 +142,8 @@ export const useAppStore = create<AppState>()(
       loadProfile: async () => {
         const userId = get().userId;
         const isAuthenticated = get().isAuthenticated;
-        if (!userId || !isAuthenticated) return;
+        if (!userId || !isAuthenticated || get().isSyncing) return;
+        set({ isSyncing: true });
         try {
           const response = await fetch(`/api/profile/${userId}`);
           if (response.ok) {
@@ -158,12 +158,22 @@ export const useAppStore = create<AppState>()(
                 activeProjectId: p.activeProjectId || null,
                 isOnboarded: p.isOnboarded ?? false,
                 lastSynced: p.updatedAt || Date.now(),
-                isPro: p.isPro ?? false
+                isPro: p.isPro ?? false,
+                lastSyncedPayload: JSON.stringify({
+                  stage: p.stage,
+                  stateOfDeployment: p.stateOfDeployment,
+                  completedTasks: p.completedTasks,
+                  readArticles: p.readArticles,
+                  activeProjectId: p.activeProjectId,
+                  isOnboarded: p.isOnboarded
+                })
               });
             }
           }
         } catch (error) {
           console.error('[LOAD PROFILE FAILURE]', error);
+        } finally {
+          set({ isSyncing: false });
         }
       },
       reset: () => {
@@ -180,6 +190,7 @@ export const useAppStore = create<AppState>()(
           activeProjectId: null,
           isOnboarded: false,
           lastSynced: null,
+          lastSyncedPayload: null,
           isSyncing: false
         });
       },
