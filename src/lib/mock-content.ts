@@ -74,7 +74,7 @@ export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
 1. ACADEMIC REQUIREMENTS:
 You must have graduated from an accredited Nigerian or foreign institution with a Degree (B.Sc, B.A, etc.) or Higher National Diploma (HND). Part-time and Distance Learning graduates are usually issued "Exclusion Certificates."
 2. THE AGE RULE (CRITICAL):
-Eligibility is based on your age at the TIME OF GRADUATION, not when you are mobilized. 
+Eligibility is based on your age at the TIME OF GRADUATION, not when you are mobilized.
 - If you graduated before age 30: You are MANDATED to serve.
 - If you graduated at age 30 or older: You qualify for an "Exemption Certificate," which is legally equivalent to a Discharge Certificate for employment purposes.
 3. MARITAL CONCESSIONS:
@@ -84,6 +84,31 @@ Graduates with physical disabilities or serious medical conditions that preclude
 5. THE EXCLUSION CATEGORY:
 This applies to graduates of part-time, sandwich, or distance learning programs. While they do not participate in the service year, they must register on the portal to obtain their "Letter of Exclusion."`,
     metadata: { stage: 'prospective', risk: 'low', source: 'NYSC Act', featured: true }
+  },
+  {
+    id: 'k-batches',
+    category: 'Official',
+    title: 'NYSC Batch System: A/B/C Streams & Assignment',
+    summary: 'Logistics Roadmap: Understand the A/B/C batch cycles, stream assignments, and the revalidation protocol.',
+    content: `The NYSC mobilization calendar is divided into three major phases known as Batches.
+1. THE THREE BATCHES:
+- BATCH A: Usually mobilized in Q1 (Feb/March).
+- BATCH B: Usually mobilized in Q2 (May/June).
+- BATCH C: Usually mobilized in Q4 (Oct/Nov).
+2. STREAMS (THE CAPACITY SPLIT):
+Due to the limited capacity of orientation camps across the 36 states, each batch is typically split into "Stream 1" and "Stream 2."
+- STREAM 1: Goes to camp immediately after the call-up letter is issued.
+- STREAM 2: Goes to camp approximately 3 to 5 weeks after Stream 1 finishes.
+3. THE SENATE LIST (FOUNDATION):
+Your mobilization depends entirely on your institution uploading your details to the NYSC portal. This is the "Senate List." If your name isn't there, you cannot register for that batch.
+4. REVALIDATION PROTOCOL:
+If you were issued a call-up letter in a previous batch but failed to report to camp (for valid or invalid reasons), you must undergo "Revalidation."
+- You must register again on the portal during the next mobilization window.
+- Select the revalidation option.
+- You do not need to pay the portal fee again if you already paid for the previous call-up letter.
+5. DEPLOYMENT LOGISTICS:
+Streams are assigned randomly based on the order of registration and state capacity. Earlier registration doesn't always guarantee Stream 1, but it is highly recommended.`,
+    metadata: { stage: 'mobilization', risk: 'low', source: 'NYSC Mobilization Dept', featured: true }
   },
   {
     id: 'k-registration',

@@ -36,7 +36,7 @@ export function DashboardPage() {
   const priorityContent = useMemo(() => {
     if (!isInitialized) return null;
     const readArticlesSet = new Set(readArticles ?? []);
-    // 0. Essential Foundational Knowledge (Eligibility) - Expand to mobilization phase
+    // 0. Essential Foundational Knowledge (Eligibility)
     if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-eligibility')) {
       return {
         title: 'NYSC Eligibility Guide',
@@ -45,7 +45,16 @@ export function DashboardPage() {
         searchLink: '/app/knowledge?search=eligibility'
       };
     }
-    // 1. Critical Disciplinary Guides (Risk High)
+    // 1. Batch System Intelligence (Requested Official Guide)
+    if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-batches')) {
+      return {
+        title: 'Batch System Intelligence',
+        desc: 'Logistics Roadmap: Understand the A/B/C batch cycles, stream assignments, and how to revalidate your mobilization if you miss your window.',
+        risk: 'low' as PriorityRisk,
+        searchLink: '/app/knowledge?search=batches'
+      };
+    }
+    // 2. Critical Disciplinary Guides (Risk High)
     if (!readArticlesSet.has('k-disqualification')) {
       return {
         title: 'Disqualification Protocol',
@@ -62,7 +71,7 @@ export function DashboardPage() {
         searchLink: '/app/knowledge?search=sanctions'
       };
     }
-    // 2. Stage-Specific Critical Intelligence
+    // 3. Stage-Specific Critical Intelligence
     if (stageId === 'prospective' && !readArticlesSet.has('k-registration')) {
       return {
         title: 'Online Registration Roadmap',
@@ -95,7 +104,7 @@ export function DashboardPage() {
         searchLink: '/app/knowledge?search=pop'
       };
     }
-    // 3. Featured Guides based on user profile
+    // 4. Featured Guides based on user profile
     if ((stageId === 'prospective' || stageId === 'mobilization') && !readArticlesSet.has('k-foreign')) {
       return {
         title: 'Foreign-Trained Graduates',
@@ -112,7 +121,7 @@ export function DashboardPage() {
         searchLink: '/app/knowledge?search=pregnancy'
       };
     }
-    // 4. Milestone Achievement Fallback
+    // 5. Milestone Achievement Fallback
     if (progressPercent === 100) {
       return {
         title: 'Phase Milestone Achieved',
