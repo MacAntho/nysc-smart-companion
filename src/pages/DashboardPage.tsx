@@ -4,11 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, CheckCircle, ChevronRight, MapPin, BookOpen, LayoutList, Sparkles, Lock, ArrowRight, AlertTriangle, ShieldAlert } from 'lucide-react';
+import { Calendar, CheckCircle, ChevronRight, MapPin, BookOpen, LayoutList, Sparkles, Lock, ArrowRight, AlertTriangle, ShieldAlert, Fingerprint } from 'lucide-react';
 import { JOURNEY_STAGES, DEADLINES, KNOWLEDGE_ARTICLES } from '@/lib/mock-content';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow, differenceInDays, parseISO } from 'date-fns';
 import { cn } from '@/lib/utils';
+type PriorityRisk = 'high' | 'medium' | 'low';
 export function DashboardPage() {
   const stageId = useAppStore(s => s.stage);
   const stateName = useAppStore(s => s.stateOfDeployment);
@@ -28,7 +29,7 @@ export function DashboardPage() {
   const progressPercent = stageTasks.length > 0 ? (completedCount / stageTasks.length) * 100 : 0;
   const readPercent = (readArticles.length / KNOWLEDGE_ARTICLES.length) * 100;
   const relevantDeadlines = DEADLINES.filter(d => d.stage === stageId);
-  const getPriorityContent = () => {
+  const getPriorityContent = (): { title: string; desc: string; risk: PriorityRisk } => {
     switch(stageId) {
       case 'prospective':
         return {
@@ -72,16 +73,17 @@ export function DashboardPage() {
   };
   const { title: priorityTitle, desc: priorityDesc, risk } = getPriorityContent();
   const priorityLink = stageId === 'cds' ? '/app/cds' : '/app/knowledge';
-  const riskStyles = {
+  const riskStyles: Record<PriorityRisk, string> = {
     high: "border-destructive/40 bg-red-50/50 shadow-destructive/10",
     medium: "border-nysc-gold border-2 bg-amber-50/50 shadow-nysc-gold/10",
     low: "border-nysc-green-100 bg-nysc-green-50/20 shadow-nysc-green-100/10"
-  } as const;
-  const badgeStyles = {
+  };
+  const badgeStyles: Record<PriorityRisk, string> = {
     high: "bg-destructive text-white animate-pulse",
     medium: "bg-nysc-gold text-white",
     low: "bg-nysc-green-800 text-white"
   };
+  const safeRisk = risk as keyof typeof riskStyles;
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-fade-in px-4">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -94,16 +96,21 @@ export function DashboardPage() {
           </div>
           <p className="text-muted-foreground font-medium">Serving the Nation with Digital Intelligence.</p>
         </div>
-        <div className="flex items-center gap-3 text-[11px] font-semibold px-4 py-2 rounded-full bg-white border shadow-sm">
-          {isSyncing ? (
-            <><div className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" /><span className="text-muted-foreground uppercase tracking-wider">Syncing...</span></>
-          ) : (
-            <><div className="h-2 w-2 rounded-full bg-nysc-green-800" /><span className="text-muted-foreground uppercase tracking-wider">Cloud Synced {lastSynced ? formatDistanceToNow(lastSynced, { addSuffix: true }) : 'now'}</span></>
-          )}
+        <div className="flex flex-col items-end gap-1">
+          <div className="flex items-center gap-3 text-[11px] font-semibold px-4 py-2 rounded-full bg-white border shadow-sm">
+            {isSyncing ? (
+              <><div className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" /><span className="text-muted-foreground uppercase tracking-wider">Syncing...</span></>
+            ) : (
+              <><div className="h-2 w-2 rounded-full bg-nysc-green-800" /><span className="text-muted-foreground uppercase tracking-wider">Cloud Synced {lastSynced ? formatDistanceToNow(lastSynced, { addSuffix: true }) : 'now'}</span></>
+            )}
+          </div>
+          <span className="text-[9px] font-black text-nysc-green-800 uppercase tracking-widest opacity-40 px-2 flex items-center gap-1">
+            <Fingerprint className="w-3 h-3" /> Digital Check-in Recommended Daily
+          </span>
         </div>
       </header>
       {priorityTitle && (
-        <Card className={cn("border-2 shadow-lg overflow-hidden relative group transition-all duration-300", riskStyles[(risk as keyof typeof riskStyles) ?? 'low'])}>
+        <Card className={cn("border-2 shadow-lg overflow-hidden relative group transition-all duration-300", riskStyles[safeRisk] || riskStyles.low)}>
           <div className="absolute top-0 right-0 p-4">
              {risk === 'high' ? (
                <ShieldAlert className="w-12 h-12 text-destructive opacity-20 group-hover:scale-125 transition-transform duration-500" />
@@ -112,7 +119,7 @@ export function DashboardPage() {
              )}
           </div>
           <CardHeader className="pb-2">
-            <Badge className={cn("w-fit mb-2 uppercase text-[9px] font-black tracking-widest flex items-center gap-1", badgeStyles[(risk as keyof typeof badgeStyles) ?? 'low'])}>
+            <Badge className={cn("w-fit mb-2 uppercase text-[9px] font-black tracking-widest flex items-center gap-1", badgeStyles[safeRisk] || badgeStyles.low)}>
               {risk === 'high' && <AlertTriangle className="w-3 h-3" />}
               {risk === 'high' ? 'High Risk Action Required' : 'Priority Phase Resource'}
             </Badge>

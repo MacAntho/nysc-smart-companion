@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAppStore } from '@/lib/store';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -42,6 +42,10 @@ export function ProfilePage() {
   const setStage = useAppStore(s => s.setStage);
   const setStateOfDeployment = useAppStore(s => s.setStateOfDeployment);
   const logout = useAppStore(s => s.logout);
+  const loadProfile = useAppStore(s => s.loadProfile);
+  useEffect(() => {
+    loadProfile();
+  }, [loadProfile]);
   // Calculate total tasks dynamically from all stages
   const totalTasks = JOURNEY_STAGES.reduce((acc, s) => acc + s.tasks.length, 0);
   const masteryProgress = totalTasks > 0 ? (completedTasks.length / totalTasks) * 100 : 0;
@@ -139,11 +143,11 @@ export function ProfilePage() {
           <CardContent>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
-                { icon: <Briefcase />, text: 'PPA Vacancy Database' },
-                { icon: <Mail />, text: 'LGI Document Support' },
+                { icon: <Briefcase className="w-5 h-5" />, text: 'PPA Vacancy Database' },
+                { icon: <Mail className="w-5 h-5" />, text: 'LGI Document Support' },
               ].map((item, i) => (
                 <li key={i} className="flex items-center gap-3 text-sm font-bold bg-white/10 p-3 rounded-xl border border-white/10">
-                  <span className="text-nysc-gold w-5 h-5">{item.icon}</span> {item.text}
+                  <span className="text-nysc-gold shrink-0">{item.icon}</span> {item.text}
                 </li>
               ))}
             </ul>

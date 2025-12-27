@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { ShieldAlert, Users, BookOpen, Calendar, MapPin, Plus, Trash2, Edit3, Search, Loader2, RefreshCw, UserMinus } from 'lucide-react';
+import { ShieldAlert, Users, BookOpen, Calendar, MapPin, Plus, Trash2, Edit3, Search, Loader2, RefreshCw, UserMinus, ArrowLeft } from 'lucide-react';
 import { KNOWLEDGE_ARTICLES } from '@/lib/mock-content';
 import type { NYSCProfile } from '@shared/types';
 import { toast } from 'sonner';
@@ -24,13 +25,14 @@ export function AdminPage() {
       ]);
       if (statsRes.success) setStats(statsRes.data);
       if (usersRes.success) {
-        // Ensure every user has a valid array structure for tasks/articles
+        // Ensure every user has a valid array structure for tasks/articles and safe sort
         const sanitizedUsers = (usersRes.data || []).map((u: any) => ({
           ...u,
           completedTasks: Array.isArray(u.completedTasks) ? u.completedTasks : [],
           readArticles: Array.isArray(u.readArticles) ? u.readArticles : [],
-          stateOfDeployment: u.stateOfDeployment || 'N/A'
-        }));
+          stateOfDeployment: u.stateOfDeployment || 'N/A',
+          updatedAt: u.updatedAt || 0
+        })).sort((a: NYSCProfile, b: NYSCProfile) => b.updatedAt - a.updatedAt);
         setUsers(sanitizedUsers);
       }
       if (!silent) toast.success('Administrative records synchronized');
@@ -55,7 +57,12 @@ export function AdminPage() {
     <div className="max-w-7xl mx-auto space-y-8 animate-fade-in px-4">
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 p-6 md:p-10 bg-nysc-green-900 rounded-3xl text-white shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl pointer-events-none" />
-        <div className="space-y-1 relative z-10">
+        <div className="space-y-3 relative z-10">
+          <Link to="/app">
+            <Button variant="ghost" size="sm" className="text-nysc-green-100 hover:text-white hover:bg-white/10 -ml-2 mb-2 font-bold h-8 px-2 gap-1 transition-all">
+              <ArrowLeft className="w-4 h-4" /> Back to Command Center
+            </Button>
+          </Link>
           <div className="flex items-center gap-2">
             <ShieldAlert className="w-6 h-6 text-nysc-gold" />
             <h1 className="text-2xl md:text-3xl font-display font-bold">Admin Command Center</h1>
@@ -71,9 +78,9 @@ export function AdminPage() {
             <p className="text-[9px] font-black uppercase tracking-widest opacity-60">Health</p>
             <p className="text-xl font-bold">{stats.systemHealth}</p>
           </div>
-          <Button 
-            variant="secondary" 
-            size="icon" 
+          <Button
+            variant="secondary"
+            size="icon"
             className="h-12 w-12 rounded-2xl bg-white/20 hover:bg-white/30 text-white border-none transition-all active:scale-90"
             onClick={() => fetchAdminData()}
             disabled={isLoading}
