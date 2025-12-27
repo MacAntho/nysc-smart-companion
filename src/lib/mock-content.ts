@@ -66,6 +66,26 @@ export const JOURNEY_STAGES = [
 ];
 export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
   {
+    id: 'k-eligibility',
+    category: 'Official',
+    title: 'NYSC Eligibility: Who Serves, Exemptions & Special Cases',
+    summary: 'Strategic Roadmap: Detailed legal clarity on the 30-year age rule, academic prerequisites, and special concessions.',
+    content: `Understanding your eligibility status is the foundation of your service year planning.
+1. ACADEMIC REQUIREMENTS:
+You must have graduated from an accredited Nigerian or foreign institution with a Degree (B.Sc, B.A, etc.) or Higher National Diploma (HND). Part-time and Distance Learning graduates are usually issued "Exclusion Certificates."
+2. THE AGE RULE (CRITICAL):
+Eligibility is based on your age at the TIME OF GRADUATION, not when you are mobilized. 
+- If you graduated before age 30: You are MANDATED to serve.
+- If you graduated at age 30 or older: You qualify for an "Exemption Certificate," which is legally equivalent to a Discharge Certificate for employment purposes.
+3. MARITAL CONCESSIONS:
+Married female graduates are eligible for deployment to the state where their spouse resides. This requires uploading a Marriage Certificate, Newspaper Change of Name, and Husband's utility bill during registration.
+4. PHYSICAL DISABILITIES:
+Graduates with physical disabilities or serious medical conditions that preclude them from participation in camp drills are given special concessions for deployment to their home states or areas with specialized medical facilities.
+5. THE EXCLUSION CATEGORY:
+This applies to graduates of part-time, sandwich, or distance learning programs. While they do not participate in the service year, they must register on the portal to obtain their "Letter of Exclusion."`,
+    metadata: { stage: 'prospective', risk: 'low', source: 'NYSC Act', featured: true }
+  },
+  {
     id: 'k-registration',
     category: 'Official',
     title: 'Online Registration Roadmap',
@@ -187,7 +207,7 @@ export const STATE_DATA: Record<string, any> = {
     pro_tip: 'Apply for PPA in Ikorodu if you want a lower cost of living while staying in Lagos.'
   },
   'Abuja': {
-    camp: 'Kubwa Orientation Camp. Modern facilities, good water supply, very competitive.',
+    camp: 'Kubwa Orientation Camp. Modern facilities, grid water supply, very competitive.',
     cost: 'Very High. Abuja rent is steep. Average ₦350k+ in satellite towns, millions in city center.',
     metrics: { rent: 350000, food: 50000, transport: 40000 },
     ppa: 'Govt Agencies, NGOs, and Professional Firms.',

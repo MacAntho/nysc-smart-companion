@@ -36,6 +36,15 @@ export function DashboardPage() {
   const priorityContent = useMemo(() => {
     if (!isInitialized) return null;
     const readArticlesSet = new Set(readArticles ?? []);
+    // 0. Essential Foundational Knowledge (Eligibility)
+    if (stageId === 'prospective' && !readArticlesSet.has('k-eligibility')) {
+      return {
+        title: 'NYSC Eligibility Guide',
+        desc: 'Strategic Roadmap: Detailed legal clarity on the 30-year age exemption rule and academic prerequisites before you register.',
+        risk: 'low' as PriorityRisk,
+        searchLink: '/app/knowledge?search=eligibility'
+      };
+    }
     // 1. Critical Disciplinary Guides (Risk High)
     if (!readArticlesSet.has('k-disqualification')) {
       return {
